@@ -1,0 +1,108 @@
+{% load static %}
+
+<!-- ========== ENHANCED NAVIGATION (LIGHT THEME) ========== -->
+<nav id="navbar" class="navbar fixed top-0 left-0 w-full z-50">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="navbar-inner">
+      <!-- Logo -->
+      <a href="{% url 'index' %}" class="navbar-logo">
+        <img src="{% static 'logo.png' %}" alt="HELPEX">
+        <div class="navbar-brand">
+          <span class="navbar-brand-main" style="color: #1A1F3B;">HELPEX<span style="color: #28A197;">.</span></span>
+          <span class="navbar-brand-sub" style="color: #28A197;">BRO</span>
+        </div>
+      </a>
+
+      <!-- Desktop Menu -->
+      <div class="navbar-menu">
+        <a href="{% url 'index' %}" class="nav-link {% if request.path == '/' %}active{% endif %}" style="color: #1A1F3B;">Home</a>
+        <a href="{% url 'service' %}" class="nav-link {% if request.path == '/service/' %}active{% endif %}" style="color: #1A1F3B;">Services</a>
+        <a href="{% url 'about' %}" class="nav-link {% if request.path == '/about/' %}active{% endif %}" style="color: #1A1F3B;">About Us</a>
+        <a href="{% url 'contact' %}" class="nav-link {% if request.path == '/contact/' %}active{% endif %}" style="color: #1A1F3B;">Contact</a>
+        <a href="{% url 'contact' %}" class="navbar-cta">
+          Start Project
+          <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- Mobile Toggle -->
+      <button id="menuBtn" class="navbar-mobile-toggle" style="display: flex; background: rgba(26,31,59,0.05); border-color: rgba(26,31,59,0.1); color: #1A1F3B;">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Menu Overlay -->
+<div id="mobileOverlay" class="mobile-menu-overlay"></div>
+
+<!-- Mobile Menu -->
+<div id="mobileMenu" class="mobile-menu">
+  <div class="mobile-menu-header">
+    <a href="{% url 'index' %}" class="navbar-logo">
+      <img src="{% static 'logo.png' %}" alt="HELPEX">
+      <div class="navbar-brand">
+        <span class="navbar-brand-main">HELPEX<span style="color: #28A197;">.</span></span>
+        <span class="navbar-brand-sub">BRO</span>
+      </div>
+    </a>
+    <button id="closeMenu" class="mobile-menu-close">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  
+  <div class="mobile-menu-content">
+    <a href="{% url 'index' %}" class="mobile-nav-link {% if request.path == '/' %}active{% endif %}">Home</a>
+    <a href="{% url 'service' %}" class="mobile-nav-link {% if request.path == '/service/' %}active{% endif %}">Services</a>
+    <a href="{% url 'about' %}" class="mobile-nav-link {% if request.path == '/about/' %}active{% endif %}">About Us</a>
+    <a href="{% url 'contact' %}" class="mobile-nav-link {% if request.path == '/contact/' %}active{% endif %}">Contact</a>
+    <a href="{% url 'contact' %}" class="mobile-menu-cta">
+      Start Project
+      <i class="fas fa-arrow-right"></i>
+    </a>
+  </div>
+</div>
+
+<script>
+  // Mobile Menu
+  (function() {
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    const menuBtn = document.getElementById('menuBtn');
+    const closeMenu = document.getElementById('closeMenu');
+    
+    if (menuBtn && mobileMenu) {
+      menuBtn.addEventListener('click', () => {
+        mobileMenu.classList.add('active');
+        if (mobileOverlay) mobileOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+    }
+    
+    const closeMenuFn = () => {
+      mobileMenu.classList.remove('active');
+      if (mobileOverlay) mobileOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    };
+    
+    if (closeMenu && mobileMenu) {
+      closeMenu.addEventListener('click', closeMenuFn);
+    }
+    
+    if (mobileOverlay) {
+      mobileOverlay.addEventListener('click', closeMenuFn);
+    }
+    
+    if (mobileMenu) {
+      mobileMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', closeMenuFn);
+      });
+    }
+    
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileMenu && mobileMenu.classList.contains('active')) {
+        closeMenuFn();
+      }
+    });
+  })();
+</script>

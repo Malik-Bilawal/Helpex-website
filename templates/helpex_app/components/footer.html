@@ -1,0 +1,109 @@
+{% load static %}
+{% load helpex_tags %}
+
+<!-- ========== PROFESSIONAL FOOTER ========== -->
+<footer class="py-16" style="background: linear-gradient(180deg, #1A1F3B 0%, #0f1225 100%);">
+  <div class="max-w-7xl mx-auto px-6">
+    <!-- Main Footer Content -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+      <!-- Column 1: Brand & About -->
+      <div class="lg:col-span-1">
+        <a href="{% url 'index' %}" class="flex items-center gap-3 mb-5">
+          <img src="{% static 'logo.png' %}" alt="HELPEX" class="h-11 rounded-xl" style="box-shadow: 0 4px 15px rgba(40,161,151,0.3);">
+          <div>
+            <span class="text-xl font-bold text-white">HELPEX<span style="color: #28A197;">.</span></span>
+            <span class="block text-[10px] font-semibold" style="color: #28A197; letter-spacing: 3px;">BRO</span>
+          </div>
+        </a>
+        <p class="mb-5" style="color: rgba(255,255,255,0.6); font-size: 14px; line-height: 1.7;">
+          Adaptive digital studio crafting premium web applications and iconic visual identities.
+        </p>
+        <!-- Social Links -->
+        <div class="flex gap-3">
+          <a href="#" class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);">
+            <i class="fab fa-twitter" style="color: rgba(255,255,255,0.6); font-size: 14px;"></i>
+          </a>
+          <a href="#" class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);">
+            <i class="fab fa-instagram" style="color: rgba(255,255,255,0.6); font-size: 14px;"></i>
+          </a>
+          <a href="#" class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);">
+            <i class="fab fa-linkedin-in" style="color: rgba(255,255,255,0.6); font-size: 14px;"></i>
+          </a>
+          <a href="#" class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);">
+            <i class="fab fa-github" style="color: rgba(255,255,255,0.6); font-size: 14px;"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Column 2: Services -->
+      <div>
+        <h4 class="text-white font-semibold mb-5" style="font-size: 15px; letter-spacing: 0.5px;">Services</h4>
+        <ul class="space-y-3">
+          <li><a href="{% url 'service' %}" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Web Development</a></li>
+          <li><a href="{% url 'service' %}" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Mobile Apps</a></li>
+          <li><a href="{% url 'service' %}" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Brand Design</a></li>
+          <li><a href="{% url 'service' %}" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Cloud Solutions</a></li>
+          <li><a href="{% url 'service' %}" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">AI & Automation</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 3: Company -->
+      <div>
+        <h4 class="text-white font-semibold mb-5" style="font-size: 15px; letter-spacing: 0.5px;">Company</h4>
+        <ul class="space-y-3">
+          <li><a href="{% url 'about' %}" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">About Us</a></li>
+          <li><a href="{% url 'service' %}" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Services</a></li>
+          <li><a href="{% url 'contact' %}" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Contact</a></li>
+          <li><a href="#" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Careers</a></li>
+          <li><a href="#" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Blog</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 4: Newsletter -->
+      <div>
+        <h4 class="text-white font-semibold mb-5" style="font-size: 15px; letter-spacing: 0.5px;">Stay Updated</h4>
+        <p class="text-sm mb-4" style="color: rgba(255,255,255,0.5);">Subscribe for updates & insights.</p>
+        <form class="flex gap-2" onsubmit="event.preventDefault(); alert('Thanks for subscribing!');">
+          <input type="email" placeholder="Your email" required class="flex-1 px-4 py-3 rounded-xl text-sm outline-none" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: white;">
+          <button type="submit" class="px-5 py-3 rounded-xl font-semibold text-sm transition-all duration-300 hover:scale-105" style="background: linear-gradient(135deg, #28A197, #1E837A); color: white;">
+            Go
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="h-px mb-8" style="background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);"></div>
+
+    <!-- Bottom Bar -->
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-sm" style="color: rgba(255,255,255,0.4);">&copy; {% now "Y" %} HELPEX BRO. All rights reserved.</p>
+      <div class="flex gap-6">
+        <a href="#" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.4);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">Privacy</a>
+        <a href="#" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.4);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">Terms</a>
+        <a href="#" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.4);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">Cookies</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back to Top Button -->
+  <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" 
+    class="fixed bottom-6 right-6 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 hover:-translate-y-1 z-50"
+    style="background: linear-gradient(135deg, #28A197, #1E837A); box-shadow: 0 4px 20px rgba(40,161,151,0.4);" 
+    title="Back to top">
+    <i class="fas fa-arrow-up" style="color: white; font-size: 14px;"></i>
+  </button>
+</footer>
+
+<style>
+  @media (max-width: 768px) {
+    footer .grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 480px) {
+    footer .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

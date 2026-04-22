@@ -1,0 +1,603 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="About HELPEX BRO - Adaptive Digital Studio">
+  <title>About Us · HELPEX BRO</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  
+  <style>
+    :root {
+      --midnight: #1A1F3B;
+      --teal: #28A197;
+      --teal-dark: #1E837A;
+      --teal-glow: #3BC4B5;
+      --gray-100: #F8FAFC;
+      --gray-500: #64748B;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--gray-100);
+      color: var(--midnight);
+      line-height: 1.6;
+    }
+
+    .font-display { font-family: 'Space Grotesk', sans-serif; }
+
+    /* ========== NAVBAR STYLES ========== */
+    .navbar {
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(40,161,151,0.15);
+      box-shadow: 0 2px 20px rgba(26,31,59,0.06);
+      padding: 0.75rem 0;
+    }
+
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 1.5rem;
+      background: rgba(255,255,255,0.6);
+      border: 1px solid rgba(40,161,151,0.15);
+      border-radius: 100px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .navbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .navbar-logo img {
+      height: 40px;
+      width: auto;
+      border-radius: 10px;
+    }
+
+    .navbar-brand {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .navbar-brand-main {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .navbar-brand-sub {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    .navbar-menu {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-link {
+      position: relative;
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .nav-link:hover {
+      background: rgba(40,161,151,0.1);
+    }
+
+    .nav-link.active {
+      background: rgba(40,161,151,0.15);
+      color: #28A197;
+    }
+
+    .navbar-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.25rem;
+      background: linear-gradient(135deg, #28A197, #1E837A);
+      color: white;
+      font-weight: 600;
+      font-size: 0.875rem;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(40,161,151,0.3);
+    }
+
+    .navbar-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(40,161,151,0.4);
+      color: white;
+    }
+
+    .navbar-cta i {
+      font-size: 0.75rem;
+      transition: transform 0.3s ease;
+    }
+
+    .navbar-cta:hover i {
+      transform: translateX(3px);
+    }
+
+    .navbar-mobile-toggle {
+      display: none;
+      width: 44px;
+      height: 44px;
+      align-items: center;
+      justify-content: center;
+      background: rgba(26,31,59,0.05);
+      border: 1px solid rgba(26,31,59,0.1);
+      border-radius: 12px;
+      color: #1A1F3B;
+      font-size: 1.25rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 9998;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 100%;
+      max-width: 400px;
+      height: 100vh;
+      background: linear-gradient(180deg, #1A1F3B 0%, #0d1224 100%);
+      z-index: 9999;
+      transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    .mobile-menu.active {
+      right: 0;
+    }
+
+    .mobile-menu-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 3rem;
+    }
+
+    .mobile-menu-close {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-size: 1.25rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu-close:hover {
+      background: rgba(40,161,151,0.2);
+    }
+
+    .mobile-menu-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .mobile-nav-link {
+      display: block;
+      padding: 1rem 1.25rem;
+      color: rgba(255,255,255,0.8);
+      font-size: 1.25rem;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateX(20px);
+    }
+
+    .mobile-menu.active .mobile-nav-link {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .mobile-menu.active .mobile-nav-link:nth-child(1) { transition-delay: 0.05s; }
+    .mobile-menu.active .mobile-nav-link:nth-child(2) { transition-delay: 0.1s; }
+    .mobile-menu.active .mobile-nav-link:nth-child(3) { transition-delay: 0.15s; }
+    .mobile-menu.active .mobile-nav-link:nth-child(4) { transition-delay: 0.2s; }
+
+    .mobile-nav-link:hover,
+    .mobile-nav-link.active {
+      background: rgba(40,161,151,0.15);
+      color: #28A197;
+    }
+
+    .mobile-menu-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: linear-gradient(135deg, #28A197, #1E837A);
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(40,161,151,0.4);
+      color: white;
+    }
+
+    @media (max-width: 1023px) {
+      .navbar-mobile-toggle { display: flex !important; }
+    }
+
+    @media (min-width: 1024px) {
+      .navbar-mobile-toggle { display: none !important; }
+    }
+
+    @media (max-width: 640px) {
+      .navbar-inner { padding: 0.5rem 1rem; }
+      .navbar-logo img { height: 36px; }
+      .navbar-brand-main { font-size: 1.25rem; }
+    }
+
+    #mobileMenu.active .mobile-nav-link:nth-child(1) { transition-delay: 0.1s; }
+    #mobileMenu.active .mobile-nav-link:nth-child(2) { transition-delay: 0.2s; }
+    #mobileMenu.active .mobile-nav-link:nth-child(3) { transition-delay: 0.3s; }
+    #mobileMenu.active .mobile-nav-link:nth-child(4) { transition-delay: 0.4s; }
+
+    .mobile-nav-link:hover {
+      color: #28A197;
+      transform: translateX(10px);
+    }
+  </style>
+</head>
+<body>
+  {% include 'helpex_app/components/navbar.html' %}
+
+  <!-- Hero Section -->
+  <section class="py-24 pt-32 pb-16 relative overflow-hidden" style="background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);">
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="absolute top-0 -left-32 w-72 h-72 rounded-full mix-blend-multiply filter blur-3xl opacity-20" style="background: #28A197;"></div>
+      <div class="absolute bottom-0 right-0 w-96 h-96 rounded-full mix-blend-multiply filter blur-3xl opacity-15" style="background: #3BC4B5;"></div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto px-4 relative z-10">
+      <div class="flex items-center gap-2 mb-8">
+        <a href="{% url 'index' %}" class="text-sm transition-colors" style="color: #64748B;" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='#64748B'">Home</a>
+        <span style="color: #CBD5E1;">/</span>
+        <span class="text-sm font-medium" style="color: #28A197;">About Us</span>
+      </div>
+
+      <div class="text-center mb-8">
+        <h1 class="text-5xl md:text-6xl font-bold mb-6" style="color: #1A1F3B;">
+          About <span class="text-transparent bg-clip-text bg-gradient-to-r" style="background: linear-gradient(135deg, #28A197, #3BC4B5); -webkit-background-clip: text;">Us</span>
+        </h1>
+        <p class="text-xl max-w-2xl mx-auto" style="color: #64748B;">
+          We're a team of passionate digital craftsmen dedicated to building exceptional experiences.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hero Section -->
+  <section class="py-32 pb-20 relative overflow-hidden" style="background: linear-gradient(180deg, #F8FAFC 0%, #EEF1F5 100%);">
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="absolute top-0 -right-32 w-96 h-96 rounded-full mix-blend-multiply filter blur-3xl opacity-20" style="background: #28A197;"></div>
+      <div class="absolute bottom-0 -left-32 w-80 h-80 rounded-full mix-blend-multiply filter blur-3xl opacity-15" style="background: #3BC4B5;"></div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+      <div class="text-center mb-16">
+        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5" style="background: rgba(40,161,151,0.1); color: #28A197;">// About Us</span>
+        <h1 class="font-display text-5xl md:text-7xl font-bold mb-6" style="color: #1A1F3B;">
+          Building the <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-500">future</span>
+        </h1>
+        <p class="text-lg md:text-xl max-w-2xl mx-auto leading-relaxed" style="color: #64748B;">
+          We're a team of passionate creators, developers, and strategists dedicated to transforming ideas into powerful digital experiences.
+        </p>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+        <div class="text-center p-6 rounded-2xl bg-white/80 backdrop-blur-sm shadow-md">
+          <div class="text-3xl md:text-4xl font-bold" style="color: #28A197;">180+</div>
+          <div class="text-sm mt-1" style="color: #64748B;">Projects</div>
+        </div>
+        <div class="text-center p-6 rounded-2xl bg-white/80 backdrop-blur-sm shadow-md">
+          <div class="text-3xl md:text-4xl font-bold" style="color: #28A197;">98%</div>
+          <div class="text-sm mt-1" style="color: #64748B;">Satisfaction</div>
+        </div>
+        <div class="text-center p-6 rounded-2xl bg-white/80 backdrop-blur-sm shadow-md">
+          <div class="text-3xl md:text-4xl font-bold" style="color: #28A197;">50+</div>
+          <div class="text-sm mt-1" style="color: #64748B;">Experts</div>
+        </div>
+        <div class="text-center p-6 rounded-2xl bg-white/80 backdrop-blur-sm shadow-md">
+          <div class="text-3xl md:text-4xl font-bold" style="color: #28A197;">12+</div>
+          <div class="text-sm mt-1" style="color: #64748B;">Years</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Story Section -->
+  <section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase mb-4" style="background: rgba(40,161,151,0.1); color: #28A197;">// Our Story</span>
+          <h2 class="font-display text-4xl md:text-5xl font-bold mb-6" style="color: #1A1F3B;">
+            From startup to <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-500">industry leader</span>
+          </h2>
+          <p class="text-lg mb-6" style="color: #64748B; line-height: 1.8;">
+            Founded in 2012, HELPEX started as a smallweb development agency with big ambitions. Over the years, we've grown into a full-fledged digital studio, helping businesses of all sizes transform their digital presence.
+          </p>
+          <p class="text-lg mb-8" style="color: #64748B; line-height: 1.8;">
+            Our mission is simple: to deliver exceptional digital solutions that drive real business results. We believe in the power of technology to transform businesses, and we're committed to being your partner in that transformation.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background: rgba(40,161,151,0.1); color: #28A197;">
+                <i class="fas fa-award text-lg"></i>
+              </div>
+              <div>
+                <div class="font-semibold" style="color: #1A1F3B;">Award Winning</div>
+                <div class="text-sm" style="color: #64748B;">Industry Recognition</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background: rgba(40,161,151,0.1); color: #28A197;">
+                <i class="fas fa-users text-lg"></i>
+              </div>
+              <div>
+                <div class="font-semibold" style="color: #1A1F3B;">Expert Team</div>
+                <div class="text-sm" style="color: #64748B;">50+ Professionals</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="relative">
+          <div class="absolute inset-0 rounded-3xl transform rotate-3" style="background: rgba(40,161,151,0.1);"></div>
+          <div class="relative rounded-3xl overflow-hidden shadow-2xl" style="background: linear-gradient(135deg, #1A1F3B 0%, #2D3555 100%);">
+            <div class="p-10 md:p-14">
+              <div class="text-white/80 text-lg mb-6 font-light">
+                <i class="fas fa-quote-left text-3xl mb-4" style="color: #28A197;"></i>
+                <p class="leading-relaxed">"We don't just build websites. We build relationships. Every project is an opportunity to create something extraordinary that makes a real difference for our clients and their customers."</p>
+              </div>
+              <div class="flex items-center gap-4">
+                <div class="w-14 h-14 rounded-full flex items-center justify-center text-xl font-bold" style="background: linear-gradient(135deg, #28A197, #1E837A); color: white;">JD</div>
+                <div>
+                  <div class="font-semibold text-white">John Doe</div>
+                  <div class="text-sm text-white/60">CEO & Founder</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Values Section -->
+  <section class="py-20" style="background: #F8FAFC;">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-14">
+        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5" style="background: rgba(40,161,151,0.1); color: #28A197;">// Our Values</span>
+        <h2 class="font-display text-4xl md:text-5xl font-bold" style="color: #1A1F3B;">What drives <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-500">us</span></h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="group p-8 rounded-3xl bg-white border transition-all duration-500 hover:shadow-2xl hover:-translate-y-2" style="border-color: rgba(40,161,151,0.1);">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-5 transition-all group-hover:scale-110" style="background: rgba(40,161,151,0.1); color: #28A197;">
+            <i class="fas fa-lightbulb"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3" style="color: #1A1F3B;">Innovation</h3>
+          <p class="text-gray-500 leading-relaxed">We constantly push boundaries and explore new technologies to deliver cutting-edge solutions that give our clients a competitive edge.</p>
+        </div>
+
+        <div class="group p-8 rounded-3xl bg-white border transition-all duration-500 hover:shadow-2xl hover:-translate-y-2" style="border-color: rgba(40,161,151,0.1);">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-5 transition-all group-hover:scale-110" style="background: rgba(40,161,151,0.1); color: #28A197;">
+            <i class="fas fa-heart"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3" style="color: #1A1F3B;">Client Focus</h3>
+          <p class="text-gray-500 leading-relaxed">Your success is our success. We take the time to understand your unique needs and deliver solutions that exceed expectations.</p>
+        </div>
+
+        <div class="group p-8 rounded-3xl bg-white border transition-all duration-500 hover:shadow-2xl hover:-translate-y-2" style="border-color: rgba(40,161,151,0.1);">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-5 transition-all group-hover:scale-110" style="background: rgba(40,161,151,0.1); color: #28A197;">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3" style="color: #1A1F3B;">Excellence</h3>
+          <p class="text-gray-500 leading-relaxed">We never settle for "good enough." Every line of code, every pixel, every interaction is crafted with precision and care.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team Section -->
+  <section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-14">
+        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5" style="background: rgba(40,161,151,0.1); color: #28A197;">// Our Team</span>
+        <h2 class="font-display text-4xl md:text-5xl font-bold" style="color: #1A1F3B;">Meet the <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-500">experts</span></h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Team Member 1 -->
+        <div class="group text-center">
+          <div class="relative mb-5 mx-auto w-40 h-40 rounded-full overflow-hidden shadow-xl transition-all group-hover:scale-110" style="background: linear-gradient(135deg, #28A197, #1E837A);">
+            <div class="absolute inset-0 flex items-center justify-center text-5xl text-white/30">
+              <i class="fas fa-user"></i>
+            </div>
+          </div>
+          <h3 class="text-lg font-bold" style="color: #1A1F3B;">John Doe</h3>
+          <p class="text-sm font-medium" style="color: #28A197;">CEO & Founder</p>
+          <p class="text-sm mt-2" style="color: #64748B;">Visionary leader with 15+ years in tech</p>
+        </div>
+
+        <!-- Team Member 2 -->
+        <div class="group text-center">
+          <div class="relative mb-5 mx-auto w-40 h-40 rounded-full overflow-hidden shadow-xl transition-all group-hover:scale-110" style="background: linear-gradient(135deg, #28A197, #1E837A);">
+            <div class="absolute inset-0 flex items-center justify-center text-5xl text-white/30">
+              <i class="fas fa-user"></i>
+            </div>
+          </div>
+          <h3 class="text-lg font-bold" style="color: #1A1F3B;">Sarah Smith</h3>
+          <p class="text-sm font-medium" style="color: #28A197;">CTO</p>
+          <p class="text-sm mt-2" style="color: #64748B;">Tech mastermind & architecture expert</p>
+        </div>
+
+        <!-- Team Member 3 -->
+        <div class="group text-center">
+          <div class="relative mb-5 mx-auto w-40 h-40 rounded-full overflow-hidden shadow-xl transition-all group-hover:scale-110" style="background: linear-gradient(135deg, #28A197, #1E837A);">
+            <div class="absolute inset-0 flex items-center justify-center text-5xl text-white/30">
+              <i class="fas fa-user"></i>
+            </div>
+          </div>
+          <h3 class="text-lg font-bold" style="color: #1A1F3B;">Mike Johnson</h3>
+          <p class="text-sm font-medium" style="color: #28A197;">Design Director</p>
+          <p class="text-sm mt-2" style="color: #64748B;">Award-winning UI/UX designer</p>
+        </div>
+
+        <!-- Team Member 4 -->
+        <div class="group text-center">
+          <div class="relative mb-5 mx-auto w-40 h-40 rounded-full overflow-hidden shadow-xl transition-all group-hover:scale-110" style="background: linear-gradient(135deg, #28A197, #1E837A);">
+            <div class="absolute inset-0 flex items-center justify-center text-5xl text-white/30">
+              <i class="fas fa-user"></i>
+            </div>
+          </div>
+          <h3 class="text-lg font-bold" style="color: #1A1F3B;">Emily Brown</h3>
+          <p class="text-sm font-medium" style="color: #28A197;">Project Manager</p>
+          <p class="text-sm mt-2" style="color: #64748B;">Certified PMP & agile expert</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-24 relative overflow-hidden" style="background: linear-gradient(135deg, #1A1F3B 0%, #2D3555 100%);">
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="absolute top-0 -right-32 w-96 h-96 rounded-full mix-blend-multiply filter blur-3xl opacity-20" style="background: #28A197;"></div>
+      <div class="absolute bottom-0 -left-32 w-80 h-80 rounded-full mix-blend-multiply filter blur-3xl opacity-15" style="background: #3BC4B5;"></div>
+    </div>
+    
+    <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+      <h2 class="font-display text-4xl md:text-5xl font-bold text-white mb-6">
+        Ready to start your <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-teal-300">journey?</span>
+      </h2>
+      <p class="text-lg mb-8" style="color: rgba(255,255,255,0.7);">
+        Let's collaborate to bring your vision to life.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="{% url 'contact' %}" class="inline-flex items-center gap-3 px-8 py-4 rounded-full font-bold text-white transition-all hover:scale-105 hover:shadow-2xl" style="background: linear-gradient(135deg, #28A197, #1E837A); box-shadow: 0 10px 30px rgba(40,161,151,0.4);">
+          Get Started <i class="fas fa-arrow-right"></i>
+        </a>
+        <a href="service.html" class="inline-flex items-center gap-3 px-8 py-4 rounded-full font-semibold transition-all hover:bg-white/10" style="border: 1px solid rgba(255,255,255,0.3); color: white;">
+          View Services
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {% include 'helpex_app/components/footer.html' %}
+
+  <script>
+    // Simple animations on scroll
+    gsap.registerPlugin(ScrollTrigger);
+    
+    // Animate elements with fade up
+    gsap.utils.toArray('.group').forEach((el, i) => {
+      gsap.from(el, {
+        y: 40,
+        opacity: 0,
+        duration: 0.6,
+        delay: i * 0.1,
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 85%',
+        }
+      });
+    });
+
+    // Mobile Menu
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuBtn = document.getElementById('menuBtn');
+    const closeMenu = document.getElementById('closeMenu');
+    const body = document.body;
+
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.add('active');
+      body.style.overflow = 'hidden';
+    });
+
+    closeMenu.addEventListener('click', () => {
+      mobileMenu.classList.remove('active');
+      body.style.overflow = '';
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+        body.style.overflow = '';
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+        mobileMenu.classList.remove('active');
+        body.style.overflow = '';
+      }
+    });
+  </script>
+</body>
+</html>

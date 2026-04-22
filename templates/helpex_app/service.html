@@ -1,0 +1,735 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="HELPEX BRO Services - Web Development, Mobile Apps, Brand Design, Cloud & AI Solutions">
+  <title>Services · HELPEX BRO</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  
+  <style>
+    :root {
+      --midnight: #1A1F3B;
+      --midnight-light: #2D3555;
+      --teal: #28A197;
+      --teal-dark: #1E837A;
+      --teal-glow: #3BC4B5;
+      --soft-white: #F7F9FA;
+      --pure-white: #FFFFFF;
+      --gray-100: #F8FAFC;
+      --gray-200: #EEF1F5;
+      --gray-300: #E2E8F0;
+      --gray-500: #64748B;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--soft-white);
+      color: var(--midnight);
+      line-height: 1.6;
+    }
+
+    .font-display {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    /* ========== NAVBAR STYLES ========== */
+    .navbar {
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(40,161,151,0.15);
+      box-shadow: 0 2px 20px rgba(26,31,59,0.06);
+      padding: 0.75rem 0;
+    }
+
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 1.5rem;
+      background: rgba(255,255,255,0.6);
+      border: 1px solid rgba(40,161,151,0.15);
+      border-radius: 100px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .navbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .navbar-logo img {
+      height: 40px;
+      width: auto;
+      border-radius: 10px;
+    }
+
+    .navbar-brand {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .navbar-brand-main {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .navbar-brand-sub {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    .navbar-menu {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-link {
+      position: relative;
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .nav-link:hover {
+      background: rgba(40,161,151,0.1);
+    }
+
+    .nav-link.active {
+      background: rgba(40,161,151,0.15);
+      color: #28A197;
+    }
+
+    .navbar-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.25rem;
+      background: linear-gradient(135deg, #28A197, #1E837A);
+      color: white;
+      font-weight: 600;
+      font-size: 0.875rem;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(40,161,151,0.3);
+    }
+
+    .navbar-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(40,161,151,0.4);
+      color: white;
+    }
+
+    .navbar-cta i {
+      font-size: 0.75rem;
+      transition: transform 0.3s ease;
+    }
+
+    .navbar-cta:hover i {
+      transform: translateX(3px);
+    }
+
+    .navbar-mobile-toggle {
+      display: none;
+      width: 44px;
+      height: 44px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid;
+      border-radius: 12px;
+      font-size: 1.25rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 9998;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 100%;
+      max-width: 400px;
+      height: 100vh;
+      background: linear-gradient(180deg, #1A1F3B 0%, #0d1224 100%);
+      z-index: 9999;
+      transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    .mobile-menu.active {
+      right: 0;
+    }
+
+    .mobile-menu-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 3rem;
+    }
+
+    .mobile-menu-close {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-size: 1.25rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu-close:hover {
+      background: rgba(40,161,151,0.2);
+    }
+
+    .mobile-menu-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .mobile-nav-link {
+      display: block;
+      padding: 1rem 1.25rem;
+      color: rgba(255,255,255,0.8);
+      font-size: 1.25rem;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateX(20px);
+    }
+
+    .mobile-menu.active .mobile-nav-link {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .mobile-menu.active .mobile-nav-link:nth-child(1) { transition-delay: 0.05s; }
+    .mobile-menu.active .mobile-nav-link:nth-child(2) { transition-delay: 0.1s; }
+    .mobile-menu.active .mobile-nav-link:nth-child(3) { transition-delay: 0.15s; }
+    .mobile-menu.active .mobile-nav-link:nth-child(4) { transition-delay: 0.2s; }
+
+    .mobile-nav-link:hover,
+    .mobile-nav-link.active {
+      background: rgba(40,161,151,0.15);
+      color: #28A197;
+    }
+
+    .mobile-menu-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: linear-gradient(135deg, #28A197, #1E837A);
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(40,161,151,0.4);
+      color: white;
+    }
+
+    @media (max-width: 1023px) {
+      .navbar-mobile-toggle { display: flex !important; }
+    }
+
+    @media (min-width: 1024px) {
+      .navbar-mobile-toggle { display: none !important; }
+    }
+
+    @media (max-width: 640px) {
+      .navbar-inner { padding: 0.5rem 1rem; }
+      .navbar-logo img { height: 36px; }
+      .navbar-brand-main { font-size: 1.25rem; }
+    }
+    }
+
+    /* Navigation */
+    .navbar {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(40, 161, 151, 0.15);
+      box-shadow: 0 2px 20px rgba(26, 31, 59, 0.06);
+    }
+
+    .nav-link {
+      position: relative;
+      color: var(--midnight);
+      font-weight: 500;
+      font-size: 15px;
+      transition: color 0.3s;
+      text-decoration: none;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--teal);
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--teal);
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .nav-link.active {
+      color: var(--teal);
+    }
+
+    .nav-link.active::after {
+      width: 100%;
+    }
+
+    /* Badge */
+    .badge {
+      display: inline-block;
+      padding: 8px 20px;
+      background: rgba(40, 161, 151, 0.1);
+      color: var(--teal);
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* Service Cards */
+    .service-card {
+      background: var(--pure-white);
+      border: 1px solid rgba(26, 31, 59, 0.08);
+      border-radius: 28px;
+      padding: 2.5rem;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 30px rgba(26, 31, 59, 0.05);
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal), var(--teal-glow));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.5s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-10px);
+      border-color: rgba(40, 161, 151, 0.3);
+      box-shadow: 0 30px 60px rgba(26, 31, 59, 0.12), 0 0 40px rgba(40, 161, 151, 0.1);
+    }
+
+    .service-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .service-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, rgba(40, 161, 151, 0.12), rgba(40, 161, 151, 0.04));
+      border: 1px solid rgba(40, 161, 151, 0.15);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      color: var(--teal);
+      margin-bottom: 1.5rem;
+      transition: all 0.4s ease;
+    }
+
+    .service-card:hover .service-icon {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 10px 30px rgba(40, 161, 151, 0.2);
+    }
+
+    .service-tag {
+      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: 50px;
+      background: rgba(40, 161, 151, 0.1);
+      color: var(--teal);
+      border: 1px solid rgba(40, 161, 151, 0.2);
+      font-weight: 500;
+    }
+
+    /* Process Cards */
+    .process-card {
+      background: var(--pure-white);
+      border: 1px solid rgba(26, 31, 59, 0.06);
+      border-radius: 24px;
+      padding: 2.5rem;
+      text-align: center;
+      transition: all 0.4s ease;
+      box-shadow: 0 4px 30px rgba(26, 31, 59, 0.04);
+    }
+
+    .process-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(40, 161, 151, 0.25);
+      box-shadow: 0 20px 50px rgba(26, 31, 59, 0.1);
+    }
+
+    .step-number {
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--pure-white);
+      margin-bottom: 1.5rem;
+    }
+
+    /* Stats */
+    .stat-card {
+      background: linear-gradient(135deg, var(--midnight), var(--midnight-light));
+      border-radius: 24px;
+      padding: 2rem;
+      text-align: center;
+      color: white;
+    }
+
+    /* CTA */
+    .cta-section {
+      background: linear-gradient(135deg, var(--midnight) 0%, var(--midnight-light) 100%);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--midnight);
+    }
+
+    footer a {
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    footer a:hover {
+      color: var(--teal);
+    }
+
+    /* Mobile Nav Link Animation */
+    .mobile-nav-link {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      position: relative;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    #mobileMenu.active .mobile-nav-link {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #mobileMenu.active .mobile-nav-link:nth-child(1) { transition-delay: 0.1s; }
+    #mobileMenu.active .mobile-nav-link:nth-child(2) { transition-delay: 0.2s; }
+    #mobileMenu.active .mobile-nav-link:nth-child(3) { transition-delay: 0.3s; }
+    #mobileMenu.active .mobile-nav-link:nth-child(4) { transition-delay: 0.4s; }
+
+    .mobile-nav-link:hover {
+      color: #28A197;
+      transform: translateX(10px);
+    }
+
+    /* Horizontal Scroll */
+    .h-scroll-container {
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: none;
+      cursor: grab;
+    }
+
+    .h-scroll-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .h-scroll-wrapper {
+      display: flex;
+      gap: 2rem;
+    }
+  </style>
+</head>
+<body>
+  {% include 'helpex_app/components/navbar.html' %}
+
+  <!-- Hero Section -->
+  <section class="py-24 pt-32 pb-16 relative overflow-hidden" style="background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);">
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="absolute top-0 -left-32 w-72 h-72 rounded-full mix-blend-multiply filter blur-3xl opacity-20" style="background: #28A197;"></div>
+      <div class="absolute bottom-0 right-0 w-96 h-96 rounded-full mix-blend-multiply filter blur-3xl opacity-15" style="background: #3BC4B5;"></div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto px-4 relative z-10">
+      <div class="flex items-center gap-2 mb-8">
+        <a href="{% url 'index' %}" class="text-sm transition-colors" style="color: #64748B;" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='#64748B'">Home</a>
+        <span style="color: #CBD5E1;">/</span>
+        <span class="text-sm font-medium" style="color: #28A197;">Services</span>
+      </div>
+
+      <div class="text-center mb-8">
+        <h1 class="text-5xl md:text-6xl font-bold mb-6" style="color: #1A1F3B;">
+          Our <span class="text-transparent bg-clip-text bg-gradient-to-r" style="background: linear-gradient(135deg, #28A197, #3BC4B5); -webkit-background-clip: text;">Services</span>
+        </h1>
+        <p class="text-xl max-w-2xl mx-auto" style="color: #64748B;">
+          End-to-end digital solutions tailored to your unique business needs.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hero Section -->
+  <section class="py-24 pt-32 pb-20 relative overflow-hidden" style="background: linear-gradient(180deg, #F8FAFC 0%, #EEF1F5 100%);">
+    <!-- Animated Background -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="absolute top-0 -right-32 w-96 h-96 rounded-full mix-blend-multiply filter blur-3xl opacity-20" style="background: #28A197;"></div>
+      <div class="absolute bottom-0 -left-32 w-80 h-80 rounded-full mix-blend-multiply filter blur-3xl opacity-15" style="background: #3BC4B5;"></div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+      <div class="text-center mb-16">
+        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5" style="background: rgba(40,161,151,0.1); color: #28A197;">// Our Services</span>
+        <h1 class="font-display text-5xl md:text-7xl font-bold mb-6" style="color: #1A1F3B;">
+          What we <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-500">do best</span>
+        </h1>
+        <p class="text-lg md:text-xl max-w-2xl mx-auto leading-relaxed" style="color: #64748B;">
+          End-to-end digital solutions tailored to your unique business needs. From concept to deployment, we've got you covered.
+        </p>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto mb-16">
+        <div class="text-center p-5 rounded-2xl bg-white/80 backdrop-blur-sm shadow-sm">
+          <div class="text-3xl md:text-4xl font-bold" style="color: #28A197;">180+</div>
+          <div class="text-sm mt-1" style="color: #64748B;">Projects</div>
+        </div>
+        <div class="text-center p-5 rounded-2xl bg-white/80 backdrop-blur-sm shadow-sm">
+          <div class="text-3xl md:text-4xl font-bold" style="color: #28A197;">98%</div>
+          <div class="text-sm mt-1" style="color: #64748B;">Satisfaction</div>
+        </div>
+        <div class="text-center p-5 rounded-2xl bg-white/80 backdrop-blur-sm shadow-sm">
+          <div class="text-3xl md:text-4xl font-bold" style="color: #28A197;">50+</div>
+          <div class="text-sm mt-1" style="color: #64748B;">Experts</div>
+        </div>
+        <div class="text-center p-5 rounded-2xl bg-white/80 backdrop-blur-sm shadow-sm">
+          <div class="text-3xl md:text-4xl font-bold" style="color: #28A197;">12+</div>
+          <div class="text-sm mt-1" style="color: #64748B;">Years</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for service in services %}
+        <div class="group p-8 rounded-3xl border transition-all duration-500 hover:shadow-2xl hover:-translate-y-2" style="background: #F8FAFC; border-color: rgba(40,161,151,0.1);">
+          <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-6 transition-all group-hover:scale-110 group-hover:rotate-6" style="background: rgba(40,161,151,0.1); color: #28A197;">
+            <i class="fas {{ service.icon_class|default:'fa-code' }}"></i>
+          </div>
+          <h3 class="text-2xl font-bold mb-3" style="color: #1A1F3B;">{{ service.title }}</h3>
+          <p class="text-gray-500 mb-5 leading-relaxed">{{ service.description }}</p>
+          <div class="flex flex-wrap gap-2">
+            {% for tag in service.tags %}
+            <span class="px-3 py-1 rounded-full text-xs font-medium" style="background: rgba(40,161,151,0.1); color: #28A197;">{{ tag }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        {% empty %}
+        <p class="text-center text-gray-500 col-span-3">No services available.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Process Section -->
+  <section class="py-20" style="background: #F8FAFC;">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-14">
+        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5" style="background: rgba(40,161,151,0.1); color: #28A197;">// How We Work</span>
+        <h2 class="font-display text-4xl md:text-5xl font-bold" style="color: #1A1F3B;">Our <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-500">process</span></h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="text-center p-8 rounded-3xl bg-white shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+          <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-bold mx-auto mb-5" style="background: linear-gradient(135deg, #28A197, #1E837A); color: white;">1</div>
+          <h3 class="text-xl font-bold mb-3" style="color: #1A1F3B;">Discovery</h3>
+          <p class="text-gray-500 text-sm">We dive deep into your business, goals, and challenges.</p>
+        </div>
+
+        <div class="text-center p-8 rounded-3xl bg-white shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+          <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-bold mx-auto mb-5" style="background: linear-gradient(135deg, #28A197, #1E837A); color: white;">2</div>
+          <h3 class="text-xl font-bold mb-3" style="color: #1A1F3B;">Strategy</h3>
+          <p class="text-gray-500 text-sm">We craft a tailored roadmap with wireframes.</p>
+        </div>
+
+        <div class="text-center p-8 rounded-3xl bg-white shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+          <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-bold mx-auto mb-5" style="background: linear-gradient(135deg, #28A197, #1E837A); color: white;">3</div>
+          <h3 class="text-xl font-bold mb-3" style="color: #1A1F3B;">Development</h3>
+          <p class="text-gray-500 text-sm">Agile sprints with transparent communication.</p>
+        </div>
+
+        <div class="text-center p-8 rounded-3xl bg-white shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+          <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-bold mx-auto mb-5" style="background: linear-gradient(135deg, #28A197, #1E837A); color: white;">4</div>
+          <h3 class="text-xl font-bold mb-3" style="color: #1A1F3B;">Launch</h3>
+          <p class="text-gray-500 text-sm">We deploy, test, and optimize with support.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  {% include 'helpex_app/components/footer.html' %}
+
+  <script>
+    // Initialize Lenis
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    // GSAP animations
+    gsap.from('.service-card', {
+      y: 50,
+      opacity: 0,
+      duration: 0.6,
+      stagger: 0.15,
+      scrollTrigger: {
+        trigger: '.h-scroll-container',
+        start: 'top 80%'
+      }
+    });
+
+    gsap.from('.process-card', {
+      y: 40,
+      opacity: 0,
+      duration: 0.6,
+      stagger: 0.15,
+      scrollTrigger: {
+        trigger: '.process-card',
+        start: 'top 75%'
+      }
+    });
+
+    // Mobile Menu
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuBtn = document.getElementById('menuBtn');
+    const closeMenu = document.getElementById('closeMenu');
+    const body = document.body;
+
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.add('active');
+      body.style.overflow = 'hidden';
+    });
+
+    closeMenu.addEventListener('click', () => {
+      mobileMenu.classList.remove('active');
+      body.style.overflow = '';
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+        body.style.overflow = '';
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+        mobileMenu.classList.remove('active');
+        body.style.overflow = '';
+      }
+    });
+  </script>
+</body>
+</html>
