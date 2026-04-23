@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from .models import (
     HeroSection, Service, Testimonial, ProcessStep, 
     PortfolioCategory, PortfolioItem, SiteSettings, 
-    ContactMessage, TeamMember
+    ContactMessage, TeamMember, Client, BlogCategory, BlogPost
 )
 
 
@@ -105,3 +105,29 @@ class TeamMemberAdmin(admin.ModelAdmin):
     search_fields = ['name', 'role']
     list_editable = ['order', 'is_active']
     ordering = ['order', 'name']
+
+
+@admin.register(Client)
+class ClientAdmin(admin.ModelAdmin):
+    list_display = ['name', 'industry', 'is_featured', 'order', 'is_active']
+    list_filter = ['is_active', 'is_featured', 'industry']
+    search_fields = ['name', 'industry']
+    list_editable = ['order', 'is_active', 'is_featured']
+    ordering = ['order', 'name']
+
+
+@admin.register(BlogCategory)
+class BlogCategoryAdmin(admin.ModelAdmin):
+    list_display = ['name', 'slug', 'order']
+    list_editable = ['order']
+    prepopulated_fields = {'slug': ('name',)}
+
+
+@admin.register(BlogPost)
+class BlogPostAdmin(admin.ModelAdmin):
+    list_display = ['title', 'category', 'author', 'is_published', 'is_featured', 'view_count', 'created_at']
+    list_filter = ['is_published', 'is_featured', 'category']
+    search_fields = ['title', 'content']
+    list_editable = ['is_published', 'is_featured']
+    ordering = ['-created_at']
+    prepopulated_fields = {'slug': ('title',)}

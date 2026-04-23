@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
-from .models import Service, Testimonial, ProcessStep, PortfolioItem, PortfolioCategory, TeamMember, SiteSettings, HeroSection, ContactMessage
+from .models import Service, Testimonial, ProcessStep, PortfolioItem, PortfolioCategory, TeamMember, SiteSettings, HeroSection, ContactMessage, Client, BlogPost, BlogCategory
 
 
 def index(request):
@@ -11,6 +11,7 @@ def index(request):
     portfolio_items = PortfolioItem.objects.filter(is_active=True).order_by('order', '-created_at')[:6]
     categories = PortfolioCategory.objects.all().order_by('order', 'name')
     process_steps = ProcessStep.objects.filter(is_active=True).order_by('order', 'step_number')
+    clients = Client.objects.filter(is_active=True).order_by('order', 'name')[:8]
     settings = SiteSettings.get_settings()
     
     return render(request, 'helpex_app/index.html', {
@@ -20,6 +21,7 @@ def index(request):
         'portfolio_items': portfolio_items,
         'categories': categories,
         'process_steps': process_steps,
+        'clients': clients,
         'settings': settings,
     })
 
@@ -73,3 +75,35 @@ def contact(request):
     return render(request, 'helpex_app/contact.html', {
         'settings': settings,
     })
+
+
+def clients(request):
+    client_list = Client.objects.filter(is_active=True).order_by('order', 'name')
+    featured_clients = Client.objects.filter(is_active=True, is_featured=True).order_by('order', 'name')
+    testimonials = Testimonial.objects.filter(is_active=True).order_by('order', 'name')[:3]
+    settings = SiteSettings.get_settings()
+    
+    return render(request, 'helpex_app/clients.html', {
+        'clients': client_list,
+        'featured_clients': featured_clients,
+        'testimonials': testimonials,
+        'settings': settings,
+    })
+
+
+def blog(request):
+    posts = BlogPost.objects.filter(is_published=True).order_by('-created_at')
+    featured_posts = BlogPost.objects.filter(is_published=True, is_featured=True).order_by('-created_at')[:3]
+    categories = BlogCategory.objects.all().order_by('order', 'name')
+    settings = SiteSettings.get_settings()
+    
+    response = render(request, 'helpex_app/blog.html', {
+        'posts': posts,
+        'featured_posts': featured_posts,
+        'categories': categories,
+        'settings': settings,
+    })
+    response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+    return response

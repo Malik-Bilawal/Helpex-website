@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from helpex_app.models import HeroSection, Service, Testimonial, ProcessStep, PortfolioCategory, PortfolioItem, SiteSettings, TeamMember
+from helpex_app.models import HeroSection, Service, Testimonial, ProcessStep, PortfolioCategory, PortfolioItem, SiteSettings, TeamMember, Client, BlogCategory, BlogPost
 
 
 class Command(BaseCommand):
@@ -106,6 +106,54 @@ class Command(BaseCommand):
         ]:
             TeamMember.objects.create(name=name, role=role, bio=bio)
         print('[OK] 4 Team Members')
+        
+        # 9. Clients
+        Client.objects.all().delete()
+        for name, industry, featured in [
+            ('TechCorp', 'Technology', True),
+            ('InnovateLab', 'Fintech', True),
+            ('GrowthStart', 'SaaS', True),
+            ('DataFlow', 'Analytics', False),
+            ('CloudNine', 'Cloud Services', False),
+            ('SmartApp', 'Mobile', False),
+            ('FinEdge', 'Finance', False),
+            ('MediTech', 'Healthcare', False),
+        ]:
+            Client.objects.create(name=name, industry=industry, is_featured=featured)
+        print('[OK] 8 Clients')
+        
+        # 10. Blog Categories
+        BlogCategory.objects.all().delete()
+        for name, desc in [
+            ('Web Development', 'Tips and tutorials for web development'),
+            ('Design', 'UI/UX design insights'),
+            ('Business', 'Business and strategy advice'),
+            ('Technology', 'Tech trends and updates'),
+        ]:
+            BlogCategory.objects.create(name=name, description=desc)
+        print('[OK] 4 Blog Categories')
+        
+        # 11. Blog Posts
+        BlogPost.objects.all().delete()
+        cats = list(BlogCategory.objects.all())
+        for i, (title, excerpt, content, featured) in enumerate([
+            ('Getting Started with React in 2024', 'Learn the fundamentals of React and build your first app.', 'React continues to be one of the most popular JavaScript frameworks...', True),
+            ('10 UI/UX Design Tips', 'Best practices for creating user-friendly interfaces.', 'Design can make or break your product. Here are 10 tips...', True),
+            ('How to Choose the Right Tech Stack', 'A guide to selecting the best technology for your project.', 'Choosing a tech stack is one of the most important decisions...', False),
+            ('The Future of AI in Web Development', 'How artificial intelligence is changing the way we build websites.', 'AI is revolutionizing web development in unprecedented ways...', False),
+            ('Responsive Design Best Practices', 'Ensure your website looks great on all devices.', 'With so many devices and screen sizes, responsive design is essential...', False),
+        ], 1):
+            BlogPost.objects.create(
+                title=title,
+                excerpt=excerpt,
+                content=content,
+                category=cats[i % len(cats)] if cats else None,
+                author='HELPEX Team',
+                is_published=True,
+                is_featured=featured,
+                view_count=i * 50,
+            )
+        print('[OK] 5 Blog Posts')
         
         print('')
         print('======================================')

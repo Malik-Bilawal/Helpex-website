@@ -3,7 +3,7 @@
 <!-- ========== ENHANCED NAVIGATION (LIGHT THEME) ========== -->
 <nav id="navbar" class="navbar fixed top-0 left-0 w-full z-50">
   <div class="max-w-7xl mx-auto px-4">
-    <div class="navbar-inner">
+    <div class="navbar-inner flex justify-between" style="background: rgba(255,255,255,0.6); border: 1px solid rgba(40,161,151,0.15);">
       <!-- Logo -->
       <a href="{% url 'index' %}" class="navbar-logo">
         <img src="{% static 'logo.png' %}" alt="HELPEX">
@@ -14,19 +14,23 @@
       </a>
 
       <!-- Desktop Menu -->
-      <div class="navbar-menu">
+      <div class="hidden lg:flex items-center gap-6" style="position: absolute; left: 50%; transform: translateX(-50%);">
         <a href="{% url 'index' %}" class="nav-link {% if request.path == '/' %}active{% endif %}" style="color: #1A1F3B;">Home</a>
         <a href="{% url 'service' %}" class="nav-link {% if request.path == '/service/' %}active{% endif %}" style="color: #1A1F3B;">Services</a>
+        <a href="{% url 'clients' %}" class="nav-link {% if request.path == '/clients/' %}active{% endif %}" style="color: #1A1F3B;">Clients</a>
+        <a href="{% url 'blog' %}" class="nav-link {% if request.path == '/blog/' %}active{% endif %}" style="color: #1A1F3B;">Blog</a>
         <a href="{% url 'about' %}" class="nav-link {% if request.path == '/about/' %}active{% endif %}" style="color: #1A1F3B;">About Us</a>
         <a href="{% url 'contact' %}" class="nav-link {% if request.path == '/contact/' %}active{% endif %}" style="color: #1A1F3B;">Contact</a>
-        <a href="{% url 'contact' %}" class="navbar-cta">
-          Start Project
-          <i class="fas fa-arrow-right"></i>
-        </a>
       </div>
 
-      <!-- Mobile Toggle -->
-      <button id="menuBtn" class="navbar-mobile-toggle" style="display: flex; background: rgba(26,31,59,0.05); border-color: rgba(26,31,59,0.1); color: #1A1F3B;">
+      <!-- CTA on right -->
+      <a href="{% url 'contact' %}" class="navbar-cta" style="margin-left: auto;">
+        Start Project
+        <i class="fas fa-arrow-right"></i>
+      </a>
+
+      <!-- Mobile Toggle (hidden on desktop) -->
+      <button id="menuBtn" class="navbar-mobile-toggle" style="display: none; background: rgba(26,31,59,0.05); border-color: rgba(26,31,59,0.1); color: #1A1F3B;">
         <i class="fas fa-bars"></i>
       </button>
     </div>
@@ -36,26 +40,28 @@
 <!-- Mobile Menu Overlay -->
 <div id="mobileOverlay" class="mobile-menu-overlay"></div>
 
-<!-- Mobile Menu -->
-<div id="mobileMenu" class="mobile-menu">
+<!-- Mobile Menu (80% width, light theme) -->
+<div id="mobileMenu" class="mobile-menu" style="width: 80%; max-width: 80%; background: rgba(255,255,255,0.98); backdrop-filter: blur(20px);">
   <div class="mobile-menu-header">
     <a href="{% url 'index' %}" class="navbar-logo">
       <img src="{% static 'logo.png' %}" alt="HELPEX">
       <div class="navbar-brand">
-        <span class="navbar-brand-main">HELPEX<span style="color: #28A197;">.</span></span>
-        <span class="navbar-brand-sub">BRO</span>
+        <span class="navbar-brand-main" style="color: #1A1F3B;">HELPEX<span style="color: #28A197;">.</span></span>
+        <span class="navbar-brand-sub" style="color: #28A197;">BRO</span>
       </div>
     </a>
-    <button id="closeMenu" class="mobile-menu-close">
+    <button id="closeMenu" class="mobile-menu-close" style="background: rgba(26,31,59,0.1); color: #1A1F3B;">
       <i class="fas fa-times"></i>
     </button>
   </div>
   
   <div class="mobile-menu-content">
-    <a href="{% url 'index' %}" class="mobile-nav-link {% if request.path == '/' %}active{% endif %}">Home</a>
-    <a href="{% url 'service' %}" class="mobile-nav-link {% if request.path == '/service/' %}active{% endif %}">Services</a>
-    <a href="{% url 'about' %}" class="mobile-nav-link {% if request.path == '/about/' %}active{% endif %}">About Us</a>
-    <a href="{% url 'contact' %}" class="mobile-nav-link {% if request.path == '/contact/' %}active{% endif %}">Contact</a>
+    <a href="{% url 'index' %}" class="mobile-nav-link {% if request.path == '/' %}active{% endif %}" style="color: #1A1F3B;">Home</a>
+    <a href="{% url 'service' %}" class="mobile-nav-link {% if request.path == '/service/' %}active{% endif %}" style="color: #1A1F3B;">Services</a>
+    <a href="{% url 'clients' %}" class="mobile-nav-link {% if request.path == '/clients/' %}active{% endif %}" style="color: #1A1F3B;">Clients</a>
+    <a href="{% url 'blog' %}" class="mobile-nav-link {% if request.path == '/blog/' %}active{% endif %}" style="color: #1A1F3B;">Blog</a>
+    <a href="{% url 'about' %}" class="mobile-nav-link {% if request.path == '/about/' %}active{% endif %}" style="color: #1A1F3B;">About Us</a>
+    <a href="{% url 'contact' %}" class="mobile-nav-link {% if request.path == '/contact/' %}active{% endif %}" style="color: #1A1F3B;">Contact</a>
     <a href="{% url 'contact' %}" class="mobile-menu-cta">
       Start Project
       <i class="fas fa-arrow-right"></i>

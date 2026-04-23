@@ -80,3 +80,9 @@ def rjustrepeat(value, arg):
         return "x" * int(arg)
     except (ValueError, TypeError):
         return ""
+
+
+@register.filter
+def make_list(value):
+    """Convert string to list"""
+    return list(value)
