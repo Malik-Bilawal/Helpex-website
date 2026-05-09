@@ -1,0 +1,334 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery - HELPEX</title>
+  <meta name="description" content="HELPEX Gallery - Visual showcase of our creative work">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Outfit', sans-serif; background: #F8FAFC; color: #1A1F3B; line-height: 1.6; }
+    .font-display { font-family: 'Space Grotesk', sans-serif; }
+    
+    .gallery-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+      gap: 1.5rem; 
+    }
+    @media (max-width: 640px) { 
+      .gallery-grid { 
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 0.75rem; 
+      } 
+    }
+
+    .gallery-item { 
+      position: relative; 
+      border-radius: 16px; 
+      overflow: hidden; 
+      cursor: pointer; 
+      aspect-ratio: 4/3; 
+      background: #F1F5F9; 
+    }
+    .gallery-item.portrait { aspect-ratio: 3/4; }
+    .gallery-item.square { aspect-ratio: 1/1; }
+    .gallery-item img { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover; 
+      transition: transform 0.5s ease; 
+    }
+    .gallery-item:hover img { transform: scale(1.1); }
+
+    .gallery-overlay { 
+      position: absolute; 
+      inset: 0; 
+      background: linear-gradient(to top, rgba(26,31,59,0.9), transparent); 
+      display: flex; 
+      flex-direction: column; 
+      justify-content: flex-end; 
+      padding: 1.5rem; 
+      opacity: 0; 
+      transition: opacity 0.3s; 
+    }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    .gallery-overlay-title { color: white; font-size: 1.125rem; font-weight: 600; }
+    .gallery-overlay-cat { color: #28A197; font-size: 0.875rem; }
+    
+    .gallery-zoom { 
+      position: absolute; 
+      top: 50%; 
+      left: 50%; 
+      transform: translate(-50%, -50%) scale(0); 
+      width: 50px; 
+      height: 50px; 
+      background: #28A197; 
+      border-radius: 50%; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      color: white; 
+      transition: transform 0.3s; 
+    }
+    .gallery-item:hover .gallery-zoom { transform: translate(-50%, -50%) scale(1); }
+
+    .empty-state { text-align: center; padding: 4rem 1rem; }
+    .empty-icon { 
+      width: 80px; 
+      height: 80px; 
+      border-radius: 50%; 
+      background: rgba(40,161,151,0.1); 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      margin: 0 auto 1.5rem; 
+    }
+    .empty-icon i { font-size: 2rem; color: #28A197; }
+    .empty-title { font-size: 1.5rem; font-weight: 700; color: #1A1F3B; margin-bottom: 0.5rem; }
+    .empty-desc { color: #64748B; margin-bottom: 1.5rem; }
+    .empty-btn { 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 0.5rem; 
+      padding: 0.75rem 1.5rem; 
+      background: #28A197; 
+      color: white; 
+      border-radius: 50px; 
+      font-weight: 600; 
+      text-decoration: none; 
+    }
+    .empty-btn:hover { background: #1E837A; }
+
+    .lightbox { 
+      position: fixed; 
+      inset: 0; 
+      z-index: 99999; 
+      background: rgba(0,0,0,0.95); 
+      display: none; 
+      align-items: center; 
+      justify-content: center; 
+      padding: 2rem; 
+    }
+    .lightbox.active { display: flex; }
+    .lightbox-content { position: relative; max-width: 90vw; max-height: 90vh; }
+    .lightbox-content img { 
+      max-width: 100%; 
+      max-height: 90vh; 
+      object-fit: contain; 
+      border-radius: 12px; 
+    }
+    .lightbox-close { 
+      position: absolute; 
+      top: 1rem; 
+      right: 1rem; 
+      width: 50px; 
+      height: 50px; 
+      background: rgba(255,255,255,0.1); 
+      border: none; 
+      border-radius: 50%; 
+      color: white; 
+      font-size: 1.5rem; 
+      cursor: pointer; 
+    }
+    .lightbox-close:hover { background: #28A197; }
+    .lightbox-nav { 
+      position: absolute; 
+      top: 50%; 
+      transform: translateY(-50%); 
+      width: 50px; 
+      height: 50px; 
+      background: rgba(255,255,255,0.1); 
+      border: none; 
+      border-radius: 50%; 
+      color: white; 
+      font-size: 1.25rem; 
+      cursor: pointer; 
+    }
+    .lightbox-nav:hover { background: #28A197; }
+    .lightbox-prev { left: 1rem; }
+    .lightbox-next { right: 1rem; }
+    .lightbox-info { position: absolute; bottom: 1rem; left: 1rem; color: white; }
+    .lightbox-info h3 { font-size: 1.25rem; font-weight: 600; }
+    .lightbox-info p { font-size: 0.875rem; opacity: 0.7; }
+    @media (max-width: 768px) { .lightbox-nav { display: none; } }
+  </style>
+</head>
+<body>
+  {% include 'helpex_app/components/navbar.html' %}
+
+  <div style="padding-top: 80px;">
+    <section class="py-16 relative overflow-hidden" style="background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);">
+      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-0 -left-32 w-72 h-72 rounded-full mix-blend-multiply filter blur-3xl opacity-20" style="background: #28A197;"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 rounded-full mix-blend-multiply filter blur-3xl opacity-15" style="background: #3BC4B5;"></div>
+      </div>
+      
+      <div class="max-w-7xl mx-auto px-4 relative z-10">
+        <div class="flex items-center gap-2 mb-8">
+          <a href="{% url 'index' %}" class="text-sm" style="color: #64748B;">Home</a>
+          <span style="color: #CBD5E1;">/</span>
+          <span class="text-sm font-medium" style="color: #28A197;">Gallery</span>
+        </div>
+        <div class="text-center">
+          <h1 class="text-5xl md:text-6xl font-bold mb-4" style="color: #1A1F3B;">
+            Our <span style="background: linear-gradient(135deg, #28A197, #3BC4B5); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Gallery</span>
+          </h1>
+          <p class="text-xl max-w-2xl mx-auto" style="color: #64748B;">Explore our collection of stunning visuals and creative work.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-12" style="background: #F8FAFC; border-top: 1px solid #E2E8F0; border-bottom: 1px solid #E2E8F0;">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="text-center p-5 rounded-2xl bg-white shadow-sm">
+            <div class="text-3xl font-bold" style="color: #28A197;">{{ total_count }}</div>
+            <div class="text-sm mt-1" style="color: #64748B;">Total Images</div>
+          </div>
+          <div class="text-center p-5 rounded-2xl bg-white shadow-sm">
+            <div class="text-3xl font-bold" style="color: #28A197;">{{ categories.count }}</div>
+            <div class="text-sm mt-1" style="color: #64748B;">Categories</div>
+          </div>
+          <div class="text-center p-5 rounded-2xl bg-white shadow-sm">
+            <div class="text-3xl font-bold" style="color: #28A197;">{{ featured_images.count }}</div>
+            <div class="text-sm mt-1" style="color: #64748B;">Featured</div>
+          </div>
+          <div class="text-center p-5 rounded-2xl bg-white shadow-sm">
+            <div class="text-3xl font-bold" style="color: #28A197;">4K</div>
+            <div class="text-sm mt-1" style="color: #64748B;">Quality</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div style="padding: 2rem 1rem; background: white; border-bottom: 1px solid #E2E8F0;">
+      <div style="max-width: 80rem; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem;">
+        <button class="filter-btn active" data-category="all" style="padding: 10px 24px; border-radius: 50px; font-weight: 600; font-size: 14px; border: 1px solid #E2E8F0; background: #28A197; color: white; cursor: pointer;">
+          <i class="fas fa-th-large mr-2"></i>All ({{ total_count }})
+        </button>
+        {% for cat in categories %}
+        <button class="filter-btn" data-category="{{ cat.slug }}" style="padding: 10px 24px; border-radius: 50px; font-weight: 600; font-size: 14px; border: 1px solid #E2E8F0; background: white; color: #64748B; cursor: pointer;">
+          <i class="{{ cat.icon }} mr-2"></i>{{ cat.name }} ({{ cat.images.count }})
+        </button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <section style="padding: 2rem 1rem 5rem; background: white;">
+      <div style="max-width: 80rem; margin: 0 auto;">
+        <div class="gallery-grid" id="galleryGrid">
+          {% for image in images %}
+          <div class="gallery-item {{ image.aspect_ratio }}" data-category="{{ image.category.slug|default:'uncategorized' }}" data-src="{{ image.image.url }}" data-title="{{ image.title }}" data-cat="{{ image.category.name|default:'Gallery' }}">
+            <img src="{{ image.image.url }}" alt="{{ image.alt_text|default:image.title }}" loading="lazy">
+            <div class="gallery-overlay">
+              <span class="gallery-overlay-cat">{{ image.category.name|default:'Gallery' }}</span>
+              <span class="gallery-overlay-title">{{ image.title }}</span>
+            </div>
+            <div class="gallery-zoom"><i class="fas fa-expand"></i></div>
+          </div>
+          {% empty %}
+          <div style="grid-column: 1/-1; text-align: center; padding: 4rem;">
+            <div class="empty-icon"><i class="fas fa-images"></i></div>
+            <h3 class="empty-title">Gallery is empty</h3>
+            <p class="empty-desc">Add images from the admin panel.</p>
+            <a href="/admin/helpex_app/galleryimage/add/" class="empty-btn">
+              <i class="fas fa-plus"></i> Add Image
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  </div>
+
+  {% include 'helpex_app/components/footer.html' %}
+
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" onclick="closeLightbox()"><i class="fas fa-times"></i></button>
+    <button class="lightbox-nav lightbox-prev" onclick="navigateLightbox(-1)"><i class="fas fa-chevron-left"></i></button>
+    <button class="lightbox-nav lightbox-next" onclick="navigateLightbox(1)"><i class="fas fa-chevron-right"></i></button>
+    <div class="lightbox-content">
+      <img src="" alt="" id="lightboxImage">
+    </div>
+    <div class="lightbox-info" id="lightboxInfo"></div>
+  </div>
+
+  <script>
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const galleryItems = document.querySelectorAll('.gallery-item');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => {
+          b.classList.remove('active');
+          b.style.background = 'white';
+          b.style.color = '#64748B';
+        });
+        btn.classList.add('active');
+        btn.style.background = '#28A197';
+        btn.style.color = 'white';
+
+        const category = btn.dataset.category;
+        galleryItems.forEach(item => {
+          item.style.display = (category === 'all' || item.dataset.category === category) ? '' : 'none';
+        });
+      });
+    });
+
+    let currentIndex = 0;
+    const items = document.querySelectorAll('.gallery-item');
+
+    items.forEach((item, index) => {
+      item.addEventListener('click', () => {
+        currentIndex = index;
+        openLightbox(item);
+      });
+    });
+
+    function openLightbox(item) {
+      document.getElementById('lightboxImage').src = item.dataset.src;
+      document.getElementById('lightboxInfo').innerHTML = '<h3>' + item.dataset.title + '</h3><p>' + item.dataset.cat + '</p>';
+      document.getElementById('lightbox').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function navigateLightbox(direction) {
+      currentIndex = (currentIndex + direction + items.length) % items.length;
+      const item = items[currentIndex];
+      document.getElementById('lightboxImage').src = item.dataset.src;
+      document.getElementById('lightboxInfo').innerHTML = '<h3>' + item.dataset.title + '</h3><p>' + item.dataset.cat + '</p>';
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (document.getElementById('lightbox').classList.contains('active')) {
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') navigateLightbox(-1);
+        if (e.key === 'ArrowRight') navigateLightbox(1);
+      }
+    });
+
+    document.getElementById('lightbox').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeLightbox();
+    });
+
+    try {
+      gsap.registerPlugin(ScrollTrigger);
+      gsap.from('.gallery-item', { opacity: 0, y: 30, duration: 0.6, stagger: 0.1, ease: 'power2.out' });
+    } catch(e) {}
+  </script>
+</body>
+</html>

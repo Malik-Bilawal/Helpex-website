@@ -20,10 +20,10 @@ class Command(BaseCommand):
         # 2. Hero
         HeroSection.objects.all().delete()
         HeroSection.objects.create(
-            title_line_1="We craft",
-            title_line_2="experiences",
+            title_line_1="Innovating the Future",
+            title_line_2="One Solution at a Time",
             typing_texts=['digital experiences', 'web applications', 'software solutions'],
-            description='HELPEX delivers premium web applications and iconic visual identities.',
+            description='HELPEX is an adaptive digital studio crafting exceptional digital experiences. We combine creative design, cutting-edge technology, and strategic thinking to deliver transformative solutions that drive business growth and success.',
             cta_button_text='Start Your Project',
             cta_button_url='/contact/',
             stats_number_1='180+', stats_label_1='Projects',
@@ -35,15 +35,15 @@ class Command(BaseCommand):
         )
         print('[OK] Hero Section')
         
-        # 3. Services
+        # 3. Services (from PDF: 6 core services)
         Service.objects.all().delete()
         services = [
-            {'title': 'Web Development', 'short_description': 'Modern websites', 'description': 'Modern, responsive websites.', 'icon_class': 'fa-code', 'tags': ['React', 'Vue'], 'order': 1},
-            {'title': 'Software Solutions', 'short_description': 'Custom SaaS', 'description': 'Custom software solutions.', 'icon_class': 'fa-cogs', 'tags': ['SaaS', 'ERP'], 'order': 2},
-            {'title': 'Brand & Design', 'short_description': 'Visual identities', 'description': 'Visual identities and branding.', 'icon_class': 'fa-palette', 'tags': ['Logo', 'UI/UX'], 'order': 3},
-            {'title': 'Mobile Apps', 'short_description': 'Cross-platform', 'description': 'Mobile applications.', 'icon_class': 'fa-mobile-alt', 'tags': ['iOS', 'Android'], 'order': 4},
-            {'title': 'Cloud & DevOps', 'short_description': 'Scalable infrastructure', 'description': 'Cloud solutions.', 'icon_class': 'fa-cloud', 'tags': ['AWS', 'Azure'], 'order': 5},
-            {'title': 'AI & Automation', 'short_description': 'Smart workflows', 'description': 'AI integration.', 'icon_class': 'fa-brain', 'tags': ['ML', 'LLM'], 'order': 6},
+            {'title': 'Web Development', 'short_description': 'Modern, responsive websites and web applications', 'description': 'Modern, responsive, and performant. From interactive frontends to robust backends, we build scalable web solutions using cutting-edge technologies.', 'icon_class': 'fa-code', 'tags': ['React', 'Vue', 'Next.js'], 'order': 1},
+            {'title': 'App Development', 'short_description': 'Cross-platform mobile applications', 'description': 'Native and cross-platform mobile applications. We create intuitive, high-performance apps that engage users and drive business growth.', 'icon_class': 'fa-mobile-alt', 'tags': ['React Native', 'Flutter', 'iOS'], 'order': 2},
+            {'title': 'Software Solutions', 'short_description': 'Custom SaaS and enterprise systems', 'description': 'Custom SaaS, automation, and enterprise systems. We design and develop scalable software solutions tailored to your unique business needs.', 'icon_class': 'fa-cogs', 'tags': ['SaaS', 'ERP', 'API'], 'order': 3},
+            {'title': 'Digital Marketing', 'short_description': 'Strategic online presence', 'description': 'Strategic digital marketing services to boost your online visibility. SEO, content marketing, and paid advertising campaigns that deliver results.', 'icon_class': 'fa-bullhorn', 'tags': ['SEO', 'Content', 'Ads'], 'order': 4},
+            {'title': 'UI/UX Design', 'short_description': 'User-centered design experiences', 'description': 'User-centered design that creates meaningful experiences. From research to prototyping, we craft interfaces that users love.', 'icon_class': 'fa-pencil-ruler', 'tags': ['Figma', 'Research', 'Prototyping'], 'order': 5},
+            {'title': 'AI Solutions', 'short_description': 'Intelligent automation and insights', 'description': 'Intelligent automation and AI-powered insights. We integrate machine learning and AI into your workflows for smarter business decisions.', 'icon_class': 'fa-brain', 'tags': ['ML', 'LLM', 'Automation'], 'order': 6},
         ]
         for s in services:
             Service.objects.create(**s)

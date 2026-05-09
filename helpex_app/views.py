@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
-from .models import Service, Testimonial, ProcessStep, PortfolioItem, PortfolioCategory, TeamMember, SiteSettings, HeroSection, ContactMessage, Client, BlogPost, BlogCategory
+from .models import Service, Testimonial, ProcessStep, PortfolioItem, PortfolioCategory, TeamMember, SiteSettings, HeroSection, ContactMessage, Client, BlogPost, BlogCategory, GalleryImage, GalleryCategory
 
 
 def index(request):
@@ -107,3 +107,43 @@ def blog(request):
     response['Pragma'] = 'no-cache'
     response['Expires'] = '0'
     return response
+
+
+def gallery(request):
+    images = GalleryImage.objects.filter(is_active=True).order_by('order', '-is_featured', '-created_at')
+    categories = GalleryCategory.objects.filter(is_active=True).order_by('order', 'name')
+    featured_images = GalleryImage.objects.filter(is_active=True, is_featured=True).order_by('order')[:5]
+    total_count = images.count()
+    settings = SiteSettings.get_settings()
+
+    category_filter = request.GET.get('category')
+    if category_filter and category_filter != 'all':
+        images = images.filter(category__slug=category_filter)
+
+    return render(request, 'helpex_app/gallery.html', {
+        'images': images,
+        'categories': categories,
+        'featured_images': featured_images,
+        'total_count': total_count,
+        'settings': settings,
+        'active_category': category_filter or 'all',
+    })
+
+
+def gallery_image_detail(request, slug):
+    image = GalleryImage.objects.get(slug=slug, is_active=True)
+    image.view_count += 1
+    image.save(update_fields=['view_count'])
+
+    related_images = GalleryImage.objects.filter(
+        category=image.category,
+        is_active=True
+    ).exclude(id=image.id)[:4]
+
+    settings = SiteSettings.get_settings()
+
+    return render(request, 'helpex_app/gallery_detail.html', {
+        'image': image,
+        'related_images': related_images,
+        'settings': settings,
+    })

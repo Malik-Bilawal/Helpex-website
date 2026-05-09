@@ -6,6 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blog - HELPEX BRO</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @media (max-width: 1023px) {
+      .navbar-cta { display: none !important; }
+    }
+  </style>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -232,31 +237,6 @@
   
   <script>
     try { gsap.registerPlugin(ScrollTrigger); } catch(e) {}
-    
-    // Mobile menu
-    const mobileMenu = document.getElementById('mobileMenu') || document.querySelector('.mobile-menu');
-    const mobileOverlay = document.getElementById('mobileOverlay') || document.querySelector('.mobile-menu-overlay');
-    const menuBtn = document.getElementById('menuBtn') || document.querySelector('.navbar-mobile-toggle');
-    const closeBtn = document.getElementById('closeMenu') || document.querySelector('.mobile-menu-close');
-    
-    if (menuBtn && mobileMenu) {
-      menuBtn.addEventListener('click', () => {
-        mobileMenu.classList.add('active');
-        if (mobileOverlay) mobileOverlay.classList.add('active');
-      });
-    }
-    if (closeBtn) {
-      closeBtn.addEventListener('click', () => {
-        mobileMenu.classList.remove('active');
-        if (mobileOverlay) mobileOverlay.classList.remove('active');
-      });
-    }
-    if (mobileOverlay) {
-      mobileOverlay.addEventListener('click', () => {
-        mobileMenu.classList.remove('active');
-        mobileOverlay.classList.remove('active');
-      });
-    }
     
     // Ensure posts are visible
     document.querySelectorAll('.blog-card, .featured-card').forEach(el => {

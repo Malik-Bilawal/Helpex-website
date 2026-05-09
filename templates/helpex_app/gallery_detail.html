@@ -1,0 +1,155 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ image.title }} - Gallery - HELPEX</title>
+  <meta name="description" content="{{ image.description|default:image.title }}">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Outfit', sans-serif; background: #F8FAFC; color: #1A1F3B; line-height: 1.6; }
+    .font-display { font-family: 'Space Grotesk', sans-serif; }
+
+    .image-container { position: relative; overflow: hidden; border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
+    .image-container img { width: 100%; display: block; }
+    .detail-card { background: white; border-radius: 24px; padding: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
+    .related-card { border-radius: 16px; overflow: hidden; position: relative; aspect-ratio: 4/3; }
+    .related-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+    .related-card:hover img { transform: scale(1.1); }
+    .related-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(26,31,59,0.8), transparent); display: flex; align-items: flex-end; padding: 1rem; }
+    .related-overlay span { color: white; font-weight: 600; }
+  </style>
+</head>
+<body>
+  {% include 'helpex_app/components/navbar.html' %}
+
+  <div style="padding-top: 80px;">
+    <section class="py-16" style="background: linear-gradient(180deg, white 0%, #F8FAFC 100%);">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex items-center gap-2 mb-8">
+        <a href="{% url 'index' %}" class="text-sm" style="color: #64748B;">Home</a>
+        <span style="color: #CBD5E1;">/</span>
+        <a href="{% url 'gallery' %}" class="text-sm" style="color: #64748B;">Gallery</a>
+        <span style="color: #CBD5E1;">/</span>
+        <span class="text-sm font-medium" style="color: #28A197;">{{ image.title|truncatechars:30 }}</span>
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2">
+          <div class="image-container">
+            <img src="{{ image.image.url }}" alt="{{ image.alt_text|default:image.title }}">
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          <div class="detail-card">
+            <span class="inline-block px-4 py-2 rounded-full text-xs font-semibold mb-4" style="background: rgba(40,161,151,0.1); color: #28A197;">
+              {{ image.category.name|default:'Gallery' }}
+            </span>
+            <h1 class="font-display text-3xl md:text-4xl font-bold mb-4" style="color: #1A1F3B;">{{ image.title }}</h1>
+            {% if image.description %}
+            <p class="mb-6" style="color: #64748B; line-height: 1.7;">{{ image.description }}</p>
+            {% endif %}
+
+            <div class="space-y-4 pt-4" style="border-top: 1px solid #E2E8F0;">
+              {% if image.photographer %}
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background: linear-gradient(135deg, #28A197, #1E837A);">
+                  <i class="fas fa-camera text-white"></i>
+                </div>
+                <div>
+                  <div class="text-sm" style="color: #64748B;">Photographer</div>
+                  <div class="font-medium">{{ image.photographer }}</div>
+                </div>
+              </div>
+              {% endif %}
+
+              {% if image.location %}
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background: rgba(40,161,151,0.1); color: #28A197;">
+                  <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <div>
+                  <div class="text-sm" style="color: #64748B;">Location</div>
+                  <div class="font-medium">{{ image.location }}</div>
+                </div>
+              </div>
+              {% endif %}
+
+              {% if image.captured_date %}
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background: rgba(40,161,151,0.1); color: #28A197;">
+                  <i class="fas fa-calendar"></i>
+                </div>
+                <div>
+                  <div class="text-sm" style="color: #64748B;">Date</div>
+                  <div class="font-medium">{{ image.captured_date }}</div>
+                </div>
+              </div>
+              {% endif %}
+
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background: rgba(40,161,151,0.1); color: #28A197;">
+                  <i class="fas fa-eye"></i>
+                </div>
+                <div>
+                  <div class="text-sm" style="color: #64748B;">Views</div>
+                  <div class="font-medium">{{ image.view_count }} views</div>
+                </div>
+              </div>
+            </div>
+
+            {% if image.tags %}
+            <div class="mt-6">
+              <div class="text-sm mb-2" style="color: #64748B;">Tags</div>
+              <div class="flex flex-wrap gap-2">
+                {% for tag in image.tags %}
+                <span class="px-3 py-1 rounded-full text-xs font-medium" style="background: #F1F5F9; color: #64748B;">{{ tag }}</span>
+                {% endfor %}
+              </div>
+            </div>
+            {% endif %}
+          </div>
+
+          <div class="flex gap-3">
+            <a href="{{ image.image.url }}" download class="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-white" style="background: linear-gradient(135deg, #28A197, #1E837A);">
+              <i class="fas fa-download"></i> Download
+            </a>
+            <a href="{% url 'gallery' %}" class="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold" style="background: #F1F5F9; color: #1A1F3B; border: 1px solid #E2E8F0;">
+              <i class="fas fa-arrow-left"></i> Back
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {% if related_images %}
+      <div class="mt-16">
+        <h2 class="font-display text-2xl font-bold mb-8" style="color: #1A1F3B;">
+          Related <span style="background: linear-gradient(135deg, #28A197, #3BC4B5); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Images</span>
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {% for related in related_images %}
+          <a href="{% url 'gallery_detail' related.slug %}" class="related-card group">
+            <img src="{{ related.image.url }}" alt="{{ related.title }}">
+            <div class="related-overlay">
+              <span>{{ related.title }}</span>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+  </div>
+
+  {% include 'helpex_app/components/footer.html' %}
+</body>
+</html>

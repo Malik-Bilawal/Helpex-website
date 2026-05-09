@@ -8,6 +8,11 @@
   <title>About Us · HELPEX BRO</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @media (max-width: 1023px) {
+      .navbar-cta { display: none !important; }
+    }
+  </style>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -321,10 +326,10 @@
 
       <div class="text-center mb-8">
         <h1 class="text-5xl md:text-6xl font-bold mb-6" style="color: #1A1F3B;">
-          About <span class="text-transparent bg-clip-text bg-gradient-to-r" style="background: linear-gradient(135deg, #28A197, #3BC4B5); -webkit-background-clip: text;">Us</span>
+          About <span class="text-transparent bg-clip-text bg-gradient-to-r" style="background: linear-gradient(135deg, #28A197, #3BC4B5); -webkit-background-clip: text;">HELPEX</span>
         </h1>
         <p class="text-xl max-w-2xl mx-auto" style="color: #64748B;">
-          We're a team of passionate digital craftsmen dedicated to building exceptional experiences.
+          We're an adaptive digital studio crafting exceptional experiences that drive business growth and success.
         </p>
       </div>
     </div>
@@ -341,11 +346,11 @@
       <div class="text-center mb-16">
         <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5" style="background: rgba(40,161,151,0.1); color: #28A197;">// About Us</span>
         <h1 class="font-display text-5xl md:text-7xl font-bold mb-6" style="color: #1A1F3B;">
-          Building the <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-500">future</span>
-        </h1>
-        <p class="text-lg md:text-xl max-w-2xl mx-auto leading-relaxed" style="color: #64748B;">
-          We're a team of passionate creators, developers, and strategists dedicated to transforming ideas into powerful digital experiences.
-        </p>
+            Innovating the Future,<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-500">One Solution at a Time</span>
+          </h1>
+          <p class="text-lg md:text-xl max-w-2xl mx-auto leading-relaxed" style="color: #64748B;">
+            We're a team of passionate creators, developers, and strategists dedicated to transforming ideas into powerful digital experiences. Our adaptive approach ensures we deliver solutions that truly make a difference.
+          </p>
       </div>
 
       <!-- Stats -->
@@ -377,13 +382,13 @@
         <div>
           <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase mb-4" style="background: rgba(40,161,151,0.1); color: #28A197;">// Our Story</span>
           <h2 class="font-display text-4xl md:text-5xl font-bold mb-6" style="color: #1A1F3B;">
-            From startup to <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-500">industry leader</span>
+            From vision to <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-500">reality</span>
           </h2>
           <p class="text-lg mb-6" style="color: #64748B; line-height: 1.8;">
-            Founded in 2012, HELPEX started as a smallweb development agency with big ambitions. Over the years, we've grown into a full-fledged digital studio, helping businesses of all sizes transform their digital presence.
+            HELPEX is an adaptive digital studio with a passion for crafting exceptional digital experiences. Founded with a vision to bridge the gap between innovative ideas and digital reality, we've grown into a trusted partner for businesses worldwide.
           </p>
           <p class="text-lg mb-8" style="color: #64748B; line-height: 1.8;">
-            Our mission is simple: to deliver exceptional digital solutions that drive real business results. We believe in the power of technology to transform businesses, and we're committed to being your partner in that transformation.
+            We believe that great digital experiences are born from the perfect blend of creative design, cutting-edge technology, and strategic thinking. Every project we undertake is an opportunity to push boundaries and deliver transformative solutions that drive real business growth.
           </p>
           <div class="flex flex-wrap gap-4">
             <div class="flex items-center gap-3">
@@ -439,6 +444,14 @@
       <div class="grid md:grid-cols-3 gap-6">
         <div class="group p-8 rounded-3xl bg-white border transition-all duration-500 hover:shadow-2xl hover:-translate-y-2" style="border-color: rgba(40,161,151,0.1);">
           <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-5 transition-all group-hover:scale-110" style="background: rgba(40,161,151,0.1); color: #28A197;">
+            <i class="fas fa-heart"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3" style="color: #1A1F3B;">Passion</h3>
+          <p class="text-gray-500 leading-relaxed">We pour our heart into every project, treating each challenge as an opportunity to create something extraordinary that makes a real difference.</p>
+        </div>
+
+        <div class="group p-8 rounded-3xl bg-white border transition-all duration-500 hover:shadow-2xl hover:-translate-y-2" style="border-color: rgba(40,161,151,0.1);">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-5 transition-all group-hover:scale-110" style="background: rgba(40,161,151,0.1); color: #28A197;">
             <i class="fas fa-lightbulb"></i>
           </div>
           <h3 class="text-xl font-bold mb-3" style="color: #1A1F3B;">Innovation</h3>
@@ -447,18 +460,34 @@
 
         <div class="group p-8 rounded-3xl bg-white border transition-all duration-500 hover:shadow-2xl hover:-translate-y-2" style="border-color: rgba(40,161,151,0.1);">
           <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-5 transition-all group-hover:scale-110" style="background: rgba(40,161,151,0.1); color: #28A197;">
-            <i class="fas fa-heart"></i>
+            <i class="fas fa-handshake"></i>
           </div>
-          <h3 class="text-xl font-bold mb-3" style="color: #1A1F3B;">Client Focus</h3>
-          <p class="text-gray-500 leading-relaxed">Your success is our success. We take the time to understand your unique needs and deliver solutions that exceed expectations.</p>
+          <h3 class="text-xl font-bold mb-3" style="color: #1A1F3B;">Integrity</h3>
+          <p class="text-gray-500 leading-relaxed">We build trust through transparency, honesty, and delivering on our promises. Your success is our success, and we're committed to that partnership.</p>
         </div>
 
         <div class="group p-8 rounded-3xl bg-white border transition-all duration-500 hover:shadow-2xl hover:-translate-y-2" style="border-color: rgba(40,161,151,0.1);">
           <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-5 transition-all group-hover:scale-110" style="background: rgba(40,161,151,0.1); color: #28A197;">
-            <i class="fas fa-shield-alt"></i>
+            <i class="fas fa-users"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3" style="color: #1A1F3B;">Collaboration</h3>
+          <p class="text-gray-500 leading-relaxed">Great work happens when great minds work together. We foster open communication and teamwork to achieve shared goals.</p>
+        </div>
+
+        <div class="group p-8 rounded-3xl bg-white border transition-all duration-500 hover:shadow-2xl hover:-translate-y-2" style="border-color: rgba(40,161,151,0.1);">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-5 transition-all group-hover:scale-110" style="background: rgba(40,161,151,0.1); color: #28A197;">
+            <i class="fas fa-star"></i>
           </div>
           <h3 class="text-xl font-bold mb-3" style="color: #1A1F3B;">Excellence</h3>
-          <p class="text-gray-500 leading-relaxed">We never settle for "good enough." Every line of code, every pixel, every interaction is crafted with precision and care.</p>
+          <p class="text-gray-500 leading-relaxed">We never settle for "good enough." Every line of code, every pixel, every interaction is crafted with precision and care to deliver exceptional results.</p>
+        </div>
+
+        <div class="group p-8 rounded-3xl bg-white border transition-all duration-500 hover:shadow-2xl hover:-translate-y-2" style="border-color: rgba(40,161,151,0.1);">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-5 transition-all group-hover:scale-110" style="background: rgba(40,161,151,0.1); color: #28A197;">
+            <i class="fas fa-rocket"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3" style="color: #1A1F3B;">Growth</h3>
+          <p class="text-gray-500 leading-relaxed">We're committed to continuous learning and improvement, both for ourselves and our clients, ensuring we stay ahead in an ever-evolving digital landscape.</p>
         </div>
       </div>
     </div>
@@ -569,35 +598,6 @@
       });
     });
 
-    // Mobile Menu
-    const mobileMenu = document.getElementById('mobileMenu');
-    const menuBtn = document.getElementById('menuBtn');
-    const closeMenu = document.getElementById('closeMenu');
-    const body = document.body;
-
-    menuBtn.addEventListener('click', () => {
-      mobileMenu.classList.add('active');
-      body.style.overflow = 'hidden';
-    });
-
-    closeMenu.addEventListener('click', () => {
-      mobileMenu.classList.remove('active');
-      body.style.overflow = '';
-    });
-
-    mobileMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.remove('active');
-        body.style.overflow = '';
-      });
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
-        mobileMenu.classList.remove('active');
-        body.style.overflow = '';
-      }
-    });
-  </script>
+    </script>
 </body>
 </html>

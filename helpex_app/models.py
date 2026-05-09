@@ -5,10 +5,10 @@ from django.utils.text import slugify
 
 class HeroSection(models.Model):
     """Hero section for the homepage"""
-    title_line_1 = models.CharField(max_length=100, default="We craft")
-    title_line_2 = models.CharField(max_length=100, default="experiences")
+    title_line_1 = models.CharField(max_length=100, default="Innovating the Future")
+    title_line_2 = models.CharField(max_length=100, default="One Solution at a Time")
     typing_texts = models.JSONField(default=list, blank=True, help_text="Array of animated texts")
-    description = models.TextField(default="HELPEX delivers premium web applications, custom software solutions, and iconic visual identities that transform businesses worldwide.")
+    description = models.TextField(default="HELPEX is an adaptive digital studio crafting exceptional digital experiences. We combine creative design, cutting-edge technology, and strategic thinking to deliver transformative solutions that drive business growth and success.")
     cta_button_text = models.CharField(max_length=50, default="Start Your Project")
     cta_button_url = models.CharField(max_length=100, default="/contact/")
     secondary_cta_text = models.CharField(max_length=50, default="Watch Showreel", blank=True)
@@ -298,3 +298,75 @@ class BlogPost(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
+
+
+class GalleryCategory(models.Model):
+    """Gallery categories for organizing images"""
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, unique=True)
+    description = models.TextField(blank=True)
+    icon = models.CharField(max_length=50, default="fa-images", help_text="FontAwesome icon class")
+    color = models.CharField(max_length=7, default="#28A197", help_text="Category accent color (hex)")
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Gallery Category"
+        verbose_name_plural = "Gallery Categories"
+        ordering = ['order', 'name']
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+
+class GalleryImage(models.Model):
+    """Gallery images with metadata"""
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
+    category = models.ForeignKey(GalleryCategory, on_delete=models.SET_NULL, null=True, blank=True, related_name='images')
+    image = models.ImageField(upload_to='gallery/')
+    thumbnail = models.ImageField(upload_to='gallery/thumbs/', blank=True, null=True, help_text="Optional thumbnail for optimized loading")
+    description = models.TextField(blank=True)
+    
+    alt_text = models.CharField(max_length=200, blank=True, help_text="SEO alt text for the image")
+    photographer = models.CharField(max_length=100, blank=True)
+    location = models.CharField(max_length=200, blank=True)
+    captured_date = models.DateField(null=True, blank=True)
+    
+    tags = models.JSONField(default=list, blank=True, help_text="Array of tags for filtering")
+    
+    aspect_ratio = models.CharField(max_length=20, default="landscape", choices=[
+        ('portrait', 'Portrait'),
+        ('landscape', 'Landscape'),
+        ('square', 'Square'),
+    ])
+    
+    order = models.PositiveIntegerField(default=0)
+    is_featured = models.BooleanField(default=False, help_text="Show in featured slider")
+    is_active = models.BooleanField(default=True)
+    view_count = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Gallery Image"
+        verbose_name_plural = "Gallery Images"
+        ordering = ['order', '-is_featured', '-created_at']
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+    @property
+    def image_url(self):
+        return self.thumbnail.url if self.thumbnail else self.image.url

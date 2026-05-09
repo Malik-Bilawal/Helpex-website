@@ -8,6 +8,11 @@
   <title>Contact Us · HELPEX BRO</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @media (max-width: 1023px) {
+      .navbar-cta { display: none !important; }
+    }
+  </style>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -817,35 +822,6 @@
       }
     });
 
-    // Mobile Menu
-    const mobileMenu = document.getElementById('mobileMenu');
-    const menuBtn = document.getElementById('menuBtn');
-    const closeMenu = document.getElementById('closeMenu');
-    const body = document.body;
-
-    menuBtn.addEventListener('click', () => {
-      mobileMenu.classList.add('active');
-      body.style.overflow = 'hidden';
-    });
-
-    closeMenu.addEventListener('click', () => {
-      mobileMenu.classList.remove('active');
-      body.style.overflow = '';
-    });
-
-    mobileMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.remove('active');
-        body.style.overflow = '';
-      });
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
-        mobileMenu.classList.remove('active');
-        body.style.overflow = '';
-      }
-    });
-  </script>
+    </script>
 </body>
 </html>

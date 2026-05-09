@@ -1,10 +1,12 @@
 from django.contrib import admin
 from django.urls import path
 from django.http import HttpResponseRedirect
+from django.utils.html import format_html
 from .models import (
-    HeroSection, Service, Testimonial, ProcessStep, 
-    PortfolioCategory, PortfolioItem, SiteSettings, 
-    ContactMessage, TeamMember, Client, BlogCategory, BlogPost
+    HeroSection, Service, Testimonial, ProcessStep,
+    PortfolioCategory, PortfolioItem, SiteSettings,
+    ContactMessage, TeamMember, Client, BlogCategory, BlogPost,
+    GalleryCategory, GalleryImage
 )
 
 
@@ -131,3 +133,100 @@ class BlogPostAdmin(admin.ModelAdmin):
     list_editable = ['is_published', 'is_featured']
     ordering = ['-created_at']
     prepopulated_fields = {'slug': ('title',)}
+
+
+@admin.register(GalleryCategory)
+class GalleryCategoryAdmin(admin.ModelAdmin):
+    list_display = ['name', 'icon_display', 'color_preview', 'order', 'image_count', 'is_active']
+    list_filter = ['is_active']
+    search_fields = ['name', 'description']
+    list_editable = ['order', 'is_active']
+    ordering = ['order', 'name']
+    prepopulated_fields = {'slug': ('name',)}
+
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('name', 'slug', 'description')
+        }),
+        ('Appearance', {
+            'fields': ('icon', 'color')
+        }),
+        ('Settings', {
+            'fields': ('order', 'is_active')
+        }),
+    )
+
+    def icon_display(self, obj):
+        return format_html('<i class="fas {}"></i> {}'.format(obj.icon, obj.name))
+    icon_display.short_description = 'Category'
+
+    def color_preview(self, obj):
+        return format_html(
+            '<span style="display: inline-block; width: 24px; height: 24px; background: {}; border-radius: 4px; border: 1px solid #ddd;"></span>'.format(obj.color)
+        )
+    color_preview.short_description = 'Color'
+
+    def image_count(self, obj):
+        return obj.images.count()
+    image_count.short_description = 'Images'
+
+
+@admin.register(GalleryImage)
+class GalleryImageAdmin(admin.ModelAdmin):
+    list_display = ['thumbnail_preview', 'title', 'category', 'aspect_ratio', 'is_featured', 'is_active', 'order', 'view_count', 'created']
+    list_filter = ['is_active', 'is_featured', 'category', 'aspect_ratio']
+    search_fields = ['title', 'description', 'tags', 'photographer', 'location']
+    list_editable = ['order', 'is_active', 'is_featured']
+    ordering = ['order', '-is_featured', '-created_at']
+    prepopulated_fields = {'slug': ('title',)}
+
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'slug', 'category', 'description')
+        }),
+        ('Image', {
+            'fields': ('image', 'thumbnail')
+        }),
+        ('SEO & Metadata', {
+            'fields': ('alt_text', 'tags'),
+            'classes': ('collapse',)
+        }),
+        ('Details', {
+            'fields': ('photographer', 'location', 'captured_date', 'aspect_ratio')
+        }),
+        ('Settings', {
+            'fields': ('order', 'is_featured', 'is_active')
+        }),
+    )
+
+    def thumbnail_preview(self, obj):
+        if obj.image:
+            return format_html(
+                '<img src="{}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;" />'.format(obj.image.url)
+            )
+        return format_html('<span style="color: #999;">No image</span>')
+    thumbnail_preview.short_description = 'Preview'
+
+    def created(self, obj):
+        return obj.created_at.strftime('%b %d, %Y')
+    created.short_description = 'Added'
+
+    readonly_fields = ['view_count', 'created_at', 'updated_at']
+
+    actions = ['make_active', 'make_inactive', 'make_featured', 'remove_featured']
+
+    def make_active(self, request, queryset):
+        queryset.update(is_active=True)
+    make_active.short_description = "Mark selected as active"
+
+    def make_inactive(self, request, queryset):
+        queryset.update(is_active=False)
+    make_inactive.short_description = "Mark selected as inactive"
+
+    def make_featured(self, request, queryset):
+        queryset.update(is_featured=True)
+    make_featured.short_description = "Mark as featured"
+
+    def remove_featured(self, request, queryset):
+        queryset.update(is_featured=False)
+    remove_featured.short_description = "Remove from featured"
