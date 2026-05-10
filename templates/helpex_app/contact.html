@@ -684,7 +684,7 @@
               </div>
               <div>
                 <div class="text-sm mb-1" style="color: #64748B;">Email us</div>
-                <a href="mailto:hello@helpex.com" class="text-lg font-semibold hover:text-teal transition-colors" style="color: #1A1F3B;">hello@helpex.com</a>
+                <a href="mailto:{{ settings.email|default:'hello@helpex.com' }}" class="text-lg font-semibold hover:text-teal transition-colors" style="color: #1A1F3B;">{{ settings.email|default:'hello@helpex.com' }}</a>
               </div>
             </div>
           </div>
@@ -697,7 +697,7 @@
               </div>
               <div>
                 <div class="text-sm mb-1" style="color: #64748B;">Call us</div>
-                <a href="tel:+1234567890" class="text-lg font-semibold hover:text-teal transition-colors" style="color: #1A1F3B;">+1 (234) 567-890</a>
+                <a href="tel:{{ settings.phone|default:'+1234567890' }}" class="text-lg font-semibold hover:text-teal transition-colors" style="color: #1A1F3B;">{{ settings.phone|default:'+1 (234) 567-890' }}</a>
               </div>
             </div>
           </div>
@@ -710,7 +710,7 @@
               </div>
               <div>
                 <div class="text-sm mb-1" style="color: #64748B;">Visit us</div>
-                <div class="text-lg font-semibold" style="color: #1A1F3B;">123 Digital Avenue<br><span class="text-base font-normal" style="color: #64748B;">Tech City, TC 10001</span></div>
+                <div class="text-lg font-semibold" style="color: #1A1F3B;">{% if settings.address %}{{ settings.address|linebreaks }}{% else %}123 Digital Avenue<br><span class="text-base font-normal" style="color: #64748B;">Tech City, TC 10001</span>{% endif %}</div>
               </div>
             </div>
           </div>

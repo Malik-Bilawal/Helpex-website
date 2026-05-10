@@ -1,4 +1,6 @@
 {% load static %}
+{% load helpex_tags %}
+{% get_settings as settings %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,220 +16,167 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   
   <style>
+    :root {
+      --midnight: #1A1F3B;
+      --teal: #28A197;
+      --teal-dark: #1E837A;
+      --teal-glow: #3BC4B5;
+      --white: #FFFFFF;
+      --gray-100: #F8FAFC;
+      --gray-200: #E2E8F0;
+      --gray-500: #64748B;
+    }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    body { font-family: 'Outfit', sans-serif; background: #F8FAFC; color: #1A1F3B; line-height: 1.6; }
+    body { font-family: 'Outfit', sans-serif; background: var(--gray-100); color: var(--midnight); line-height: 1.6; overflow-x: hidden; }
     .font-display { font-family: 'Space Grotesk', sans-serif; }
-    
-    .gallery-grid { 
-      display: grid; 
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-      gap: 1.5rem; 
-    }
-    @media (max-width: 640px) { 
-      .gallery-grid { 
-        grid-template-columns: repeat(2, 1fr); 
-        gap: 0.75rem; 
-      } 
-    }
 
-    .gallery-item { 
-      position: relative; 
-      border-radius: 16px; 
-      overflow: hidden; 
-      cursor: pointer; 
-      aspect-ratio: 4/3; 
-      background: #F1F5F9; 
-    }
+    /* Gallery Grid */
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+    @media (max-width: 640px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; } }
+    
+    .gallery-item { position: relative; border-radius: 16px; overflow: hidden; cursor: pointer; aspect-ratio: 4/3; background: var(--gray-200); }
     .gallery-item.portrait { aspect-ratio: 3/4; }
     .gallery-item.square { aspect-ratio: 1/1; }
-    .gallery-item img { 
-      width: 100%; 
-      height: 100%; 
-      object-fit: cover; 
-      transition: transform 0.5s ease; 
-    }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
     .gallery-item:hover img { transform: scale(1.1); }
 
-    .gallery-overlay { 
-      position: absolute; 
-      inset: 0; 
-      background: linear-gradient(to top, rgba(26,31,59,0.9), transparent); 
-      display: flex; 
-      flex-direction: column; 
-      justify-content: flex-end; 
-      padding: 1.5rem; 
-      opacity: 0; 
-      transition: opacity 0.3s; 
-    }
+    .gallery-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(26,31,59,0.9), transparent); display: flex; flex-direction: column; justify-content: flex-end; padding: 1.5rem; opacity: 0; transition: opacity 0.3s; }
     .gallery-item:hover .gallery-overlay { opacity: 1; }
     .gallery-overlay-title { color: white; font-size: 1.125rem; font-weight: 600; }
-    .gallery-overlay-cat { color: #28A197; font-size: 0.875rem; }
+    .gallery-overlay-cat { color: var(--teal); font-size: 0.875rem; }
     
-    .gallery-zoom { 
-      position: absolute; 
-      top: 50%; 
-      left: 50%; 
-      transform: translate(-50%, -50%) scale(0); 
-      width: 50px; 
-      height: 50px; 
-      background: #28A197; 
-      border-radius: 50%; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      color: white; 
-      transition: transform 0.3s; 
-    }
+    .gallery-zoom { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); width: 50px; height: 50px; background: var(--teal); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; transition: transform 0.3s; }
     .gallery-item:hover .gallery-zoom { transform: translate(-50%, -50%) scale(1); }
 
-    .empty-state { text-align: center; padding: 4rem 1rem; }
-    .empty-icon { 
-      width: 80px; 
-      height: 80px; 
-      border-radius: 50%; 
-      background: rgba(40,161,151,0.1); 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      margin: 0 auto 1.5rem; 
-    }
-    .empty-icon i { font-size: 2rem; color: #28A197; }
-    .empty-title { font-size: 1.5rem; font-weight: 700; color: #1A1F3B; margin-bottom: 0.5rem; }
-    .empty-desc { color: #64748B; margin-bottom: 1.5rem; }
-    .empty-btn { 
-      display: inline-flex; 
-      align-items: center; 
-      gap: 0.5rem; 
-      padding: 0.75rem 1.5rem; 
-      background: #28A197; 
-      color: white; 
-      border-radius: 50px; 
-      font-weight: 600; 
-      text-decoration: none; 
-    }
-    .empty-btn:hover { background: #1E837A; }
+    /* Filter Buttons */
+    .filter-bar { padding: 1.5rem 1rem; background: white; border-bottom: 1px solid var(--gray-200); overflow-x: auto; }
+    .filter-bar-inner { max-width: 80rem; margin: 0 auto; display: flex; gap: 0.75rem; }
+    .filter-btn { padding: 10px 24px; border-radius: 50px; font-weight: 600; font-size: 14px; border: 1px solid var(--gray-200); background: white; color: var(--gray-500); cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: all 0.3s; }
+    .filter-btn.active { background: var(--teal); color: white; border-color: var(--teal); }
+    .filter-btn:hover:not(.active) { border-color: var(--teal); color: var(--teal); }
 
-    .lightbox { 
-      position: fixed; 
-      inset: 0; 
-      z-index: 99999; 
-      background: rgba(0,0,0,0.95); 
-      display: none; 
-      align-items: center; 
-      justify-content: center; 
-      padding: 2rem; 
-    }
+    /* Stats */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+    .stat-card { text-align: center; padding: 1.25rem; border-radius: 1rem; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .stat-number { font-size: 2rem; font-weight: 700; color: var(--teal); }
+    .stat-label { font-size: 0.875rem; color: var(--gray-500); margin-top: 0.25rem; }
+
+    /* Lightbox */
+    .lightbox { position: fixed; inset: 0; z-index: 99999; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; padding: 2rem; }
     .lightbox.active { display: flex; }
     .lightbox-content { position: relative; max-width: 90vw; max-height: 90vh; }
-    .lightbox-content img { 
-      max-width: 100%; 
-      max-height: 90vh; 
-      object-fit: contain; 
-      border-radius: 12px; 
-    }
-    .lightbox-close { 
-      position: absolute; 
-      top: 1rem; 
-      right: 1rem; 
-      width: 50px; 
-      height: 50px; 
-      background: rgba(255,255,255,0.1); 
-      border: none; 
-      border-radius: 50%; 
-      color: white; 
-      font-size: 1.5rem; 
-      cursor: pointer; 
-    }
-    .lightbox-close:hover { background: #28A197; }
-    .lightbox-nav { 
-      position: absolute; 
-      top: 50%; 
-      transform: translateY(-50%); 
-      width: 50px; 
-      height: 50px; 
-      background: rgba(255,255,255,0.1); 
-      border: none; 
-      border-radius: 50%; 
-      color: white; 
-      font-size: 1.25rem; 
-      cursor: pointer; 
-    }
-    .lightbox-nav:hover { background: #28A197; }
+    .lightbox-content img { max-width: 100%; max-height: 90vh; object-fit: contain; border-radius: 12px; }
+    .lightbox-close { position: absolute; top: 1rem; right: 1rem; width: 50px; height: 50px; background: rgba(255,255,255,0.1); border: none; border-radius: 50%; color: white; font-size: 1.5rem; cursor: pointer; }
+    .lightbox-close:hover { background: var(--teal); }
+    .lightbox-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 50px; height: 50px; background: rgba(255,255,255,0.1); border: none; border-radius: 50%; color: white; font-size: 1.25rem; cursor: pointer; }
+    .lightbox-nav:hover { background: var(--teal); }
     .lightbox-prev { left: 1rem; }
     .lightbox-next { right: 1rem; }
     .lightbox-info { position: absolute; bottom: 1rem; left: 1rem; color: white; }
     .lightbox-info h3 { font-size: 1.25rem; font-weight: 600; }
     .lightbox-info p { font-size: 0.875rem; opacity: 0.7; }
     @media (max-width: 768px) { .lightbox-nav { display: none; } }
+
+    /* Footer */
+    .footer { background: linear-gradient(180deg, var(--midnight) 0%, #0f1225 100%); padding: 4rem 0 2rem; }
+    .footer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; max-width: 80rem; margin: 0 auto; padding: 0 1.5rem; }
+    @media (max-width: 768px) { .footer-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .footer-grid { grid-template-columns: 1fr; } }
+    .footer-brand { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; }
+    .footer-brand img { height: 44px; border-radius: 10px; }
+    .footer-brand span { font-size: 1.25rem; font-weight: 700; color: white; }
+    .footer-brand span span { color: var(--teal); }
+    .footer-desc { color: rgba(255,255,255,0.6); font-size: 0.875rem; line-height: 1.7; margin-bottom: 1.25rem; }
+    .footer-social { display: flex; gap: 0.75rem; }
+    .social-link { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); font-size: 14px; }
+    .social-link:hover { background: var(--teal); border-color: var(--teal); color: white; }
+    .footer-title { color: white; font-weight: 600; margin-bottom: 1.25rem; font-size: 15px; }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: 0.75rem; }
+    .footer-links a { color: rgba(255,255,255,0.5); font-size: 14px; text-decoration: none; transition: color 0.3s; }
+    .footer-links a:hover { color: var(--teal); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 3rem; padding: 2rem 1.5rem 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .footer-copyright { color: rgba(255,255,255,0.4); font-size: 14px; }
+    .footer-legal { display: flex; gap: 1.5rem; }
+    .footer-legal a { color: rgba(255,255,255,0.4); font-size: 14px; text-decoration: none; }
+    .footer-legal a:hover { color: var(--teal); }
+    .back-top { position: fixed; bottom: 1.5rem; right: 1.5rem; width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--teal), var(--teal-dark)); display: flex; align-items: center; justify-content: center; color: white; cursor: pointer; box-shadow: 0 4px 20px rgba(40,161,151,0.4); z-index: 50; }
   </style>
 </head>
 <body>
   {% include 'helpex_app/components/navbar.html' %}
 
   <div style="padding-top: 80px;">
-    <section class="py-16 relative overflow-hidden" style="background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);">
-      <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute top-0 -left-32 w-72 h-72 rounded-full mix-blend-multiply filter blur-3xl opacity-20" style="background: #28A197;"></div>
-        <div class="absolute bottom-0 right-0 w-96 h-96 rounded-full mix-blend-multiply filter blur-3xl opacity-15" style="background: #3BC4B5;"></div>
+    <!-- Hero Section -->
+    <section class="py-16 relative overflow-hidden" style="background: linear-gradient(180deg, var(--white) 0%, var(--gray-100) 100%);">
+      <div style="position: absolute; inset: 0; overflow: hidden; pointer-events: none;">
+        <div style="position: absolute; top: 0; left: -8rem; width: 18rem; height: 18rem; border-radius: 50%; background: var(--teal); opacity: 0.2; filter: blur(3rem);"></div>
+        <div style="position: absolute; bottom: 0; right: 0; width: 24rem; height: 24rem; border-radius: 50%; background: var(--teal-glow); opacity: 0.15; filter: blur(3rem);"></div>
       </div>
       
-      <div class="max-w-7xl mx-auto px-4 relative z-10">
-        <div class="flex items-center gap-2 mb-8">
-          <a href="{% url 'index' %}" class="text-sm" style="color: #64748B;">Home</a>
-          <span style="color: #CBD5E1;">/</span>
-          <span class="text-sm font-medium" style="color: #28A197;">Gallery</span>
+      <div style="max-width: 80rem; margin: 0 auto; padding: 0 1rem; position: relative; z-index: 10;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem;">
+          <a href="{% url 'index' %}" style="color: var(--gray-500); font-size: 14px; text-decoration: none;">Home</a>
+          <span style="color: var(--gray-200);">/</span>
+          <span style="color: var(--teal); font-size: 14px; font-weight: 500;">Gallery</span>
         </div>
-        <div class="text-center">
-          <h1 class="text-5xl md:text-6xl font-bold mb-4" style="color: #1A1F3B;">
-            Our <span style="background: linear-gradient(135deg, #28A197, #3BC4B5); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Gallery</span>
+        <div style="text-align: center;">
+          <h1 class="font-display" style="font-size: clamp(2.5rem, 5vw, 3.75rem); font-weight: 700; color: var(--midnight); margin-bottom: 1rem;">
+            Our <span style="background: linear-gradient(135deg, var(--teal), var(--teal-glow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Gallery</span>
           </h1>
-          <p class="text-xl max-w-2xl mx-auto" style="color: #64748B;">Explore our collection of stunning visuals and creative work.</p>
+          <p style="font-size: 1.25rem; max-width: 42rem; margin: 0 auto; color: var(--gray-500);">Explore our collection of stunning visuals and creative work.</p>
         </div>
       </div>
     </section>
 
-    <section class="py-12" style="background: #F8FAFC; border-top: 1px solid #E2E8F0; border-bottom: 1px solid #E2E8F0;">
-      <div class="max-w-7xl mx-auto px-4">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div class="text-center p-5 rounded-2xl bg-white shadow-sm">
-            <div class="text-3xl font-bold" style="color: #28A197;">{{ total_count }}</div>
-            <div class="text-sm mt-1" style="color: #64748B;">Total Images</div>
+    <!-- Stats Section -->
+    <section style="padding: 3rem 1rem; background: var(--gray-100); border-top: 1px solid var(--gray-200); border-bottom: 1px solid var(--gray-200);">
+      <div style="max-width: 80rem; margin: 0 auto;">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number">{{ total_count }}</div>
+            <div class="stat-label">Total Images</div>
           </div>
-          <div class="text-center p-5 rounded-2xl bg-white shadow-sm">
-            <div class="text-3xl font-bold" style="color: #28A197;">{{ categories.count }}</div>
-            <div class="text-sm mt-1" style="color: #64748B;">Categories</div>
+          <div class="stat-card">
+            <div class="stat-number">{{ categories.count }}</div>
+            <div class="stat-label">Categories</div>
           </div>
-          <div class="text-center p-5 rounded-2xl bg-white shadow-sm">
-            <div class="text-3xl font-bold" style="color: #28A197;">{{ featured_images.count }}</div>
-            <div class="text-sm mt-1" style="color: #64748B;">Featured</div>
+          <div class="stat-card">
+            <div class="stat-number">{{ featured_images.count }}</div>
+            <div class="stat-label">Featured</div>
           </div>
-          <div class="text-center p-5 rounded-2xl bg-white shadow-sm">
-            <div class="text-3xl font-bold" style="color: #28A197;">4K</div>
-            <div class="text-sm mt-1" style="color: #64748B;">Quality</div>
+          <div class="stat-card">
+            <div class="stat-number">4K</div>
+            <div class="stat-label">Quality</div>
           </div>
         </div>
       </div>
     </section>
 
-    <div style="padding: 2rem 1rem; background: white; border-bottom: 1px solid #E2E8F0;">
-      <div style="max-width: 80rem; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem;">
-        <button class="filter-btn active" data-category="all" style="padding: 10px 24px; border-radius: 50px; font-weight: 600; font-size: 14px; border: 1px solid #E2E8F0; background: #28A197; color: white; cursor: pointer;">
-          <i class="fas fa-th-large mr-2"></i>All ({{ total_count }})
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <div class="filter-bar-inner">
+        <button class="filter-btn active" data-category="all" onclick="filterGallery('all', this)">
+          <i class="fas fa-th-large" style="margin-right: 8px;"></i>All ({{ total_count }})
         </button>
         {% for cat in categories %}
-        <button class="filter-btn" data-category="{{ cat.slug }}" style="padding: 10px 24px; border-radius: 50px; font-weight: 600; font-size: 14px; border: 1px solid #E2E8F0; background: white; color: #64748B; cursor: pointer;">
-          <i class="{{ cat.icon }} mr-2"></i>{{ cat.name }} ({{ cat.images.count }})
+        <button class="filter-btn" data-category="{{ cat.slug }}" onclick="filterGallery('{{ cat.slug }}', this)">
+          <i class="{{ cat.icon|default:'fas fa-folder' }}" style="margin-right: 8px;"></i>{{ cat.name }} ({{ cat.images.count }})
         </button>
         {% endfor %}
       </div>
     </div>
 
+    <!-- Gallery Grid -->
     <section style="padding: 2rem 1rem 5rem; background: white;">
       <div style="max-width: 80rem; margin: 0 auto;">
         <div class="gallery-grid" id="galleryGrid">
           {% for image in images %}
-          <div class="gallery-item {{ image.aspect_ratio }}" data-category="{{ image.category.slug|default:'uncategorized' }}" data-src="{{ image.image.url }}" data-title="{{ image.title }}" data-cat="{{ image.category.name|default:'Gallery' }}">
+          {% if image.image %}
+          <div class="gallery-item {{ image.aspect_ratio|default:'' }}" data-category="{{ image.category.slug|default:'uncategorized' }}" onclick="openLightbox({{ forloop.counter0 }})">
             <img src="{{ image.image.url }}" alt="{{ image.alt_text|default:image.title }}" loading="lazy">
             <div class="gallery-overlay">
               <span class="gallery-overlay-cat">{{ image.category.name|default:'Gallery' }}</span>
@@ -235,12 +184,15 @@
             </div>
             <div class="gallery-zoom"><i class="fas fa-expand"></i></div>
           </div>
+          {% endif %}
           {% empty %}
           <div style="grid-column: 1/-1; text-align: center; padding: 4rem;">
-            <div class="empty-icon"><i class="fas fa-images"></i></div>
-            <h3 class="empty-title">Gallery is empty</h3>
-            <p class="empty-desc">Add images from the admin panel.</p>
-            <a href="/admin/helpex_app/galleryimage/add/" class="empty-btn">
+            <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(40,161,151,0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+              <i class="fas fa-images" style="font-size: 2rem; color: var(--teal);"></i>
+            </div>
+            <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--midnight); margin-bottom: 0.5rem;">Gallery is empty</h3>
+            <p style="color: var(--gray-500); margin-bottom: 1.5rem;">Add images from the admin panel.</p>
+            <a href="/admin/helpex_app/galleryimage/add/" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--teal); color: white; border-radius: 50px; font-weight: 600; text-decoration: none;">
               <i class="fas fa-plus"></i> Add Image
             </a>
           </div>
@@ -250,9 +202,66 @@
     </section>
   </div>
 
-  {% include 'helpex_app/components/footer.html' %}
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <img src="{% static 'logo.png' %}" alt="{{ settings.company_name }}">
+          <span>{{ settings.company_name|slice:":-1" }}<span>.</span></span>
+        </div>
+        <p class="footer-desc">{% if settings.description %}{{ settings.description }}{% else %}Adaptive digital studio crafting exceptional digital experiences.{% endif %}</p>
+        <div class="footer-social">
+          {% if settings.social_twitter %}<a href="{{ settings.social_twitter }}" target="_blank" class="social-link"><i class="fab fa-twitter"></i></a>{% endif %}
+          {% if settings.social_instagram %}<a href="{{ settings.social_instagram }}" target="_blank" class="social-link"><i class="fab fa-instagram"></i></a>{% endif %}
+          {% if settings.social_linkedin %}<a href="{{ settings.social_linkedin }}" target="_blank" class="social-link"><i class="fab fa-linkedin-in"></i></a>{% endif %}
+          {% if settings.social_github %}<a href="{{ settings.social_github }}" target="_blank" class="social-link"><i class="fab fa-github"></i></a>{% endif %}
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-title">Services</h4>
+        <ul class="footer-links">
+          <li><a href="{% url 'service' %}">Web Development</a></li>
+          <li><a href="{% url 'service' %}">App Development</a></li>
+          <li><a href="{% url 'service' %}">Software Solutions</a></li>
+          <li><a href="{% url 'service' %}">Digital Marketing</a></li>
+          <li><a href="{% url 'service' %}">UI/UX Design</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-title">Company</h4>
+        <ul class="footer-links">
+          <li><a href="{% url 'about' %}">About Us</a></li>
+          <li><a href="{% url 'service' %}">Services</a></li>
+          <li><a href="{% url 'contact' %}">Contact</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-title">Stay Updated</h4>
+        <p style="color: rgba(255,255,255,0.5); font-size: 14px; margin-bottom: 1rem;">Subscribe for updates & insights.</p>
+        <form style="display: flex; gap: 0.5rem;" onsubmit="event.preventDefault(); alert('Thanks for subscribing!');">
+          <input type="email" placeholder="Your email" required style="flex: 1; padding: 12px 16px; border-radius: 12px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: white; font-size: 14px; outline: none;">
+          <button type="submit" style="padding: 12px 20px; border-radius: 12px; background: linear-gradient(135deg, var(--teal), var(--teal-dark)); color: white; font-weight: 600; font-size: 14px; border: none; cursor: pointer;">Go</button>
+        </form>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copyright">&copy; {% now "Y" %} {% if settings.copyright_text %}{{ settings.copyright_text }}{% else %}HELPEX BRO. All rights reserved.{% endif %}</p>
+      <div class="footer-legal">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+    <button class="back-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Back to top">
+      <i class="fas fa-arrow-up"></i>
+    </button>
+  </footer>
 
-  <div class="lightbox" id="lightbox">
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" onclick="if(event.target === this) closeLightbox()">
     <button class="lightbox-close" onclick="closeLightbox()"><i class="fas fa-times"></i></button>
     <button class="lightbox-nav lightbox-prev" onclick="navigateLightbox(-1)"><i class="fas fa-chevron-left"></i></button>
     <button class="lightbox-nav lightbox-next" onclick="navigateLightbox(1)"><i class="fas fa-chevron-right"></i></button>
@@ -263,39 +272,23 @@
   </div>
 
   <script>
-    const filterBtns = document.querySelectorAll('.filter-btn');
     const galleryItems = document.querySelectorAll('.gallery-item');
-
-    filterBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        filterBtns.forEach(b => {
-          b.classList.remove('active');
-          b.style.background = 'white';
-          b.style.color = '#64748B';
-        });
-        btn.classList.add('active');
-        btn.style.background = '#28A197';
-        btn.style.color = 'white';
-
-        const category = btn.dataset.category;
-        galleryItems.forEach(item => {
-          item.style.display = (category === 'all' || item.dataset.category === category) ? '' : 'none';
-        });
-      });
-    });
-
+    const allItems = Array.from(galleryItems);
     let currentIndex = 0;
-    const items = document.querySelectorAll('.gallery-item');
 
-    items.forEach((item, index) => {
-      item.addEventListener('click', () => {
-        currentIndex = index;
-        openLightbox(item);
+    function filterGallery(category, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      galleryItems.forEach(item => {
+        item.style.display = (category === 'all' || item.dataset.category === category) ? '' : 'none';
       });
-    });
+    }
 
-    function openLightbox(item) {
-      document.getElementById('lightboxImage').src = item.dataset.src;
+    function openLightbox(index) {
+      const visibleItems = allItems.filter(item => item.style.display !== 'none');
+      currentIndex = visibleItems.findIndex(item => item === allItems[index]) || index;
+      const item = allItems[currentIndex];
+      document.getElementById('lightboxImage').src = item.querySelector('img').src;
       document.getElementById('lightboxInfo').innerHTML = '<h3>' + item.dataset.title + '</h3><p>' + item.dataset.cat + '</p>';
       document.getElementById('lightbox').classList.add('active');
       document.body.style.overflow = 'hidden';
@@ -307,9 +300,10 @@
     }
 
     function navigateLightbox(direction) {
-      currentIndex = (currentIndex + direction + items.length) % items.length;
-      const item = items[currentIndex];
-      document.getElementById('lightboxImage').src = item.dataset.src;
+      const visibleItems = allItems.filter(item => item.style.display !== 'none');
+      currentIndex = (currentIndex + direction + visibleItems.length) % visibleItems.length;
+      const item = visibleItems[currentIndex];
+      document.getElementById('lightboxImage').src = item.querySelector('img').src;
       document.getElementById('lightboxInfo').innerHTML = '<h3>' + item.dataset.title + '</h3><p>' + item.dataset.cat + '</p>';
     }
 
@@ -319,10 +313,6 @@
         if (e.key === 'ArrowLeft') navigateLightbox(-1);
         if (e.key === 'ArrowRight') navigateLightbox(1);
       }
-    });
-
-    document.getElementById('lightbox').addEventListener('click', (e) => {
-      if (e.target === e.currentTarget) closeLightbox();
     });
 
     try {

@@ -44,7 +44,13 @@
       <div class="grid lg:grid-cols-3 gap-8">
         <div class="lg:col-span-2">
           <div class="image-container">
+            {% if image.image %}
             <img src="{{ image.image.url }}" alt="{{ image.alt_text|default:image.title }}">
+            {% else %}
+            <div class="w-full h-64 flex items-center justify-center" style="background: #F1F5F9; border-radius: 16px;">
+              <span style="color: #64748B;">No image available</span>
+            </div>
+            {% endif %}
           </div>
         </div>
 
@@ -136,6 +142,7 @@
         </h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
           {% for related in related_images %}
+          {% if related.image %}
           <a href="{% url 'gallery_detail' related.slug %}" class="related-card group">
             <img src="{{ related.image.url }}" alt="{{ related.title }}">
             <div class="related-overlay">

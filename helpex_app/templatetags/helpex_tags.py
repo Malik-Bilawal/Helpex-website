@@ -62,6 +62,13 @@ def get_site_settings():
     return SiteSettings.get_settings()
 
 
+@register.simple_tag
+def get_settings():
+    """Get site settings (alias)"""
+    from helpex_app.models import SiteSettings
+    return SiteSettings.get_settings()
+
+
 @register.filter
 def make_initials(value):
     """Create initials from a name"""

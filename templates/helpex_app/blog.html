@@ -171,7 +171,7 @@
         <div class="blog-card bg-white rounded-2xl overflow-hidden" style="border: 1px solid #E2E8F0; box-shadow: 0 4px 20px rgba(26,31,59,0.05);">
           <div class="blog-img h-44 overflow-hidden" style="background: linear-gradient(135deg, #28A197, #1E837A);">
             {% if post.featured_image %}
-            <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="w-full h-full object-cover">
+            {% if post.featured_image %}<img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="w-full h-full object-cover">{% endif %}
             {% else %}
             <div class="w-full h-full flex items-center justify-center">
               <i class="fas fa-newspaper text-3xl" style="color: rgba(255,255,255,0.5);"></i>

@@ -147,3 +147,11 @@ def gallery_image_detail(request, slug):
         'related_images': related_images,
         'settings': settings,
     })
+
+
+def profile(request):
+    """User profile page"""
+    settings = SiteSettings.get_settings()
+    return render(request, 'helpex_app/profile.html', {
+        'settings': settings,
+    })

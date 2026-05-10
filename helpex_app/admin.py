@@ -18,14 +18,17 @@ class SiteSettingsAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return False
     
-    def get_urls(self):
-        urls = super().get_urls()
-        return [path('', lambda r: HttpResponseRedirect('/admin/helpex_app/sitesettings/1/change/'))] + urls
-    
     def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
-        if not SiteSettings.objects.exists() and object_id is None:
-            return HttpResponseRedirect('/admin/helpex_app/sitesettings/add/')
+        # Ensure settings exist
+        if not SiteSettings.objects.exists():
+            settings = SiteSettings.objects.create(pk=1)
+        # Redirect to the existing settings
+        if object_id is None:
+            return HttpResponseRedirect('/admin/helpex_app/sitesettings/1/change/')
         return super().changeform_view(request, object_id, form_url, extra_context)
+    
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        return super().change_view(request, object_id, form_url, extra_context)
 
 
 @admin.register(HeroSection)

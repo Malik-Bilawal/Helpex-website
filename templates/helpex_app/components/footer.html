@@ -1,6 +1,8 @@
 {% load static %}
 {% load helpex_tags %}
 
+{% get_settings as settings %}
+
 <!-- ========== PROFESSIONAL FOOTER ========== -->
 <footer class="py-16" style="background: linear-gradient(180deg, #1A1F3B 0%, #0f1225 100%);">
   <div class="max-w-7xl mx-auto px-6">
@@ -9,29 +11,37 @@
       <!-- Column 1: Brand & About -->
       <div class="lg:col-span-1">
         <a href="{% url 'index' %}" class="flex items-center gap-3 mb-5">
-          <img src="{% static 'logo.png' %}" alt="HELPEX" class="h-11 rounded-xl" style="box-shadow: 0 4px 15px rgba(40,161,151,0.3);">
+          <img src="{% static 'logo.png' %}" alt="{{ settings.company_name }}" class="h-11 rounded-xl" style="box-shadow: 0 4px 15px rgba(40,161,151,0.3);">
           <div>
-            <span class="text-xl font-bold text-white">HELPEX<span style="color: #28A197;">.</span></span>
+            <span class="text-xl font-bold text-white">{{ settings.company_name|slice:":-1" }}<span style="color: #28A197;">.</span></span>
             <span class="block text-[10px] font-semibold" style="color: #28A197; letter-spacing: 3px;">BRO</span>
           </div>
         </a>
         <p class="mb-5" style="color: rgba(255,255,255,0.6); font-size: 14px; line-height: 1.7;">
-          Adaptive digital studio crafting exceptional digital experiences. We combine creative design, cutting-edge technology, and strategic thinking.
+          {% if settings.description %}{{ settings.description }}{% else %}Adaptive digital studio crafting exceptional digital experiences. We combine creative design, cutting-edge technology, and strategic thinking.{% endif %}
         </p>
         <!-- Social Links -->
         <div class="flex gap-3">
-          <a href="#" class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);">
+          {% if settings.social_twitter %}
+          <a href="{{ settings.social_twitter }}" target="_blank" class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);">
             <i class="fab fa-twitter" style="color: rgba(255,255,255,0.6); font-size: 14px;"></i>
           </a>
-          <a href="#" class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);">
+          {% endif %}
+          {% if settings.social_instagram %}
+          <a href="{{ settings.social_instagram }}" target="_blank" class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);">
             <i class="fab fa-instagram" style="color: rgba(255,255,255,0.6); font-size: 14px;"></i>
           </a>
-          <a href="#" class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);">
+          {% endif %}
+          {% if settings.social_linkedin %}
+          <a href="{{ settings.social_linkedin }}" target="_blank" class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);">
             <i class="fab fa-linkedin-in" style="color: rgba(255,255,255,0.6); font-size: 14px;"></i>
           </a>
-          <a href="#" class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);">
+          {% endif %}
+          {% if settings.social_github %}
+          <a href="{{ settings.social_github }}" target="_blank" class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);">
             <i class="fab fa-github" style="color: rgba(255,255,255,0.6); font-size: 14px;"></i>
           </a>
+          {% endif %}
         </div>
       </div>
 
@@ -78,7 +88,7 @@
 
     <!-- Bottom Bar -->
     <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-      <p class="text-sm" style="color: rgba(255,255,255,0.4);">&copy; {% now "Y" %} HELPEX BRO. All rights reserved.</p>
+      <p class="text-sm" style="color: rgba(255,255,255,0.4);">&copy; {% now "Y" %} {% if settings.copyright_text %}{{ settings.copyright_text }}{% else %}HELPEX BRO. All rights reserved.{% endif %}</p>
       <div class="flex gap-6">
         <a href="#" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.4);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">Privacy</a>
         <a href="#" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.4);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">Terms</a>

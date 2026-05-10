@@ -1,0 +1,199 @@
+{% load static %}
+{% load helpex_tags %}
+{% get_settings as settings %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile - {{ settings.company_name }}</title>
+  <meta name="description" content="Manage your account profile">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <style>
+    :root {
+      --midnight: #1A1F3B;
+      --teal: #28A197;
+      --teal-dark: #1E837A;
+      --teal-glow: #3BC4B5;
+      --white: #FFFFFF;
+      --gray-100: #F8FAFC;
+      --gray-200: #E2E8F0;
+      --gray-500: #64748B;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Outfit', sans-serif; background: var(--gray-100); color: var(--midnight); line-height: 1.6; }
+    .font-display { font-family: 'Space Grotesk', sans-serif; }
+    
+    .navbar { position: fixed; top: 0; left: 0; width: 100%; z-index: 9999; height: 80px; display: flex; align-items: center; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(40,161,151,0.1); }
+    .navbar-container { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; width: 100%; display: flex; align-items: center; justify-content: space-between; }
+    .navbar-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; flex-shrink: 0; }
+    .navbar-logo img { height: 44px; width: auto; border-radius: 12px; }
+    .navbar-brand { display: flex; flex-direction: column; line-height: 1.1; }
+    .brand-main { font-size: 22px; font-weight: 800; color: var(--midnight); }
+    .brand-main span { color: var(--teal); }
+    .brand-sub { font-size: 9px; font-weight: 700; color: var(--teal); letter-spacing: 3px; text-transform: uppercase; }
+    .nav-menu { display: flex; align-items: center; gap: 1.5rem; margin-left: auto; }
+    .nav-link { text-decoration: none; font-weight: 500; font-size: 15px; color: var(--midnight); padding: 8px 16px; border-radius: 8px; transition: all 0.3s; }
+    .nav-link:hover, .nav-link.active { background: rgba(40,161,151,0.1); color: var(--teal); }
+    .logout-btn { padding: 8px 20px; background: #EF4444; color: white; border-radius: 8px; font-weight: 500; text-decoration: none; transition: all 0.3s; }
+    .logout-btn:hover { background: #DC2626; }
+    @media (max-width: 768px) { .nav-menu { display: none; } }
+    
+    .profile-card { background: white; border-radius: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: hidden; }
+    .avatar { width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, var(--teal), var(--teal-dark)); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem; font-weight: 700; }
+    .stat-box { padding: 1.5rem; border-radius: 16px; background: var(--gray-100); text-align: center; }
+    .stat-number { font-size: 1.5rem; font-weight: 700; color: var(--teal); }
+    .form-input { width: 100%; padding: 14px 18px; border: 2px solid var(--gray-200); border-radius: 12px; font-size: 15px; transition: all 0.3s; outline: none; background: var(--gray-100); }
+    .form-input:focus { border-color: var(--teal); background: white; }
+    .save-btn { padding: 14px 32px; background: linear-gradient(135deg, var(--teal), var(--teal-dark)); color: white; border: none; border-radius: 12px; font-weight: 600; font-size: 16px; cursor: pointer; transition: all 0.3s; }
+    .save-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(40,161,151,0.4); }
+    .menu-item { display: flex; align-items: center; gap: 12px; padding: 16px; border-radius: 12px; transition: all 0.3s; cursor: pointer; }
+    .menu-item:hover, .menu-item.active { background: rgba(40,161,151,0.1); color: var(--teal); }
+    .menu-item i { width: 24px; text-align: center; }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="{% url 'index' %}" class="navbar-logo">
+        <img src="{% static 'logo.png' %}" alt="HELPEX">
+        <div class="navbar-brand">
+          <span class="brand-main">HELPEX<span>.</span></span>
+          <span class="brand-sub">BRO</span>
+        </div>
+      </a>
+      <div class="nav-menu">
+        <a href="{% url 'index' %}" class="nav-link">Home</a>
+        <a href="{% url 'gallery' %}" class="nav-link">Gallery</a>
+        <a href="{% url 'blog' %}" class="nav-link">Blog</a>
+        <a href="/admin/" class="nav-link">Admin</a>
+        <a href="/admin/logout/" class="logout-btn">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <div style="padding-top: 100px; padding-bottom: 4rem;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem;">
+      
+      <!-- Page Header -->
+      <div style="margin-bottom: 2rem;">
+        <h1 class="font-display" style="font-size: 2rem; font-weight: 700; color: var(--midnight);">My Account</h1>
+        <p style="color: var(--gray-500);">Manage your profile and settings</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 300px 1fr; gap: 2rem;">
+        <!-- Sidebar -->
+        <div class="profile-card" style="padding: 1.5rem; height: fit-content;">
+          <div style="text-align: center; padding-bottom: 1.5rem; border-bottom: 1px solid var(--gray-200); margin-bottom: 1.5rem;">
+            <div class="avatar" style="margin: 0 auto 1rem;">A</div>
+            <h3 style="font-size: 1.25rem; font-weight: 600; color: var(--midnight);">Admin User</h3>
+            <p style="color: var(--gray-500); font-size: 14px;">admin@helpex.com</p>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <div class="menu-item active">
+              <i class="fas fa-user"></i>
+              <span>Profile</span>
+            </div>
+            <div class="menu-item">
+              <i class="fas fa-cog"></i>
+              <span>Settings</span>
+            </div>
+            <div class="menu-item">
+              <i class="fas fa-images"></i>
+              <span>My Gallery</span>
+            </div>
+            <div class="menu-item">
+              <i class="fas fa-envelope"></i>
+              <span>Messages</span>
+            </div>
+            <a href="/admin/" class="menu-item" style="text-decoration: none; color: inherit;">
+              <i class="fas fa-cogs"></i>
+              <span>Admin Panel</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Main Content -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          
+          <!-- Profile Info -->
+          <div class="profile-card" style="padding: 2rem;">
+            <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem; color: var(--midnight);">Profile Information</h2>
+            <form>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                  <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--midnight);">First Name</label>
+                  <input type="text" class="form-input" value="Admin">
+                </div>
+                <div>
+                  <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--midnight);">Last Name</label>
+                  <input type="text" class="form-input" value="User">
+                </div>
+              </div>
+              <div style="margin-bottom: 1rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--midnight);">Email</label>
+                <input type="email" class="form-input" value="admin@helpex.com">
+              </div>
+              <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--midnight);">Phone</label>
+                <input type="tel" class="form-input" value="+1 (555) 123-4567">
+              </div>
+              <button type="button" class="save-btn">Save Changes</button>
+            </form>
+          </div>
+
+          <!-- Stats -->
+          <div class="profile-card" style="padding: 2rem;">
+            <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem; color: var(--midnight);">Activity Stats</h2>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+              <div class="stat-box">
+                <div class="stat-number">12</div>
+                <div style="color: var(--gray-500); font-size: 14px;">Gallery Images</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-number">5</div>
+                <div style="color: var(--gray-500); font-size: 14px;">Blog Posts</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-number">28</div>
+                <div style="color: var(--gray-500); font-size: 14px;">Messages</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Security -->
+          <div class="profile-card" style="padding: 2rem;">
+            <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem; color: var(--midnight);">Security</h2>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-radius: 12px; background: var(--gray-100);">
+                <div>
+                  <div style="font-weight: 600; color: var(--midnight);">Password</div>
+                  <div style="font-size: 14px; color: var(--gray-500);">Last changed 30 days ago</div>
+                </div>
+                <button style="padding: 8px 16px; border: 1px solid var(--gray-200); background: white; border-radius: 8px; cursor: pointer;">Change</button>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-radius: 12px; background: var(--gray-100);">
+                <div>
+                  <div style="font-weight: 600; color: var(--midnight);">Two-Factor Auth</div>
+                  <div style="font-size: 14px; color: var(--gray-500);">Not enabled</div>
+                </div>
+                <button style="padding: 8px 16px; background: var(--teal); color: white; border: none; border-radius: 8px; cursor: pointer;">Enable</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include 'helpex_app/components/footer.html' %}
+</body>
+</html>

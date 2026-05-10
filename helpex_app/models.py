@@ -155,12 +155,14 @@ class SiteSettings(models.Model):
     email = models.EmailField(blank=True)
     phone = models.CharField(max_length=20, blank=True)
     address = models.TextField(blank=True)
+    office_hours = models.CharField(max_length=100, default="Mon-Fri: 9AM - 6PM")
     
     # Social Links
     social_twitter = models.URLField(blank=True)
     social_instagram = models.URLField(blank=True)
     social_linkedin = models.URLField(blank=True)
     social_dribbble = models.URLField(blank=True)
+    social_github = models.URLField(blank=True)
     
     # Branding
     primary_color = models.CharField(max_length=7, default="#28A197")
@@ -169,6 +171,23 @@ class SiteSettings(models.Model):
     # SEO
     meta_title = models.CharField(max_length=200, blank=True)
     meta_description = models.TextField(blank=True)
+    
+    # Section Titles (Dynamic)
+    hero_tagline = models.CharField(max_length=100, default="Innovating the Future")
+    hero_subtagline = models.CharField(max_length=100, default="One Solution at a Time")
+    section_services_title = models.CharField(max_length=100, default="Our Services")
+    section_testimonials_title = models.CharField(max_length=100, default="What Our Clients Say")
+    section_process_title = models.CharField(max_length=100, default="Our Working Process")
+    section_portfolio_title = models.CharField(max_length=100, default="Our Portfolio")
+    section_team_title = models.CharField(max_length=100, default="Our Team")
+    section_clients_title = models.CharField(max_length=100, default="Our Clients")
+    section_blog_title = models.CharField(max_length=100, default="Latest Insights")
+    section_gallery_title = models.CharField(max_length=100, default="Our Gallery")
+    section_contact_title = models.CharField(max_length=100, default="Get In Touch")
+    section_about_title = models.CharField(max_length=100, default="About Us")
+    
+    # Copyright
+    copyright_text = models.CharField(max_length=200, default="HELPEX BRO. All rights reserved.")
     
     updated_at = models.DateTimeField(auto_now=True)
 
