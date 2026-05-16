@@ -1,0 +1,977 @@
+{% load static %}
+{% load helpex_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Why Choose HELPEX BRO - Your Digital Success Partner">
+  <title>Why Choose Us · HELPEX BRO</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @media (max-width: 1023px) {
+      .navbar-cta { display: none !important; }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  
+  <style>
+    :root {
+      --midnight: #1A1F3B;
+      --teal: #28A197;
+      --teal-dark: #1E837A;
+      --teal-glow: #3BC4B5;
+      --gray-100: #F8FAFC;
+      --gray-500: #64748B;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--gray-100);
+      color: var(--midnight);
+      line-height: 1.6;
+    }
+
+    .font-display { font-family: 'Space Grotesk', sans-serif; }
+
+    /* ========== NAVBAR STYLES ========== */
+    .navbar {
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(40,161,151,0.15);
+      box-shadow: 0 2px 20px rgba(26,31,59,0.06);
+      padding: 0.75rem 0;
+    }
+
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 1.5rem;
+      background: rgba(255,255,255,0.6);
+      border: 1px solid rgba(40,161,151,0.15);
+      border-radius: 100px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .navbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .navbar-logo img {
+      height: 40px;
+      width: auto;
+      border-radius: 10px;
+    }
+
+    .navbar-brand {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .navbar-brand-main {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .navbar-brand-sub {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    .navbar-menu {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-link {
+      padding: 0.5rem 1rem;
+      border-radius: 100px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: var(--midnight);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-link:hover {
+      background: rgba(40,161,151,0.1);
+      color: var(--teal);
+    }
+
+    .nav-link.active {
+      background: var(--teal);
+      color: white;
+    }
+
+    .navbar-cta {
+      padding: 0.75rem 1.5rem;
+      background: var(--midnight);
+      color: white;
+      border-radius: 100px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .navbar-cta:hover {
+      background: var(--teal);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(40,161,151,0.3);
+    }
+
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--midnight);
+      padding: 0.5rem;
+    }
+
+    @media (max-width: 1023px) {
+      .hamburger { display: block !important; }
+      .navbar-menu { display: none !important; }
+    }
+
+    /* ========== MOBILE MENU ========== */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 85%;
+      max-width: 400px;
+      height: 100vh;
+      background: white;
+      z-index: 10001;
+      padding: 2rem;
+      transition: right 0.3s ease;
+      overflow-y: auto;
+    }
+
+    .mobile-menu.active { right: 0; }
+
+    .mobile-menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .mobile-menu-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--midnight);
+    }
+
+    .mobile-menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(26,31,59,0.5);
+      z-index: 10000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .mobile-menu-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .mobile-nav-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--midnight);
+      font-weight: 500;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      margin-bottom: 0.5rem;
+    }
+
+    .mobile-nav-link:hover,
+    .mobile-nav-link.active {
+      background: rgba(40,161,151,0.1);
+      color: var(--teal);
+    }
+
+    .mobile-nav-link i {
+      width: 24px;
+      text-align: center;
+      color: var(--teal);
+    }
+
+    /* ========== WHY CHOOSE US PAGE STYLES ========== */
+    .wcu-hero {
+      background: linear-gradient(135deg, var(--midnight) 0%, #2A3158 100%);
+      padding: 8rem 2rem 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .wcu-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(40,161,151,0.2) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(40,161,151,0.15) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .wcu-hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      color: white;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .wcu-hero p {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: rgba(255,255,255,0.8);
+      max-width: 700px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .wcu-stats {
+      padding: 4rem 2rem;
+      background: white;
+    }
+
+    .wcu-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .wcu-stat-card {
+      text-align: center;
+      padding: 2rem 1.5rem;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(40,161,151,0.05) 0%, rgba(40,161,151,0.02) 100%);
+      transition: all 0.3s ease;
+    }
+
+    .wcu-stat-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 24px rgba(40,161,151,0.15);
+    }
+
+    .wcu-stat-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--teal);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin: 0 auto 1rem;
+    }
+
+    .wcu-stat-number {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--midnight);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .wcu-stat-label {
+      font-size: 1rem;
+      color: var(--gray-500);
+      font-weight: 500;
+    }
+
+    .wcu-reasons {
+      padding: 5rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .wcu-reasons-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .wcu-reasons-header h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      color: var(--midnight);
+      margin-bottom: 1rem;
+    }
+
+    .wcu-reasons-header p {
+      font-size: 1.1rem;
+      color: var(--gray-500);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .wcu-reasons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .wcu-reason-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 20px rgba(26,31,59,0.08);
+      border: 2px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .wcu-reason-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 0;
+      background: var(--teal);
+      transition: height 0.4s ease;
+    }
+
+    .wcu-reason-card:hover::before {
+      height: 100%;
+    }
+
+    .wcu-reason-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(26,31,59,0.15);
+      border-color: rgba(40,161,151,0.2);
+    }
+
+    .wcu-reason-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      background: rgba(40,161,151,0.1);
+      color: var(--teal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .wcu-reason-card:hover .wcu-reason-icon {
+      background: var(--teal);
+      color: white;
+      transform: scale(1.1);
+    }
+
+    .wcu-reason-card h3 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--midnight);
+      margin-bottom: 1rem;
+    }
+
+    .wcu-reason-card p {
+      color: var(--gray-500);
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    .wcu-process {
+      padding: 5rem 2rem;
+      background: linear-gradient(135deg, var(--midnight) 0%, #2A3158 100%);
+    }
+
+    .wcu-process-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .wcu-process-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .wcu-process-header h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .wcu-process-header p {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.8);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .wcu-process-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .wcu-process-step {
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .wcu-process-step:hover {
+      background: rgba(255,255,255,0.1);
+      transform: translateY(-8px);
+      border-color: var(--teal);
+    }
+
+    .wcu-step-number {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--teal);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin: 0 auto 1.5rem;
+    }
+
+    .wcu-process-step h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .wcu-process-step p {
+      color: rgba(255,255,255,0.7);
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    .wcu-testimonials {
+      padding: 5rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .wcu-testimonials-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .wcu-testimonials-header h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      color: var(--midnight);
+      margin-bottom: 1rem;
+    }
+
+    .wcu-testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .wcu-testimonial-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: 0 4px 20px rgba(26,31,59,0.08);
+      transition: all 0.3s ease;
+    }
+
+    .wcu-testimonial-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(26,31,59,0.15);
+    }
+
+    .wcu-testimonial-stars {
+      color: #FBBF24;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+
+    .wcu-testimonial-quote {
+      color: var(--gray-500);
+      line-height: 1.7;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+
+    .wcu-testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .wcu-testimonial-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--teal);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+
+    .wcu-testimonial-info h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--midnight);
+      margin-bottom: 0.25rem;
+    }
+
+    .wcu-testimonial-info p {
+      font-size: 0.85rem;
+      color: var(--gray-500);
+    }
+
+    .wcu-cta {
+      background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
+      padding: 5rem 2rem;
+      text-align: center;
+    }
+
+    .wcu-cta h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .wcu-cta p {
+      font-size: 1.2rem;
+      color: rgba(255,255,255,0.9);
+      max-width: 600px;
+      margin: 0 auto 2rem;
+    }
+
+    .wcu-cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1.25rem 2.5rem;
+      background: white;
+      color: var(--teal);
+      border-radius: 100px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+
+    .wcu-cta-button:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+    }
+
+    @media (max-width: 768px) {
+      .wcu-reasons-grid,
+      .wcu-testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .wcu-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .wcu-hero {
+        padding: 6rem 1.5rem 4rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .wcu-stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ========== FOOTER STYLES ========== */
+    .footer {
+      background: var(--midnight);
+      color: white;
+      padding: 4rem 2rem 2rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 3rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-brand h3 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    .footer-brand p {
+      color: rgba(255,255,255,0.7);
+      line-height: 1.7;
+    }
+
+    .footer-links h4 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--teal);
+    }
+
+    .footer-links a {
+      display: block;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      padding: 0.5rem 0;
+      transition: all 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--teal);
+      padding-left: 0.5rem;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .footer-social a {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .footer-social a:hover {
+      background: var(--teal);
+      transform: translateY(-4px);
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 3rem auto 0;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      text-align: center;
+      color: rgba(255,255,255,0.6);
+    }
+  </style>
+</head>
+<body>
+  {% include 'helpex_app/components/navbar.html' %}
+
+  <div class="mobile-menu-overlay" id="mobileOverlay"></div>
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+      <a href="/" class="navbar-logo">
+        <img src="{% static 'logo.png' %}" alt="HELPEX">
+        <div class="navbar-brand">
+          <span class="navbar-brand-main">{{ settings.company_name|default:"HELPEX BRO" }}</span>
+          <span class="navbar-brand-sub">{{ settings.tagline|default:"ADAPTIVE DIGITAL STUDIO" }}</span>
+        </div>
+      </a>
+      <button class="mobile-menu-close" id="mobileClose">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <a href="/" class="mobile-nav-link"><i class="fas fa-home"></i> Home</a>
+    <a href="/service/" class="mobile-nav-link"><i class="fas fa-cogs"></i> Services</a>
+    <a href="/gallery/" class="mobile-nav-link"><i class="fas fa-images"></i> Gallery</a>
+    <a href="/clients/" class="mobile-nav-link"><i class="fas fa-users"></i> Clients</a>
+    <a href="/blog/" class="mobile-nav-link"><i class="fas fa-blog"></i> Blog</a>
+    <a href="/pricing/" class="mobile-nav-link"><i class="fas fa-tags"></i> Pricing</a>
+    <a href="/why-choose-us/" class="mobile-nav-link active"><i class="fas fa-award"></i> Why Choose Us</a>
+    <a href="/about/" class="mobile-nav-link"><i class="fas fa-info-circle"></i> About Us</a>
+    <a href="/contact/" class="mobile-nav-link"><i class="fas fa-envelope"></i> Contact</a>
+    <a href="/contact/" class="navbar-cta" style="margin-top: 2rem; justify-content: center;">
+      Start Project <i class="fas fa-arrow-right"></i>
+    </a>
+  </div>
+
+  <section class="wcu-hero">
+    <h1>{{ section.title|default:"Why Choose Us" }}</h1>
+    <p>{{ section.subtitle|default:"Discover what makes us the perfect partner for your digital success" }}</p>
+  </section>
+
+  {% if stats %}
+  <section class="wcu-stats">
+    <div class="wcu-stats-grid">
+      {% for stat in stats %}
+      <div class="wcu-stat-card">
+        <div class="wcu-stat-icon">
+          <i class="fas {{ stat.icon_class }}"></i>
+        </div>
+        <div class="wcu-stat-number">{{ stat.number }}</div>
+        <div class="wcu-stat-label">{{ stat.label }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if reasons %}
+  <section class="wcu-reasons">
+    <div class="wcu-reasons-header">
+      <h2>What Sets Us Apart</h2>
+      <p>We combine expertise, innovation, and dedication to deliver exceptional results for every client.</p>
+    </div>
+    <div class="wcu-reasons-grid">
+      {% for reason in reasons %}
+      <div class="wcu-reason-card">
+        <div class="wcu-reason-icon">
+          <i class="fas {{ reason.icon_class }}"></i>
+        </div>
+        <h3>{{ reason.title }}</h3>
+        <p>{{ reason.description }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <section class="wcu-process">
+    <div class="wcu-process-container">
+      <div class="wcu-process-header">
+        <h2>Our Proven Process</h2>
+        <p>A streamlined approach that ensures quality, transparency, and timely delivery.</p>
+      </div>
+      <div class="wcu-process-steps">
+        <div class="wcu-process-step">
+          <div class="wcu-step-number">1</div>
+          <h3>Discovery</h3>
+          <p>We dive deep into understanding your business goals, challenges, and target audience.</p>
+        </div>
+        <div class="wcu-process-step">
+          <div class="wcu-step-number">2</div>
+          <h3>Strategy</h3>
+          <p>Crafting a comprehensive plan that aligns with your objectives and market demands.</p>
+        </div>
+        <div class="wcu-process-step">
+          <div class="wcu-step-number">3</div>
+          <h3>Design & Develop</h3>
+          <p>Building your solution with cutting-edge technology and stunning design.</p>
+        </div>
+        <div class="wcu-process-step">
+          <div class="wcu-step-number">4</div>
+          <h3>Launch & Support</h3>
+          <p>Deploying your project and providing ongoing support for continued success.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {% if testimonials %}
+  <section class="wcu-testimonials">
+    <div class="wcu-testimonials-header">
+      <h2>What Our Clients Say</h2>
+      <p>Real feedback from real partners who trust us with their digital transformation.</p>
+    </div>
+    <div class="wcu-testimonials-grid">
+      {% for testimonial in testimonials %}
+      <div class="wcu-testimonial-card">
+        <div class="wcu-testimonial-stars">
+          {% for i in "12345"|make_list %}
+            {% if forloop.counter <= testimonial.rating %}
+              <i class="fas fa-star"></i>
+            {% else %}
+              <i class="far fa-star"></i>
+            {% endif %}
+          {% endfor %}
+        </div>
+        <p class="wcu-testimonial-quote">"{{ testimonial.quote }}"</p>
+        <div class="wcu-testimonial-author">
+          {% if testimonial.avatar %}
+            <img src="{{ testimonial.avatar.url }}" alt="{{ testimonial.name }}" class="wcu-testimonial-avatar">
+          {% else %}
+            <div class="wcu-testimonial-avatar">{{ testimonial.name|make_initials }}</div>
+          {% endif %}
+          <div class="wcu-testimonial-info">
+            <h4>{{ testimonial.name }}</h4>
+            <p>{{ testimonial.role }} at {{ testimonial.company }}</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <section class="wcu-cta">
+    <h2>Ready to Work With Us?</h2>
+    <p>Let's discuss your project and explore how we can help you achieve your goals.</p>
+    <a href="/contact/" class="wcu-cta-button">
+      Get Started Today <i class="fas fa-arrow-right"></i>
+    </a>
+  </section>
+
+  {% include 'helpex_app/components/footer.html' %}
+
+  <script>
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    const mobileClose = document.getElementById('mobileClose');
+    const hamburger = document.querySelector('.hamburger');
+
+    function openMobileMenu() {
+      mobileMenu.classList.add('active');
+      mobileOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileMenu() {
+      mobileMenu.classList.remove('active');
+      mobileOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    if (hamburger) hamburger.addEventListener('click', openMobileMenu);
+    mobileClose.addEventListener('click', closeMobileMenu);
+    mobileOverlay.addEventListener('click', closeMobileMenu);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMobileMenu();
+    });
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 1024) closeMobileMenu();
+    });
+
+    gsap.registerPlugin(ScrollTrigger);
+    
+    gsap.from('.wcu-stat-card', {
+      scrollTrigger: {
+        trigger: '.wcu-stats-grid',
+        start: 'top 80%',
+      },
+      y: 40,
+      opacity: 0,
+      duration: 0.6,
+      stagger: 0.15,
+      ease: 'power3.out'
+    });
+
+    gsap.from('.wcu-reason-card', {
+      scrollTrigger: {
+        trigger: '.wcu-reasons-grid',
+        start: 'top 80%',
+      },
+      y: 50,
+      opacity: 0,
+      duration: 0.8,
+      stagger: 0.2,
+      ease: 'power3.out'
+    });
+
+    gsap.from('.wcu-process-step', {
+      scrollTrigger: {
+        trigger: '.wcu-process-steps',
+        start: 'top 80%',
+      },
+      y: 40,
+      opacity: 0,
+      duration: 0.6,
+      stagger: 0.15,
+      ease: 'power2.out'
+    });
+
+    gsap.from('.wcu-testimonial-card', {
+      scrollTrigger: {
+        trigger: '.wcu-testimonials-grid',
+        start: 'top 80%',
+      },
+      y: 50,
+      opacity: 0,
+      duration: 0.8,
+      stagger: 0.2,
+      ease: 'power3.out'
+    });
+
+    const statNumbers = document.querySelectorAll('.wcu-stat-number');
+    statNumbers.forEach(stat => {
+      const target = parseInt(stat.textContent);
+      if (!isNaN(target)) {
+        ScrollTrigger.create({
+          trigger: stat,
+          start: 'top 80%',
+          onEnter: () => {
+            gsap.to({ val: 0 }, {
+              val: target,
+              duration: 2,
+              ease: 'power2.out',
+              onUpdate: function() {
+                stat.textContent = Math.floor(this.targets()[0].val) + (stat.textContent.includes('+') ? '+' : '');
+              }
+            });
+          },
+          once: true
+        });
+      }
+    });
+  </script>
+</body>
+</html>

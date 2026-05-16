@@ -344,6 +344,120 @@ class GalleryCategory(models.Model):
         super().save(*args, **kwargs)
 
 
+class WhyChooseUsSection(models.Model):
+    """Why Choose Us page section settings"""
+    title = models.CharField(max_length=200, default="Why Choose Us")
+    subtitle = models.TextField(default="Discover what makes us the perfect partner for your digital success", blank=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Why Choose Us Section"
+        verbose_name_plural = "Why Choose Us Section"
+
+    def __str__(self):
+        return self.title
+
+
+class WhyChooseUsReason(models.Model):
+    """Reasons why clients choose us"""
+    title = models.CharField(max_length=150)
+    description = models.TextField()
+    short_description = models.CharField(max_length=200, blank=True)
+    icon_class = models.CharField(max_length=100, default='fa-check-circle', help_text="FontAwesome icon class")
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Why Choose Us Reason"
+        verbose_name_plural = "Why Choose Us Reasons"
+        ordering = ['order', 'title']
+
+    def __str__(self):
+        return self.title
+
+
+class WhyChooseUsStat(models.Model):
+    """Statistics/achievements for Why Choose Us page"""
+    number = models.CharField(max_length=20)
+    label = models.CharField(max_length=100)
+    icon_class = models.CharField(max_length=100, default='fa-trophy', help_text="FontAwesome icon class")
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "Why Choose Us Stat"
+        verbose_name_plural = "Why Choose Us Stats"
+        ordering = ['order', 'label']
+
+    def __str__(self):
+        return f"{self.number} - {self.label}"
+
+
+class PricingPlan(models.Model):
+    """Pricing plans for the pricing page"""
+    PLAN_TYPE_CHOICES = [
+        ('monthly', 'Monthly'),
+        ('yearly', 'Yearly'),
+        ('one_time', 'One Time'),
+    ]
+    
+    POPULAR_CHOICES = [
+        ('none', 'None'),
+        ('popular', 'Popular'),
+        ('best_value', 'Best Value'),
+        ('recommended', 'Recommended'),
+    ]
+    
+    name = models.CharField(max_length=100, help_text="Plan name (e.g., Basic, Pro, Enterprise)")
+    slug = models.SlugField(max_length=100, unique=True)
+    description = models.TextField(blank=True, help_text="Short description of the plan")
+    plan_type = models.CharField(max_length=20, choices=PLAN_TYPE_CHOICES, default='monthly')
+    price = models.DecimalField(max_digits=10, decimal_places=2, help_text="Plan price")
+    currency = models.CharField(max_length=10, default='$', help_text="Currency symbol")
+    billing_period = models.CharField(max_length=50, default='/month', help_text="Billing period text")
+    popular_badge = models.CharField(max_length=20, choices=POPULAR_CHOICES, default='none', help_text="Highlight this plan")
+    cta_text = models.CharField(max_length=50, default='Get Started', help_text="Call to action button text")
+    cta_url = models.CharField(max_length=200, default='/contact/', blank=True, help_text="CTA button URL")
+    icon_class = models.CharField(max_length=100, default='fa-star', help_text="FontAwesome icon class")
+    color_accent = models.CharField(max_length=7, default='#28A197', help_text="Accent color for this plan (hex)")
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Pricing Plan"
+        verbose_name_plural = "Pricing Plans"
+        ordering = ['order', 'name']
+
+    def __str__(self):
+        return f"{self.name} - {self.currency}{self.price}"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+
+class PricingFeature(models.Model):
+    """Features included in pricing plans"""
+    plan = models.ForeignKey(PricingPlan, on_delete=models.CASCADE, related_name='features')
+    text = models.CharField(max_length=200, help_text="Feature description")
+    included = models.BooleanField(default=True, help_text="Is this feature included in the plan?")
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        verbose_name = "Pricing Feature"
+        verbose_name_plural = "Pricing Features"
+        ordering = ['plan', 'order']
+
+    def __str__(self):
+        return f"{self.plan.name} - {self.text}"
+
+
 class GalleryImage(models.Model):
     """Gallery images with metadata"""
     title = models.CharField(max_length=200)

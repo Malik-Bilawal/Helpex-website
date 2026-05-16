@@ -10,4 +10,6 @@ urlpatterns = [
     path('blog/', views.blog, name='blog'),
     path('gallery/', views.gallery, name='gallery'),
     path('gallery/<slug:slug>/', views.gallery_image_detail, name='gallery_detail'),
+    path('pricing/', views.pricing, name='pricing'),
+    path('why-choose-us/', views.why_choose_us, name='why_choose_us'),
 ]

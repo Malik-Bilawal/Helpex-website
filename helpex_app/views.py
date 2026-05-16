@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
-from .models import Service, Testimonial, ProcessStep, PortfolioItem, PortfolioCategory, TeamMember, SiteSettings, HeroSection, ContactMessage, Client, BlogPost, BlogCategory, GalleryImage, GalleryCategory
+from .models import Service, Testimonial, ProcessStep, PortfolioItem, PortfolioCategory, TeamMember, SiteSettings, HeroSection, ContactMessage, Client, BlogPost, BlogCategory, GalleryImage, GalleryCategory, PricingPlan, WhyChooseUsSection, WhyChooseUsReason, WhyChooseUsStat
 
 
 def index(request):
@@ -153,5 +153,37 @@ def profile(request):
     """User profile page"""
     settings = SiteSettings.get_settings()
     return render(request, 'helpex_app/profile.html', {
+        'settings': settings,
+    })
+
+
+def pricing(request):
+    """Pricing page with all plans"""
+    plans = PricingPlan.objects.filter(is_active=True).order_by('order', 'name')
+    monthly_plans = plans.filter(plan_type='monthly')
+    yearly_plans = plans.filter(plan_type='yearly')
+    settings = SiteSettings.get_settings()
+    
+    return render(request, 'helpex_app/pricing.html', {
+        'plans': plans,
+        'monthly_plans': monthly_plans,
+        'yearly_plans': yearly_plans,
+        'settings': settings,
+    })
+
+
+def why_choose_us(request):
+    """Why Choose Us page"""
+    section = WhyChooseUsSection.objects.filter(is_active=True).first()
+    reasons = WhyChooseUsReason.objects.filter(is_active=True).order_by('order', 'title')
+    stats = WhyChooseUsStat.objects.filter(is_active=True).order_by('order')
+    testimonials = Testimonial.objects.filter(is_active=True).order_by('order', 'name')[:3]
+    settings = SiteSettings.get_settings()
+    
+    return render(request, 'helpex_app/why_choose_us.html', {
+        'section': section,
+        'reasons': reasons,
+        'stats': stats,
+        'testimonials': testimonials,
         'settings': settings,
     })

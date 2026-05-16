@@ -6,7 +6,8 @@ from .models import (
     HeroSection, Service, Testimonial, ProcessStep,
     PortfolioCategory, PortfolioItem, SiteSettings,
     ContactMessage, TeamMember, Client, BlogCategory, BlogPost,
-    GalleryCategory, GalleryImage
+    GalleryCategory, GalleryImage, PricingPlan, PricingFeature,
+    WhyChooseUsSection, WhyChooseUsReason, WhyChooseUsStat
 )
 
 
@@ -233,3 +234,115 @@ class GalleryImageAdmin(admin.ModelAdmin):
     def remove_featured(self, request, queryset):
         queryset.update(is_featured=False)
     remove_featured.short_description = "Remove from featured"
+
+
+class PricingFeatureInline(admin.TabularInline):
+    model = PricingFeature
+    extra = 3
+    fields = ['text', 'included', 'order']
+    ordering = ['order']
+
+
+@admin.register(PricingPlan)
+class PricingPlanAdmin(admin.ModelAdmin):
+    list_display = ['name', 'plan_type', 'price_display', 'popular_badge', 'order', 'is_active', 'feature_count']
+    list_filter = ['is_active', 'plan_type', 'popular_badge']
+    search_fields = ['name', 'description']
+    list_editable = ['order', 'is_active']
+    ordering = ['order', 'name']
+    prepopulated_fields = {'slug': ('name',)}
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('name', 'slug', 'description')
+        }),
+        ('Pricing', {
+            'fields': ('plan_type', 'price', 'currency', 'billing_period')
+        }),
+        ('Display', {
+            'fields': ('popular_badge', 'icon_class', 'color_accent')
+        }),
+        ('Call to Action', {
+            'fields': ('cta_text', 'cta_url')
+        }),
+        ('Settings', {
+            'fields': ('order', 'is_active')
+        }),
+    )
+    
+    inlines = [PricingFeatureInline]
+    
+    def price_display(self, obj):
+        return f"{obj.currency}{obj.price}"
+    price_display.short_description = 'Price'
+    price_display.admin_order_field = 'price'
+    
+    def feature_count(self, obj):
+        return obj.features.count()
+    feature_count.short_description = 'Features'
+    
+    def make_active(self, request, queryset):
+        queryset.update(is_active=True)
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        queryset.update(is_active=False)
+    make_inactive.short_description = "Mark selected as inactive"
+    
+    actions = ['make_active', 'make_inactive']
+
+
+@admin.register(WhyChooseUsSection)
+class WhyChooseUsSectionAdmin(admin.ModelAdmin):
+    fieldsets = (
+        ('Content', {
+            'fields': ('title', 'subtitle')
+        }),
+        ('Settings', {
+            'fields': ('is_active',)
+        }),
+    )
+    
+    def has_add_permission(self, request):
+        return not WhyChooseUsSection.objects.exists()
+    
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(WhyChooseUsReason)
+class WhyChooseUsReasonAdmin(admin.ModelAdmin):
+    list_display = ['title', 'icon_class', 'order', 'is_active']
+    list_filter = ['is_active']
+    search_fields = ['title', 'description']
+    list_editable = ['order', 'is_active']
+    ordering = ['order', 'title']
+    
+    def make_active(self, request, queryset):
+        queryset.update(is_active=True)
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        queryset.update(is_active=False)
+    make_inactive.short_description = "Mark selected as inactive"
+    
+    actions = ['make_active', 'make_inactive']
+
+
+@admin.register(WhyChooseUsStat)
+class WhyChooseUsStatAdmin(admin.ModelAdmin):
+    list_display = ['number', 'label', 'icon_class', 'order', 'is_active']
+    list_filter = ['is_active']
+    search_fields = ['label', 'number']
+    list_editable = ['order', 'is_active']
+    ordering = ['order', 'label']
+    
+    def make_active(self, request, queryset):
+        queryset.update(is_active=True)
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        queryset.update(is_active=False)
+    make_inactive.short_description = "Mark selected as inactive"
+    
+    actions = ['make_active', 'make_inactive']

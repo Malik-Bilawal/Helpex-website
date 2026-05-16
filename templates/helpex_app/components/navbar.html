@@ -19,6 +19,8 @@
       <li><a href="{% url 'gallery' %}" class="nav-link {% if request.path == '/gallery/' %}active{% endif %}">Gallery</a></li>
       <li><a href="{% url 'clients' %}" class="nav-link {% if request.path == '/clients/' %}active{% endif %}">Clients</a></li>
       <li><a href="{% url 'blog' %}" class="nav-link {% if request.path == '/blog/' %}active{% endif %}">Blog</a></li>
+      <li><a href="{% url 'pricing' %}" class="nav-link {% if request.path == '/pricing/' %}active{% endif %}">Pricing</a></li>
+      <li><a href="{% url 'why_choose_us' %}" class="nav-link {% if request.path == '/why-choose-us/' %}active{% endif %}">Why Choose Us</a></li>
       <li><a href="{% url 'about' %}" class="nav-link {% if request.path == '/about/' %}active{% endif %}">About Us</a></li>
       <li><a href="{% url 'contact' %}" class="nav-link {% if request.path == '/contact/' %}active{% endif %}">Contact</a></li>
     </ul>
@@ -68,6 +70,12 @@
     </a>
     <a href="{% url 'blog' %}" class="mobile-link {% if request.path == '/blog/' %}active{% endif %}" onclick="closeMobileMenu()">
       <i class="fas fa-blog"></i> Blog
+    </a>
+    <a href="{% url 'pricing' %}" class="mobile-link {% if request.path == '/pricing/' %}active{% endif %}" onclick="closeMobileMenu()">
+      <i class="fas fa-tags"></i> Pricing
+    </a>
+    <a href="{% url 'why_choose_us' %}" class="mobile-link {% if request.path == '/why-choose-us/' %}active{% endif %}" onclick="closeMobileMenu()">
+      <i class="fas fa-award"></i> Why Choose Us
     </a>
     <a href="{% url 'about' %}" class="mobile-link {% if request.path == '/about/' %}active{% endif %}" onclick="closeMobileMenu()">
       <i class="fas fa-info-circle"></i> About Us
