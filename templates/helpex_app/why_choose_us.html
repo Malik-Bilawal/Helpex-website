@@ -7,970 +7,398 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Why Choose HELPEX BRO - Your Digital Success Partner">
   <title>Why Choose Us · HELPEX BRO</title>
-  
+
+  <!-- Tailwind CSS with custom theme -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    @media (max-width: 1023px) {
-      .navbar-cta { display: none !important; }
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            midnight: '#1A1F3B',
+            'midnight-light': '#2D3555',
+            teal: '#28A197',
+            'teal-dark': '#1E837A',
+            'teal-glow': '#3BC4B5',
+            'soft-white': '#F7F9FA',
+            'gray-soft': '#64748B',
+          },
+          fontFamily: {
+            outfit: ['Outfit', 'sans-serif'],
+            space: ['Space Grotesk', 'sans-serif'],
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-20px)' },
+            },
+          },
+        }
+      }
     }
-  </style>
+  </script>
+
+  <!-- Fonts & Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- GSAP + ScrollTrigger + Lenis -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  
-  <style>
-    :root {
-      --midnight: #1A1F3B;
-      --teal: #28A197;
-      --teal-dark: #1E837A;
-      --teal-glow: #3BC4B5;
-      --gray-100: #F8FAFC;
-      --gray-500: #64748B;
-    }
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+  <style>
     body {
       font-family: 'Outfit', sans-serif;
-      background: var(--gray-100);
-      color: var(--midnight);
-      line-height: 1.6;
+      background-color: #F7F9FA;
+      color: #1A1F3B;
+      overflow-x: hidden;
     }
-
-    .font-display { font-family: 'Space Grotesk', sans-serif; }
-
-    /* ========== NAVBAR STYLES ========== */
-    .navbar {
-      background: rgba(255,255,255,0.85);
+    .font-display {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #28A197, #3BC4B5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.7);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(40,161,151,0.15);
-      box-shadow: 0 2px 20px rgba(26,31,59,0.06);
-      padding: 0.75rem 0;
+      border: 1px solid rgba(255, 255, 255, 0.5);
     }
-
-    .navbar-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.5rem 1.5rem;
-      background: rgba(255,255,255,0.6);
-      border: 1px solid rgba(40,161,151,0.15);
-      border-radius: 100px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+    .bg-grid {
+      background-image: 
+        linear-gradient(rgba(40, 161, 151, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(40, 161, 151, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
     }
-
-    .navbar-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      text-decoration: none;
-    }
-
-    .navbar-logo img {
-      height: 40px;
-      width: auto;
-      border-radius: 10px;
-    }
-
-    .navbar-brand {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.1;
-    }
-
-    .navbar-brand-main {
-      font-size: 1.5rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-    }
-
-    .navbar-brand-sub {
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-    }
-
-    .navbar-menu {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .nav-link {
-      padding: 0.5rem 1rem;
-      border-radius: 100px;
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 0.9rem;
-      color: var(--midnight);
-      transition: all 0.3s ease;
-      position: relative;
-    }
-
-    .nav-link:hover {
-      background: rgba(40,161,151,0.1);
-      color: var(--teal);
-    }
-
-    .nav-link.active {
-      background: var(--teal);
-      color: white;
-    }
-
-    .navbar-cta {
-      padding: 0.75rem 1.5rem;
-      background: var(--midnight);
-      color: white;
-      border-radius: 100px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .navbar-cta:hover {
-      background: var(--teal);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(40,161,151,0.3);
-    }
-
-    .hamburger {
-      display: none;
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--midnight);
-      padding: 0.5rem;
-    }
-
-    @media (max-width: 1023px) {
-      .hamburger { display: block !important; }
-      .navbar-menu { display: none !important; }
-    }
-
-    /* ========== MOBILE MENU ========== */
-    .mobile-menu {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 85%;
-      max-width: 400px;
-      height: 100vh;
-      background: white;
-      z-index: 10001;
-      padding: 2rem;
-      transition: right 0.3s ease;
-      overflow-y: auto;
-    }
-
-    .mobile-menu.active { right: 0; }
-
-    .mobile-menu-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-    }
-
-    .mobile-menu-close {
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--midnight);
-    }
-
-    .mobile-menu-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(26,31,59,0.5);
-      z-index: 10000;
+    .fade-up {
       opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
+      transform: translateY(40px);
     }
-
-    .mobile-menu-overlay.active {
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    .mobile-nav-link {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1rem;
-      border-radius: 12px;
-      text-decoration: none;
-      color: var(--midnight);
-      font-weight: 500;
-      font-size: 1.1rem;
-      transition: all 0.3s ease;
-      margin-bottom: 0.5rem;
-    }
-
-    .mobile-nav-link:hover,
-    .mobile-nav-link.active {
-      background: rgba(40,161,151,0.1);
-      color: var(--teal);
-    }
-
-    .mobile-nav-link i {
-      width: 24px;
-      text-align: center;
-      color: var(--teal);
-    }
-
-    /* ========== WHY CHOOSE US PAGE STYLES ========== */
-    .wcu-hero {
-      background: linear-gradient(135deg, var(--midnight) 0%, #2A3158 100%);
-      padding: 8rem 2rem 5rem;
-      text-align: center;
+    /* Reason card left border animation */
+    .reason-card {
       position: relative;
-      overflow: hidden;
     }
-
-    .wcu-hero::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        radial-gradient(circle at 20% 50%, rgba(40,161,151,0.2) 0%, transparent 50%),
-        radial-gradient(circle at 80% 50%, rgba(40,161,151,0.15) 0%, transparent 50%);
-      pointer-events: none;
-    }
-
-    .wcu-hero h1 {
-      font-size: clamp(2.5rem, 5vw, 4rem);
-      font-weight: 800;
-      color: white;
-      margin-bottom: 1rem;
-      position: relative;
-      z-index: 1;
-    }
-
-    .wcu-hero p {
-      font-size: clamp(1rem, 2vw, 1.25rem);
-      color: rgba(255,255,255,0.8);
-      max-width: 700px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
-    }
-
-    .wcu-stats {
-      padding: 4rem 2rem;
-      background: white;
-    }
-
-    .wcu-stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .wcu-stat-card {
-      text-align: center;
-      padding: 2rem 1.5rem;
-      border-radius: 16px;
-      background: linear-gradient(135deg, rgba(40,161,151,0.05) 0%, rgba(40,161,151,0.02) 100%);
-      transition: all 0.3s ease;
-    }
-
-    .wcu-stat-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 12px 24px rgba(40,161,151,0.15);
-    }
-
-    .wcu-stat-icon {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: var(--teal);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      margin: 0 auto 1rem;
-    }
-
-    .wcu-stat-number {
-      font-size: 3rem;
-      font-weight: 800;
-      color: var(--midnight);
-      line-height: 1;
-      margin-bottom: 0.5rem;
-    }
-
-    .wcu-stat-label {
-      font-size: 1rem;
-      color: var(--gray-500);
-      font-weight: 500;
-    }
-
-    .wcu-reasons {
-      padding: 5rem 2rem;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .wcu-reasons-header {
-      text-align: center;
-      margin-bottom: 3rem;
-    }
-
-    .wcu-reasons-header h2 {
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 800;
-      color: var(--midnight);
-      margin-bottom: 1rem;
-    }
-
-    .wcu-reasons-header p {
-      font-size: 1.1rem;
-      color: var(--gray-500);
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .wcu-reasons-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 2rem;
-    }
-
-    .wcu-reason-card {
-      background: white;
-      border-radius: 20px;
-      padding: 2.5rem;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 4px 20px rgba(26,31,59,0.08);
-      border: 2px solid transparent;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .wcu-reason-card::before {
+    .reason-card::before {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
       width: 4px;
       height: 0;
-      background: var(--teal);
-      transition: height 0.4s ease;
+      background: linear-gradient(180deg, #28A197, #3BC4B5);
+      transition: height 0.5s ease;
+      border-radius: 4px 0 0 4px;
     }
-
-    .wcu-reason-card:hover::before {
+    .reason-card:hover::before {
       height: 100%;
-    }
-
-    .wcu-reason-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(26,31,59,0.15);
-      border-color: rgba(40,161,151,0.2);
-    }
-
-    .wcu-reason-icon {
-      width: 60px;
-      height: 60px;
-      border-radius: 16px;
-      background: rgba(40,161,151,0.1);
-      color: var(--teal);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      margin-bottom: 1.5rem;
-      transition: all 0.3s ease;
-    }
-
-    .wcu-reason-card:hover .wcu-reason-icon {
-      background: var(--teal);
-      color: white;
-      transform: scale(1.1);
-    }
-
-    .wcu-reason-card h3 {
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: var(--midnight);
-      margin-bottom: 1rem;
-    }
-
-    .wcu-reason-card p {
-      color: var(--gray-500);
-      line-height: 1.7;
-      font-size: 0.95rem;
-    }
-
-    .wcu-process {
-      padding: 5rem 2rem;
-      background: linear-gradient(135deg, var(--midnight) 0%, #2A3158 100%);
-    }
-
-    .wcu-process-container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .wcu-process-header {
-      text-align: center;
-      margin-bottom: 4rem;
-    }
-
-    .wcu-process-header h2 {
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 800;
-      color: white;
-      margin-bottom: 1rem;
-    }
-
-    .wcu-process-header p {
-      font-size: 1.1rem;
-      color: rgba(255,255,255,0.8);
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .wcu-process-steps {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-    }
-
-    .wcu-process-step {
-      background: rgba(255,255,255,0.05);
-      border-radius: 20px;
-      padding: 2rem;
-      text-align: center;
-      position: relative;
-      border: 1px solid rgba(255,255,255,0.1);
-      transition: all 0.3s ease;
-    }
-
-    .wcu-process-step:hover {
-      background: rgba(255,255,255,0.1);
-      transform: translateY(-8px);
-      border-color: var(--teal);
-    }
-
-    .wcu-step-number {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: var(--teal);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      font-weight: 800;
-      margin: 0 auto 1.5rem;
-    }
-
-    .wcu-process-step h3 {
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: white;
-      margin-bottom: 1rem;
-    }
-
-    .wcu-process-step p {
-      color: rgba(255,255,255,0.7);
-      line-height: 1.7;
-      font-size: 0.95rem;
-    }
-
-    .wcu-testimonials {
-      padding: 5rem 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .wcu-testimonials-header {
-      text-align: center;
-      margin-bottom: 3rem;
-    }
-
-    .wcu-testimonials-header h2 {
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 800;
-      color: var(--midnight);
-      margin-bottom: 1rem;
-    }
-
-    .wcu-testimonials-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 2rem;
-    }
-
-    .wcu-testimonial-card {
-      background: white;
-      border-radius: 20px;
-      padding: 2.5rem;
-      box-shadow: 0 4px 20px rgba(26,31,59,0.08);
-      transition: all 0.3s ease;
-    }
-
-    .wcu-testimonial-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(26,31,59,0.15);
-    }
-
-    .wcu-testimonial-stars {
-      color: #FBBF24;
-      margin-bottom: 1rem;
-      font-size: 1.1rem;
-    }
-
-    .wcu-testimonial-quote {
-      color: var(--gray-500);
-      line-height: 1.7;
-      font-size: 0.95rem;
-      margin-bottom: 1.5rem;
-      font-style: italic;
-    }
-
-    .wcu-testimonial-author {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .wcu-testimonial-avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: var(--teal);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 1.2rem;
-    }
-
-    .wcu-testimonial-info h4 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--midnight);
-      margin-bottom: 0.25rem;
-    }
-
-    .wcu-testimonial-info p {
-      font-size: 0.85rem;
-      color: var(--gray-500);
-    }
-
-    .wcu-cta {
-      background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
-      padding: 5rem 2rem;
-      text-align: center;
-    }
-
-    .wcu-cta h2 {
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 800;
-      color: white;
-      margin-bottom: 1rem;
-    }
-
-    .wcu-cta p {
-      font-size: 1.2rem;
-      color: rgba(255,255,255,0.9);
-      max-width: 600px;
-      margin: 0 auto 2rem;
-    }
-
-    .wcu-cta-button {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 1.25rem 2.5rem;
-      background: white;
-      color: var(--teal);
-      border-radius: 100px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 1.1rem;
-      transition: all 0.3s ease;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-    }
-
-    .wcu-cta-button:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(0,0,0,0.3);
-    }
-
-    @media (max-width: 768px) {
-      .wcu-reasons-grid,
-      .wcu-testimonials-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .wcu-stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .wcu-hero {
-        padding: 6rem 1.5rem 4rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .wcu-stats-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* ========== FOOTER STYLES ========== */
-    .footer {
-      background: var(--midnight);
-      color: white;
-      padding: 4rem 2rem 2rem;
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 3rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .footer-brand h3 {
-      font-size: 1.5rem;
-      font-weight: 800;
-      margin-bottom: 1rem;
-    }
-
-    .footer-brand p {
-      color: rgba(255,255,255,0.7);
-      line-height: 1.7;
-    }
-
-    .footer-links h4 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 1.5rem;
-      color: var(--teal);
-    }
-
-    .footer-links a {
-      display: block;
-      color: rgba(255,255,255,0.7);
-      text-decoration: none;
-      padding: 0.5rem 0;
-      transition: all 0.3s ease;
-    }
-
-    .footer-links a:hover {
-      color: var(--teal);
-      padding-left: 0.5rem;
-    }
-
-    .footer-social {
-      display: flex;
-      gap: 1rem;
-      margin-top: 1.5rem;
-    }
-
-    .footer-social a {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
-
-    .footer-social a:hover {
-      background: var(--teal);
-      transform: translateY(-4px);
-    }
-
-    .footer-bottom {
-      max-width: 1200px;
-      margin: 3rem auto 0;
-      padding-top: 2rem;
-      border-top: 1px solid rgba(255,255,255,0.1);
-      text-align: center;
-      color: rgba(255,255,255,0.6);
     }
   </style>
 </head>
-<body>
+<body class="bg-gradient-to-b from-white via-soft-white to-gray-50">
+
+  <!-- Navbar -->
   {% include 'helpex_app/components/navbar.html' %}
 
-  <div class="mobile-menu-overlay" id="mobileOverlay"></div>
-  <div class="mobile-menu" id="mobileMenu">
-    <div class="mobile-menu-header">
-      <a href="/" class="navbar-logo">
-        <img src="{% static 'logo.png' %}" alt="HELPEX">
-        <div class="navbar-brand">
-          <span class="navbar-brand-main">{{ settings.company_name|default:"HELPEX BRO" }}</span>
-          <span class="navbar-brand-sub">{{ settings.tagline|default:"ADAPTIVE DIGITAL STUDIO" }}</span>
-        </div>
-      </a>
-      <button class="mobile-menu-close" id="mobileClose">
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
-    <a href="/" class="mobile-nav-link"><i class="fas fa-home"></i> Home</a>
-    <a href="/service/" class="mobile-nav-link"><i class="fas fa-cogs"></i> Services</a>
-    <a href="/gallery/" class="mobile-nav-link"><i class="fas fa-images"></i> Gallery</a>
-    <a href="/clients/" class="mobile-nav-link"><i class="fas fa-users"></i> Clients</a>
-    <a href="/blog/" class="mobile-nav-link"><i class="fas fa-blog"></i> Blog</a>
-    <a href="/pricing/" class="mobile-nav-link"><i class="fas fa-tags"></i> Pricing</a>
-    <a href="/why-choose-us/" class="mobile-nav-link active"><i class="fas fa-award"></i> Why Choose Us</a>
-    <a href="/about/" class="mobile-nav-link"><i class="fas fa-info-circle"></i> About Us</a>
-    <a href="/contact/" class="mobile-nav-link"><i class="fas fa-envelope"></i> Contact</a>
-    <a href="/contact/" class="navbar-cta" style="margin-top: 2rem; justify-content: center;">
-      Start Project <i class="fas fa-arrow-right"></i>
-    </a>
-  </div>
+  <!-- ============================================================ -->
+  <!-- HERO SECTION -->
+  <!-- ============================================================ -->
+  <section class="relative pt-32 pb-20 md:pt-44 md:pb-32 overflow-hidden bg-gradient-to-br from-midnight to-midnight-light">
+    <!-- Background effects -->
+    <div class="absolute inset-0 bg-grid opacity-10"></div>
+    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-teal/10 rounded-full filter blur-3xl animate-float"></div>
+    <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-teal-glow/10 rounded-full filter blur-3xl animate-float" style="animation-delay: -3s;"></div>
 
-  <section class="wcu-hero">
-    <h1>{{ section.title|default:"Why Choose Us" }}</h1>
-    <p>{{ section.subtitle|default:"Discover what makes us the perfect partner for your digital success" }}</p>
+    <div class="relative z-10 max-w-7xl mx-auto px-6">
+      <!-- Breadcrumb -->
+      <div class="flex items-center gap-2 mb-10">
+        <a href="{% url 'index' %}" class="text-sm text-white/60 hover:text-teal transition-colors">Home</a>
+        <span class="text-white/30">/</span>
+        <span class="text-sm font-semibold text-teal">Why Choose Us</span>
+      </div>
+
+      <!-- Headline -->
+      <div class="text-center max-w-4xl mx-auto">
+        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5 bg-teal/20 text-teal border border-teal/20">
+          // Why We're Different
+        </span>
+        <h1 class="font-display text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 text-white">
+          {{ section.title|default:"Why Choose Us" }}
+        </h1>
+        <p class="text-lg md:text-xl text-white/70 max-w-2xl mx-auto leading-relaxed">
+          {{ section.subtitle|default:"Discover what makes us the perfect partner for your digital success. We combine expertise, innovation, and dedication to deliver exceptional results." }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/40 animate-bounce">
+      <span class="text-xs tracking-widest uppercase">Explore</span>
+      <i class="fas fa-chevron-down"></i>
+    </div>
   </section>
 
+  <!-- ============================================================ -->
+  <!-- STATS SECTION -->
+  <!-- ============================================================ -->
   {% if stats %}
-  <section class="wcu-stats">
-    <div class="wcu-stats-grid">
-      {% for stat in stats %}
-      <div class="wcu-stat-card">
-        <div class="wcu-stat-icon">
-          <i class="fas {{ stat.icon_class }}"></i>
+  <section class="py-20 bg-white relative -mt-10">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {% for stat in stats %}
+        <div class="fade-up glass p-6 rounded-2xl text-center hover:-translate-y-2 transition-all duration-300 shadow-sm">
+          <div class="w-14 h-14 rounded-xl bg-teal/10 text-teal flex items-center justify-center text-2xl mx-auto mb-4">
+            <i class="fas {{ stat.icon_class }}"></i>
+          </div>
+          <div class="text-3xl md:text-4xl font-extrabold gradient-text mb-1 stat-counter" data-target="{{ stat.number|cut:'+' }}">{{ stat.number }}</div>
+          <div class="text-sm text-gray-soft font-medium">{{ stat.label }}</div>
         </div>
-        <div class="wcu-stat-number">{{ stat.number }}</div>
-        <div class="wcu-stat-label">{{ stat.label }}</div>
+        {% endfor %}
       </div>
-      {% endfor %}
     </div>
   </section>
   {% endif %}
 
+  <!-- ============================================================ -->
+  <!-- REASONS SECTION -->
+  <!-- ============================================================ -->
   {% if reasons %}
-  <section class="wcu-reasons">
-    <div class="wcu-reasons-header">
-      <h2>What Sets Us Apart</h2>
-      <p>We combine expertise, innovation, and dedication to deliver exceptional results for every client.</p>
-    </div>
-    <div class="wcu-reasons-grid">
-      {% for reason in reasons %}
-      <div class="wcu-reason-card">
-        <div class="wcu-reason-icon">
-          <i class="fas {{ reason.icon_class }}"></i>
-        </div>
-        <h3>{{ reason.title }}</h3>
-        <p>{{ reason.description }}</p>
+  <section class="py-24 bg-soft-white">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-14">
+        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5 bg-teal/10 text-teal border border-teal/20">
+          // What Sets Us Apart
+        </span>
+        <h2 class="font-display text-4xl md:text-5xl font-bold text-midnight mb-4">
+          Why Clients <span class="gradient-text">Choose Us</span>
+        </h2>
+        <p class="text-lg text-gray-soft max-w-xl mx-auto">
+          We combine expertise, innovation, and dedication to deliver exceptional results for every client.
+        </p>
       </div>
-      {% endfor %}
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for reason in reasons %}
+        <div class="fade-up reason-card bg-white rounded-3xl p-8 shadow-md border border-gray-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 overflow-hidden">
+          <!-- Icon -->
+          <div class="w-16 h-16 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mb-6 transition-all duration-300 group-hover:bg-teal group-hover:text-white">
+            <i class="fas {{ reason.icon_class }}"></i>
+          </div>
+          <!-- Content -->
+          <h3 class="text-xl font-bold mb-3 text-midnight">{{ reason.title }}</h3>
+          <p class="text-gray-soft leading-relaxed text-sm">{{ reason.description }}</p>
+        </div>
+        {% endfor %}
+      </div>
     </div>
   </section>
   {% endif %}
 
-  <section class="wcu-process">
-    <div class="wcu-process-container">
-      <div class="wcu-process-header">
-        <h2>Our Proven Process</h2>
-        <p>A streamlined approach that ensures quality, transparency, and timely delivery.</p>
+  <!-- ============================================================ -->
+  <!-- PROCESS SECTION (Dark) -->
+  <!-- ============================================================ -->
+  <section class="py-24 bg-gradient-to-br from-midnight to-midnight-light relative overflow-hidden">
+    <div class="absolute inset-0 bg-grid opacity-10"></div>
+    <div class="absolute top-0 right-0 w-96 h-96 bg-teal/10 rounded-full filter blur-3xl"></div>
+    
+    <div class="relative z-10 max-w-7xl mx-auto px-6">
+      <div class="text-center mb-14">
+        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5 bg-teal/20 text-teal border border-teal/20">
+          // How We Deliver
+        </span>
+        <h2 class="font-display text-4xl md:text-5xl font-bold text-white mb-4">
+          Our <span class="gradient-text">Proven Process</span>
+        </h2>
+        <p class="text-lg text-white/60 max-w-xl mx-auto">
+          A streamlined approach that ensures quality, transparency, and timely delivery every time.
+        </p>
       </div>
-      <div class="wcu-process-steps">
-        <div class="wcu-process-step">
-          <div class="wcu-step-number">1</div>
-          <h3>Discovery</h3>
-          <p>We dive deep into understanding your business goals, challenges, and target audience.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Step 1 -->
+        <div class="fade-up bg-white/5 border border-white/10 rounded-3xl p-8 text-center hover:bg-white/10 hover:-translate-y-2 transition-all duration-300">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center text-xl font-bold mx-auto mb-5 text-white shadow-lg shadow-teal/20">
+            1
+          </div>
+          <h3 class="text-xl font-bold text-white mb-3">Discovery</h3>
+          <p class="text-white/60 text-sm leading-relaxed">We dive deep into understanding your business goals, challenges, and target audience.</p>
         </div>
-        <div class="wcu-process-step">
-          <div class="wcu-step-number">2</div>
-          <h3>Strategy</h3>
-          <p>Crafting a comprehensive plan that aligns with your objectives and market demands.</p>
+        <!-- Step 2 -->
+        <div class="fade-up bg-white/5 border border-white/10 rounded-3xl p-8 text-center hover:bg-white/10 hover:-translate-y-2 transition-all duration-300">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center text-xl font-bold mx-auto mb-5 text-white shadow-lg shadow-teal/20">
+            2
+          </div>
+          <h3 class="text-xl font-bold text-white mb-3">Strategy</h3>
+          <p class="text-white/60 text-sm leading-relaxed">Crafting a comprehensive plan aligned with your objectives and market demands.</p>
         </div>
-        <div class="wcu-process-step">
-          <div class="wcu-step-number">3</div>
-          <h3>Design & Develop</h3>
-          <p>Building your solution with cutting-edge technology and stunning design.</p>
+        <!-- Step 3 -->
+        <div class="fade-up bg-white/5 border border-white/10 rounded-3xl p-8 text-center hover:bg-white/10 hover:-translate-y-2 transition-all duration-300">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center text-xl font-bold mx-auto mb-5 text-white shadow-lg shadow-teal/20">
+            3
+          </div>
+          <h3 class="text-xl font-bold text-white mb-3">Design & Develop</h3>
+          <p class="text-white/60 text-sm leading-relaxed">Building your solution with cutting-edge technology and stunning design.</p>
         </div>
-        <div class="wcu-process-step">
-          <div class="wcu-step-number">4</div>
-          <h3>Launch & Support</h3>
-          <p>Deploying your project and providing ongoing support for continued success.</p>
+        <!-- Step 4 -->
+        <div class="fade-up bg-white/5 border border-white/10 rounded-3xl p-8 text-center hover:bg-white/10 hover:-translate-y-2 transition-all duration-300">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center text-xl font-bold mx-auto mb-5 text-white shadow-lg shadow-teal/20">
+            4
+          </div>
+          <h3 class="text-xl font-bold text-white mb-3">Launch & Support</h3>
+          <p class="text-white/60 text-sm leading-relaxed">Deploying your project and providing ongoing support for continued success.</p>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- ============================================================ -->
+  <!-- TESTIMONIALS SECTION -->
+  <!-- ============================================================ -->
   {% if testimonials %}
-  <section class="wcu-testimonials">
-    <div class="wcu-testimonials-header">
-      <h2>What Our Clients Say</h2>
-      <p>Real feedback from real partners who trust us with their digital transformation.</p>
-    </div>
-    <div class="wcu-testimonials-grid">
-      {% for testimonial in testimonials %}
-      <div class="wcu-testimonial-card">
-        <div class="wcu-testimonial-stars">
-          {% for i in "12345"|make_list %}
-            {% if forloop.counter <= testimonial.rating %}
+  <section class="py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-14">
+        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5 bg-teal/10 text-teal border border-teal/20">
+          // Client Love
+        </span>
+        <h2 class="font-display text-4xl md:text-5xl font-bold text-midnight mb-4">
+          What <span class="gradient-text">Clients Say</span>
+        </h2>
+        <p class="text-lg text-gray-soft max-w-xl mx-auto">
+          Real feedback from real partners who trust us with their digital transformation.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for testimonial in testimonials %}
+        <div class="fade-up bg-soft-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+          <!-- Stars -->
+          <div class="flex gap-1 mb-4 text-yellow-400 text-sm">
+            {% for i in "12345"|make_list %}
+              {% if forloop.counter <= testimonial.rating %}
               <i class="fas fa-star"></i>
-            {% else %}
+              {% else %}
               <i class="far fa-star"></i>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <!-- Quote -->
+          <p class="text-midnight leading-relaxed mb-6 text-sm italic">"{{ testimonial.quote }}"</p>
+          <!-- Author -->
+          <div class="flex items-center gap-4 pt-4 border-t border-gray-200">
+            {% if testimonial.avatar %}
+            <img src="{{ testimonial.avatar.url }}" alt="{{ testimonial.name }}" class="w-12 h-12 rounded-full object-cover">
+            {% else %}
+            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center text-white font-bold text-lg">
+              {{ testimonial.name|make_initials }}
+            </div>
             {% endif %}
-          {% endfor %}
-        </div>
-        <p class="wcu-testimonial-quote">"{{ testimonial.quote }}"</p>
-        <div class="wcu-testimonial-author">
-          {% if testimonial.avatar %}
-            <img src="{{ testimonial.avatar.url }}" alt="{{ testimonial.name }}" class="wcu-testimonial-avatar">
-          {% else %}
-            <div class="wcu-testimonial-avatar">{{ testimonial.name|make_initials }}</div>
-          {% endif %}
-          <div class="wcu-testimonial-info">
-            <h4>{{ testimonial.name }}</h4>
-            <p>{{ testimonial.role }} at {{ testimonial.company }}</p>
+            <div>
+              <div class="font-semibold text-midnight">{{ testimonial.name }}</div>
+              <div class="text-sm text-gray-soft">{{ testimonial.role }} at {{ testimonial.company }}</div>
+            </div>
           </div>
         </div>
+        {% endfor %}
       </div>
-      {% endfor %}
     </div>
   </section>
   {% endif %}
 
-  <section class="wcu-cta">
-    <h2>Ready to Work With Us?</h2>
-    <p>Let's discuss your project and explore how we can help you achieve your goals.</p>
-    <a href="/contact/" class="wcu-cta-button">
-      Get Started Today <i class="fas fa-arrow-right"></i>
-    </a>
-  </section>
+  <!-- ============================================================ -->
+  <!-- CTA SECTION -->
+  <!-- ============================================================ -->
 
+
+  <!-- Footer -->
+  <!-- ========== REGISTERED COMPANIES ========== -->
+  {% include 'helpex_app/components/registered_companies.html' %}
+
+  
+  <!-- ========== FOOTER (included from component) ========== -->
   {% include 'helpex_app/components/footer.html' %}
 
+  <!-- ============================================================ -->
+  <!-- SCRIPTS -->
+  <!-- ============================================================ -->
   <script>
-    const mobileMenu = document.getElementById('mobileMenu');
-    const mobileOverlay = document.getElementById('mobileOverlay');
-    const mobileClose = document.getElementById('mobileClose');
-    const hamburger = document.querySelector('.hamburger');
-
-    function openMobileMenu() {
-      mobileMenu.classList.add('active');
-      mobileOverlay.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeMobileMenu() {
-      mobileMenu.classList.remove('active');
-      mobileOverlay.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    if (hamburger) hamburger.addEventListener('click', openMobileMenu);
-    mobileClose.addEventListener('click', closeMobileMenu);
-    mobileOverlay.addEventListener('click', closeMobileMenu);
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeMobileMenu();
+    // ---------- Lenis Smooth Scroll ----------
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true
     });
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
 
-    window.addEventListener('resize', () => {
-      if (window.innerWidth >= 1024) closeMobileMenu();
+    // Sync Lenis with GSAP ScrollTrigger
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
     });
+    gsap.ticker.lagSmoothing(0);
 
+    // ---------- GSAP Entrance Animations ----------
     gsap.registerPlugin(ScrollTrigger);
-    
-    gsap.from('.wcu-stat-card', {
-      scrollTrigger: {
-        trigger: '.wcu-stats-grid',
-        start: 'top 80%',
-      },
-      y: 40,
-      opacity: 0,
-      duration: 0.6,
-      stagger: 0.15,
-      ease: 'power3.out'
+
+    // Animate all fade-up elements
+    gsap.utils.toArray('.fade-up').forEach((element, index) => {
+      gsap.fromTo(element,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1, y: 0,
+          duration: 0.7,
+          delay: index * 0.08,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: element,
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
     });
 
-    gsap.from('.wcu-reason-card', {
-      scrollTrigger: {
-        trigger: '.wcu-reasons-grid',
-        start: 'top 80%',
-      },
-      y: 50,
-      opacity: 0,
-      duration: 0.8,
-      stagger: 0.2,
-      ease: 'power3.out'
-    });
-
-    gsap.from('.wcu-process-step', {
-      scrollTrigger: {
-        trigger: '.wcu-process-steps',
-        start: 'top 80%',
-      },
-      y: 40,
-      opacity: 0,
-      duration: 0.6,
-      stagger: 0.15,
-      ease: 'power2.out'
-    });
-
-    gsap.from('.wcu-testimonial-card', {
-      scrollTrigger: {
-        trigger: '.wcu-testimonials-grid',
-        start: 'top 80%',
-      },
-      y: 50,
-      opacity: 0,
-      duration: 0.8,
-      stagger: 0.2,
-      ease: 'power3.out'
-    });
-
-    const statNumbers = document.querySelectorAll('.wcu-stat-number');
-    statNumbers.forEach(stat => {
-      const target = parseInt(stat.textContent);
+    // ---------- Animated Counter ----------
+    document.querySelectorAll('.stat-counter').forEach(counter => {
+      const target = parseInt(counter.dataset.target);
       if (!isNaN(target)) {
         ScrollTrigger.create({
-          trigger: stat,
-          start: 'top 80%',
+          trigger: counter,
+          start: 'top 90%',
           onEnter: () => {
             gsap.to({ val: 0 }, {
               val: target,
-              duration: 2,
-              ease: 'power2.out',
+              duration: 2.5,
+              ease: 'power3.out',
               onUpdate: function() {
-                stat.textContent = Math.floor(this.targets()[0].val) + (stat.textContent.includes('+') ? '+' : '');
+                const current = Math.floor(this.targets()[0].val);
+                counter.textContent = current + (counter.textContent.includes('+') ? '+' : '');
               }
             });
           },
           once: true
         });
       }
+    });
+
+    // ---------- Smooth scroll for anchor links ----------
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) lenis.scrollTo(target);
+      });
     });
   </script>
 </body>

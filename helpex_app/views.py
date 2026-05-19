@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
-from .models import Service, Testimonial, ProcessStep, PortfolioItem, PortfolioCategory, TeamMember, SiteSettings, HeroSection, ContactMessage, Client, BlogPost, BlogCategory, GalleryImage, GalleryCategory, PricingPlan, WhyChooseUsSection, WhyChooseUsReason, WhyChooseUsStat
+from .models import Service, Testimonial, ProcessStep, PortfolioItem, PortfolioCategory, TeamMember, SiteSettings, HeroSection, HeroCarouselItem, ContactMessage, Client, BlogPost, BlogCategory, GalleryImage, GalleryCategory, PricingPlan, WhyChooseUsSection, WhyChooseUsReason, WhyChooseUsStat
 
 
 def index(request):
     hero = HeroSection.objects.filter(is_active=True).first()
+    carousel_items = HeroCarouselItem.objects.filter(is_active=True).order_by('order', 'id')
     services = Service.objects.filter(is_active=True).order_by('order', 'title')[:6]
     testimonials = Testimonial.objects.filter(is_active=True).order_by('order', 'name')[:3]
     portfolio_items = PortfolioItem.objects.filter(is_active=True).order_by('order', '-created_at')[:6]
@@ -16,6 +17,7 @@ def index(request):
     
     return render(request, 'helpex_app/index.html', {
         'hero': hero,
+        'carousel_items': carousel_items,
         'services': services,
         'testimonials': testimonials,
         'portfolio_items': portfolio_items,
@@ -32,6 +34,26 @@ def service(request):
     
     return render(request, 'helpex_app/service.html', {
         'services': services,
+        'settings': settings,
+    })
+
+
+def service_detail(request, slug):
+    service = Service.objects.filter(slug=slug, is_active=True).first()
+    if not service:
+        from django.http import Http404
+        raise Http404("Service not found")
+    
+    related_services = Service.objects.filter(is_active=True).exclude(slug=slug).order_by('order', 'title')[:3]
+    case_studies = service.case_studies.filter(is_active=True).order_by('order', 'id')
+    gallery_images = service.gallery_images.order_by('order', 'id')
+    settings = SiteSettings.get_settings()
+    
+    return render(request, 'helpex_app/service_detail.html', {
+        'service': service,
+        'related_services': related_services,
+        'case_studies': case_studies,
+        'gallery_images': gallery_images,
         'settings': settings,
     })
 

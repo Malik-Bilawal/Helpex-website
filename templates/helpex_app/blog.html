@@ -5,245 +5,486 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blog - HELPEX BRO</title>
+
+  <!-- Tailwind CSS with custom theme -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    @media (max-width: 1023px) {
-      .navbar-cta { display: none !important; }
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            midnight: '#1A1F3B',
+            'midnight-light': '#2D3555',
+            teal: '#28A197',
+            'teal-dark': '#1E837A',
+            'teal-glow': '#3BC4B5',
+            'soft-white': '#F7F9FA',
+            'gray-soft': '#64748B',
+          },
+          fontFamily: {
+            outfit: ['Outfit', 'sans-serif'],
+            space: ['Space Grotesk', 'sans-serif'],
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-20px)' },
+            },
+          },
+        }
+      }
     }
-  </style>
+  </script>
+
+  <!-- Fonts & Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- GSAP + ScrollTrigger + Lenis -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
   <style>
-    :root { --midnight: #1A1F3B; --midnight-light: #2D3555; --teal: #28A197; --teal-dark: #1E837A; --teal-glow: #3BC4B5; --soft-white: #F7F9FA; --pure-white: #FFFFFF; --gray-100: #F8FAFC; --gray-200: #EEF1F5; --gray-300: #E2E8F0; --gray-500: #64748B; }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Outfit', sans-serif; background: var(--soft-white); color: var(--midnight); overflow-x: hidden; }
-    .font-display { font-family: 'Space Grotesk', sans-serif; }
-    
-    .navbar { background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(40,161,151,0.15); box-shadow: 0 2px 20px rgba(26,31,59,0.06); padding: 0.75rem 0; position: sticky; top: 0; z-index: 50; }
-    .navbar-inner { display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 1.5rem; background: rgba(255,255,255,0.6); border: 1px solid rgba(40,161,151,0.15); border-radius: 100px; }
-    .navbar-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
-    .navbar-logo img { height: 40px; border-radius: 10px; }
-    .navbar-brand { display: flex; flex-direction: column; line-height: 1.1; }
-    .navbar-brand-main { font-size: 1.5rem; font-weight: 800; color: #1A1F3B; letter-spacing: -0.5px; }
-    .navbar-brand-main span { color: #28A197; }
-    .navbar-brand-sub { font-size: 0.65rem; font-weight: 600; color: #28A197; letter-spacing: 4px; text-transform: uppercase; }
-    .nav-link { position: relative; color: rgba(26,31,59,0.8); font-weight: 500; font-size: 0.95rem; padding: 0.5rem 1rem; border-radius: 50px; transition: all 0.3s; text-decoration: none; }
-    .nav-link:hover, .nav-link.active { background: rgba(40,161,151,0.1); color: #28A197; }
-    .navbar-cta { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.625rem 1.25rem; background: linear-gradient(135deg, #28A197, #1E837A); color: white; font-weight: 600; font-size: 0.875rem; border-radius: 50px; text-decoration: none; box-shadow: 0 4px 15px rgba(40,161,151,0.3); transition: all 0.3s; }
-    .navbar-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(40,161,151,0.4); color: white; }
-    .navbar-mobile-toggle { display: none; width: 44px; height: 44px; align-items: center; justify-content: center; background: rgba(26,31,59,0.05); border: 1px solid rgba(26,31,59,0.1); border-radius: 12px; color: #1A1F3B; font-size: 1.25rem; cursor: pointer; }
-    .mobile-menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9998; opacity: 0; visibility: hidden; transition: all 0.3s; }
-    .mobile-menu-overlay.active { opacity: 1; visibility: visible; }
-    .mobile-menu { position: fixed; top: 0; right: -100%; width: 80%; max-width: 400px; height: 100vh; background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); z-index: 9999; transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 2rem; overflow-y: auto; }
-    .mobile-menu.active { right: 0; }
-    .mobile-menu-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3rem; }
-    .mobile-menu-close { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: rgba(26,31,59,0.1); border: none; border-radius: 12px; color: #1A1F3B; font-size: 1.25rem; cursor: pointer; }
-    .mobile-nav-link { display: block; padding: 1rem 1.25rem; color: #1A1F3B; font-size: 1.25rem; font-weight: 500; text-decoration: none; border-radius: 12px; transition: all 0.3s; }
-    .mobile-nav-link:hover, .mobile-nav-link.active { background: rgba(40,161,151,0.1); color: #28A197; }
-    .mobile-menu-cta { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 1.5rem; padding: 1rem; background: linear-gradient(135deg, #28A197, #1E837A); color: white; font-weight: 600; border-radius: 50px; text-decoration: none; }
-    
-    @media (max-width: 1023px) { .navbar-mobile-toggle { display: flex !important; } }
-    
-    .gradient-text { background: linear-gradient(135deg, var(--teal), var(--teal-glow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .glass-card { background: rgba(255,255,255,0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.5); }
-.blog-card { transition: all 0.4s ease; opacity: 1 !important; transform: none !important; }
-    .blog-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(26,31,59,0.15); }
-    .blog-card:hover img { transform: scale(1.05); }
-    .blog-img { transition: transform 0.5s ease; }
-    .featured-card { transition: all 0.4s ease; opacity: 1 !important; transform: none !important; }
-    .featured-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
-    
-    footer { background: var(--midnight); }
-    footer a { color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.3s; }
-    footer a:hover { color: var(--teal); }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: #F7F9FA;
+      color: #1A1F3B;
+      overflow-x: hidden;
+    }
+    .font-display {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    /* Gradient text utility */
+    .gradient-text {
+      background: linear-gradient(135deg, #28A197, #3BC4B5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    /* Glass card */
+    .glass {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+    /* Grid pattern */
+    .bg-grid {
+      background-image: 
+        linear-gradient(rgba(40, 161, 151, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(40, 161, 151, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    /* Entrance animation base */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    /* Category pill */
+    .category-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      border: 1px solid transparent;
+    }
+    .category-pill:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(40, 161, 151, 0.2);
+    }
+    .category-pill.active {
+      background: #28A197 !important;
+      color: white !important;
+      border-color: #28A197;
+    }
+    /* Blog card image */
+    .blog-img {
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .blog-card:hover .blog-img {
+      transform: scale(1.08);
+    }
+    /* Featured card glow */
+    .featured-card {
+      transition: all 0.4s ease;
+    }
+    .featured-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    }
+    /* Newsletter input */
+    .newsletter-input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+    .newsletter-input:focus {
+      outline: none;
+      border-color: #28A197;
+      background: rgba(255, 255, 255, 0.15);
+    }
   </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gradient-to-b from-white via-soft-white to-gray-50">
+
+  <!-- Navbar -->
   {% include 'helpex_app/components/navbar.html' %}
-  
-  <!-- Hero Section -->
-  <section class="relative py-28 overflow-hidden" style="background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);">
+
+  <!-- ============================================================ -->
+  <!-- HERO SECTION -->
+  <!-- ============================================================ -->
+  <section class="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden bg-white">
+    <!-- Background effects -->
     <div class="absolute inset-0 bg-grid"></div>
-    <div class="absolute inset-0 bg-glow"></div>
-    <div class="absolute top-20 -left-32 w-96 h-96 rounded-full mix-blend-multiply filter blur-3xl opacity-30" style="background: #28A197;"></div>
-    <div class="absolute bottom-20 -right-32 w-80 h-80 rounded-full mix-blend-multiply filter blur-3xl opacity-20" style="background: #3BC4B5;"></div>
-    
+    <div class="absolute top-20 -left-32 w-96 h-96 bg-teal/10 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float"></div>
+    <div class="absolute bottom-20 -right-32 w-80 h-80 bg-teal-glow/10 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float" style="animation-delay: -3s;"></div>
+
     <div class="relative z-10 max-w-7xl mx-auto px-6">
-      <div class="flex items-center gap-2 mb-8">
-        <a href="{% url 'index' %}" class="text-sm" style="color: #64748B;">Home</a>
-        <span style="color: #CBD5E1;">/</span>
-        <span class="text-sm font-medium" style="color: #28A197;">Blog</span>
+      <!-- Breadcrumb -->
+      <div class="flex items-center gap-2 mb-10">
+        <a href="{% url 'index' %}" class="text-sm text-gray-soft hover:text-teal transition-colors">Home</a>
+        <span class="text-gray-300">/</span>
+        <span class="text-sm font-semibold text-teal">Blog</span>
       </div>
-      
-      <div class="text-center mb-16">
-        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5" style="background: rgba(40,161,151,0.1); color: #28A197;">// Our Blog</span>
-        <h1 class="font-display text-5xl md:text-7xl font-bold mb-6" style="color: #1A1F3B;">
+
+      <!-- Headline -->
+      <div class="text-center max-w-4xl mx-auto">
+        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5 bg-teal/10 text-teal border border-teal/20">
+          // Our Blog
+        </span>
+        <h1 class="font-display text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 text-midnight">
           Latest <span class="gradient-text">Insights</span>
         </h1>
-        <p class="text-lg md:text-xl max-w-2xl mx-auto" style="color: #64748B;">
-          Tips, tutorials, and insights from our team of experts. Stay updated with the latest trends.
+        <p class="text-lg md:text-xl text-gray-soft max-w-2xl mx-auto mb-12">
+          Tips, tutorials, and insights from our team of experts. Stay updated with the latest trends in technology, design, and business.
         </p>
-      </div>
-      
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
-        <div class="glass-card rounded-2xl p-5 text-center">
-          <div class="text-3xl md:text-4xl font-bold gradient-text">{{ posts.count }}</div>
-          <div class="text-sm mt-1" style="color: #64748B;">Articles</div>
-        </div>
-        <div class="glass-card rounded-2xl p-5 text-center">
-          <div class="text-3xl md:text-4xl font-bold gradient-text">{{ categories.count }}</div>
-          <div class="text-sm mt-1" style="color: #64748B;">Categories</div>
-        </div>
-        <div class="glass-card rounded-2xl p-5 text-center">
-          <div class="text-3xl md:text-4xl font-bold gradient-text">2K+</div>
-          <div class="text-sm mt-1" style="color: #64748B;">Readers</div>
-        </div>
-        <div class="glass-card rounded-2xl p-5 text-center">
-          <div class="text-3xl md:text-4xl font-bold gradient-text">Weekly</div>
-          <div class="text-sm mt-1" style="color: #64748B;">Updates</div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
+          <div class="glass p-5 rounded-2xl shadow-sm text-center">
+            <div class="text-3xl md:text-4xl font-bold gradient-text mb-1">{{ posts.count|default:"0" }}</div>
+            <div class="text-sm text-gray-soft">Articles</div>
+          </div>
+          <div class="glass p-5 rounded-2xl shadow-sm text-center">
+            <div class="text-3xl md:text-4xl font-bold gradient-text mb-1">{{ categories.count|default:"0" }}</div>
+            <div class="text-sm text-gray-soft">Categories</div>
+          </div>
+          <div class="glass p-5 rounded-2xl shadow-sm text-center">
+            <div class="text-3xl md:text-4xl font-bold gradient-text mb-1">2K+</div>
+            <div class="text-sm text-gray-soft">Monthly Readers</div>
+          </div>
+          <div class="glass p-5 rounded-2xl shadow-sm text-center">
+            <div class="text-3xl md:text-4xl font-bold gradient-text mb-1">Weekly</div>
+            <div class="text-sm text-gray-soft">Updates</div>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-400 animate-bounce">
+      <span class="text-xs tracking-widest uppercase">Explore</span>
+      <i class="fas fa-chevron-down"></i>
+    </div>
   </section>
 
-  <!-- Categories -->
-  <section class="py-6" style="background: white; border-bottom: 1px solid #E2E8F0;">
+  <!-- ============================================================ -->
+  <!-- CATEGORY FILTER -->
+  <!-- ============================================================ -->
+  <section class="py-6 bg-white border-b border-gray-200 sticky top-[72px] z-40 backdrop-blur-md bg-white/90">
     <div class="max-w-7xl mx-auto px-6">
       <div class="flex flex-wrap justify-center gap-3">
-        <a href="{% url 'blog' %}" class="category-pill active" style="background: #28A197; color: white;">All Posts</a>
+        <a href="{% url 'blog' %}" class="category-pill {% if not request.GET.category %}active{% endif %}" style="background: #F1F5F9; color: #64748B;">
+          <i class="fas fa-grid-2 mr-2"></i> All Posts
+        </a>
         {% for category in categories %}
-        <a href="{% url 'blog' %}?category={{ category.slug }}" class="category-pill" style="background: #F1F5F9; color: #64748B;">{{ category.name }}</a>
+        <a href="{% url 'blog' %}?category={{ category.slug }}" class="category-pill {% if request.GET.category == category.slug %}active{% endif %}" style="background: #F1F5F9; color: #64748B;">
+          {{ category.name }}
+        </a>
         {% endfor %}
       </div>
     </div>
   </section>
 
-  <!-- Featured Posts -->
+  <!-- ============================================================ -->
+  <!-- FEATURED POSTS (Dark Section) -->
+  <!-- ============================================================ -->
   {% if featured_posts %}
-  <section class="py-24 relative overflow-hidden" style="background: linear-gradient(135deg, #1A1F3B, #2D3555);">
-    <div class="absolute inset-0 bg-glow"></div>
+  <section class="py-24 bg-gradient-to-br from-midnight to-midnight-light relative overflow-hidden">
+    <div class="absolute inset-0 bg-grid opacity-10"></div>
     <div class="relative z-10 max-w-7xl mx-auto px-6">
       <div class="text-center mb-14">
-        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5" style="background: rgba(40,161,151,0.2); color: #28A197;">// Featured</span>
-        <h2 class="font-display text-4xl md:text-5xl font-bold" style="color: white;">Top <span class="gradient-text">Articles</span></h2>
+        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5 bg-teal/20 text-teal border border-teal/20">
+          // Editor's Picks
+        </span>
+        <h2 class="font-display text-4xl md:text-5xl font-bold text-white">
+          Featured <span class="gradient-text">Articles</span>
+        </h2>
+        <p class="text-lg mt-4 max-w-xl mx-auto text-white/60">
+          Hand-picked articles our readers love the most.
+        </p>
       </div>
-      
-      <div class="grid md:grid-cols-3 gap-6">
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for post in featured_posts %}
-        <div class="featured-card group relative rounded-3xl overflow-hidden" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
-          <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background: radial-gradient(ellipse at center, rgba(40,161,151,0.2), transparent 70%);"></div>
-          <div class="relative z-10 p-6">
-            <div class="h-40 rounded-2xl mb-5 flex items-center justify-center" style="background: linear-gradient(135deg, #28A197, #1E837A);">
-              <i class="fas fa-newspaper text-3xl" style="color: rgba(255,255,255,0.5);"></i>
+        <a href="{{ post.get_absolute_url }}" class="featured-card group relative rounded-3xl overflow-hidden block bg-white/5 border border-white/10">
+          <!-- Hover glow -->
+          <div class="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style="background: radial-gradient(ellipse at center, rgba(40,161,151,0.2), transparent 70%);"></div>
+
+          <!-- Image -->
+          <div class="h-48 overflow-hidden">
+            {% if post.featured_image %}
+            <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="w-full h-full object-cover blog-img">
+            {% else %}
+            <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-teal to-teal-dark">
+              <i class="fas fa-newspaper text-4xl text-white/30"></i>
             </div>
-            {% if post.category %}<span class="tag">{{ post.category.name }}</span>{% else %}<span class="tag">Blog</span>{% endif %}
-            <h3 class="text-xl font-bold mt-3 mb-2" style="color: white;">{{ post.title }}</h3>
-            <p class="text-sm mb-4" style="color: rgba(255,255,255,0.6);">{{ post.excerpt|truncatechars:80 }}</p>
-            <div class="flex items-center justify-between">
+            {% endif %}
+          </div>
+
+          <!-- Content -->
+          <div class="relative z-10 p-6">
+            <div class="flex items-center justify-between mb-3">
+              {% if post.category %}
+              <span class="px-3 py-1 rounded-full text-xs font-semibold bg-teal/20 text-teal">{{ post.category.name }}</span>
+              {% endif %}
+              <span class="text-xs text-white/40">{{ post.created_at|date:"M d, Y" }}</span>
+            </div>
+            <h3 class="text-xl font-bold mb-2 text-white group-hover:text-teal transition-colors">{{ post.title }}</h3>
+            <p class="text-sm mb-4 text-white/60 line-clamp-2">{{ post.excerpt|truncatechars:100 }}</p>
+            <div class="flex items-center justify-between pt-4 border-t border-white/10">
               <div class="flex items-center gap-2">
-                <div class="author-avatar">{{ post.author|slice:":1" }}</div>
-                <span class="text-sm" style="color: rgba(255,255,255,0.6);">{{ post.author }}</span>
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center text-white font-bold text-xs">
+                  {{ post.author|slice:":1"|upper }}
+                </div>
+                <span class="text-xs text-white/60">{{ post.author }}</span>
               </div>
-              <span class="text-xs" style="color: rgba(255,255,255,0.4);">{{ post.created_at|date:"M d" }}</span>
+              <span class="text-xs text-white/40 flex items-center gap-1">
+                <i class="fas fa-eye"></i> {{ post.view_count|default:"0" }}
+              </span>
             </div>
           </div>
-        </div>
+        </a>
         {% endfor %}
       </div>
     </div>
   </section>
   {% endif %}
 
-  <!-- All Posts -->
-  <section class="py-24" style="background: white;">
+  <!-- ============================================================ -->
+  <!-- ALL POSTS GRID -->
+  <!-- ============================================================ -->
+  <section class="py-24 bg-white">
     <div class="max-w-7xl mx-auto px-6">
       <div class="text-center mb-14">
-        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5" style="background: rgba(40,161,151,0.1); color: #28A197;">// All Posts</span>
-        <h2 class="font-display text-4xl md:text-5xl font-bold" style="color: #1A1F3B;">Browse <span class="gradient-text">Articles</span></h2>
+        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5 bg-teal/10 text-teal border border-teal/20">
+          // Browse All
+        </span>
+        <h2 class="font-display text-4xl md:text-5xl font-bold text-midnight">
+          Explore <span class="gradient-text">Articles</span>
+        </h2>
+        {% if request.GET.category %}
+        <p class="text-lg mt-4 text-gray-soft">
+          Showing posts in <span class="font-semibold text-teal">{{ request.GET.category|title }}</span>
+          <a href="{% url 'blog' %}" class="ml-2 text-sm text-teal hover:underline">(clear filter)</a>
+        </p>
+        {% endif %}
       </div>
-      
+
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for post in posts %}
-        <div class="blog-card bg-white rounded-2xl overflow-hidden" style="border: 1px solid #E2E8F0; box-shadow: 0 4px 20px rgba(26,31,59,0.05);">
-          <div class="blog-img h-44 overflow-hidden" style="background: linear-gradient(135deg, #28A197, #1E837A);">
+        <a href="{{ post.get_absolute_url }}" class="fade-up blog-card group bg-soft-white rounded-2xl overflow-hidden block border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+          <!-- Image -->
+          <div class="h-48 overflow-hidden">
             {% if post.featured_image %}
-            {% if post.featured_image %}<img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="w-full h-full object-cover">{% endif %}
+            <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="w-full h-full object-cover blog-img">
             {% else %}
-            <div class="w-full h-full flex items-center justify-center">
-              <i class="fas fa-newspaper text-3xl" style="color: rgba(255,255,255,0.5);"></i>
+            <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-teal/20 to-teal-dark/20">
+              <i class="fas fa-newspaper text-4xl text-teal/30"></i>
             </div>
             {% endif %}
           </div>
-          <div class="p-5">
+
+          <!-- Content -->
+          <div class="p-6">
             <div class="flex items-center justify-between mb-3">
-              {% if post.category %}<span class="tag">{{ post.category.name }}</span>{% else %}<span class="tag">Blog</span>{% endif %}
-              <span class="text-xs" style="color: #64748B;">{{ post.created_at|date:"M d, Y" }}</span>
+              {% if post.category %}
+              <span class="px-3 py-1 rounded-full text-xs font-semibold bg-teal/10 text-teal">{{ post.category.name }}</span>
+              {% endif %}
+              <span class="text-xs text-gray-400">{{ post.created_at|date:"M d, Y" }}</span>
             </div>
-            <h3 class="text-lg font-bold mb-2" style="color: #1A1F3B;">{{ post.title }}</h3>
-            <p class="text-sm mb-4" style="color: #64748B; line-height: 1.6;">{{ post.excerpt|truncatechars:70 }}</p>
-            <div class="flex items-center justify-between pt-3" style="border-top: 1px solid #F1F5F9;">
+            <h3 class="text-lg font-bold mb-2 text-midnight group-hover:text-teal transition-colors">{{ post.title }}</h3>
+            <p class="text-sm mb-4 text-gray-soft line-clamp-2 leading-relaxed">{{ post.excerpt|truncatechars:100 }}</p>
+            <div class="flex items-center justify-between pt-4 border-t border-gray-100">
               <div class="flex items-center gap-2">
-                <div class="author-avatar" style="width: 32px; height: 32px; font-size: 12px;">{{ post.author|slice:":1" }}</div>
-                <span class="text-xs" style="color: #64748B;">{{ post.author }}</span>
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center text-white font-bold text-xs">
+                  {{ post.author|slice:":1"|upper }}
+                </div>
+                <span class="text-xs text-gray-soft">{{ post.author }}</span>
               </div>
-              <span class="text-xs" style="color: #64748B;"><i class="fas fa-eye"></i> {{ post.view_count }}</span>
+              <span class="text-xs text-gray-400 flex items-center gap-1">
+                <i class="fas fa-eye"></i> {{ post.view_count|default:"0" }}
+              </span>
             </div>
           </div>
-        </div>
+        </a>
         {% empty %}
         <div class="col-span-full text-center py-16">
-          <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4" style="background: rgba(40,161,151,0.1);">
-            <i class="fas fa-pen text-3xl" style="color: #28A197;"></i>
+          <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 bg-teal/10">
+            <i class="fas fa-pen text-3xl text-teal"></i>
           </div>
-          <h3 class="text-xl font-bold mb-2" style="color: #1A1F3B;">No posts yet</h3>
-          <p style="color: #64748B;">Check back soon for new articles!</p>
+          <h3 class="text-xl font-bold mb-2 text-midnight">No posts found</h3>
+          <p class="text-gray-soft">
+            {% if request.GET.category %}
+            No articles in this category yet. <a href="{% url 'blog' %}" class="text-teal hover:underline">View all posts</a>
+            {% else %}
+            Check back soon for new articles!
+            {% endif %}
+          </p>
         </div>
         {% endfor %}
       </div>
+
+      <!-- Pagination (optional - add if you have pagination) -->
+      {% if is_paginated %}
+      <div class="flex justify-center mt-12 gap-2">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}" 
+           class="px-4 py-2 rounded-full bg-gray-100 text-gray-soft hover:bg-teal hover:text-white transition-all">
+          <i class="fas fa-arrow-left"></i>
+        </a>
+        {% endif %}
+        {% for num in page_obj.paginator.page_range %}
+        <a href="?page={{ num }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}" 
+           class="px-4 py-2 rounded-full {% if page_obj.number == num %}bg-teal text-white{% else %}bg-gray-100 text-gray-soft hover:bg-teal hover:text-white{% endif %} transition-all">
+          {{ num }}
+        </a>
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}" 
+           class="px-4 py-2 rounded-full bg-gray-100 text-gray-soft hover:bg-teal hover:text-white transition-all">
+          <i class="fas fa-arrow-right"></i>
+        </a>
+        {% endif %}
+      </div>
+      {% endif %}
     </div>
   </section>
 
-  <!-- Newsletter -->
-  <section class="py-24 relative overflow-hidden" style="background: linear-gradient(135deg, #1A1F3B, #2D3555);">
-    <div class="absolute inset-0 bg-glow"></div>
+  <!-- ============================================================ -->
+  <!-- NEWSLETTER SECTION -->
+  <!-- ============================================================ -->
+  <!-- <section class="py-24 bg-gradient-to-br from-midnight to-midnight-light relative overflow-hidden">
+    <div class="absolute inset-0 bg-grid opacity-10"></div>
+    <div class="absolute top-0 right-0 w-96 h-96 bg-teal/10 rounded-full filter blur-3xl"></div>
     <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
-      <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-6" style="background: rgba(40,161,151,0.2); color: #28A197;">// Subscribe</span>
-      <h2 class="text-4xl md:text-5xl font-bold mb-6" style="color: white;">Stay in the <span class="gradient-text">Loop</span></h2>
-      <p class="text-lg mb-10" style="color: rgba(255,255,255,0.7); max-width: 600px; margin: 0 auto;">Get the latest insights, tips, and tutorials delivered to your inbox every week.</p>
+      <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-6 bg-teal/20 text-teal border border-teal/20">
+        // Stay Connected
+      </span>
+      <h2 class="font-display text-4xl md:text-5xl font-bold mb-6 text-white">
+        Never Miss an <span class="gradient-text">Update</span>
+      </h2>
+      <p class="text-lg text-white/70 max-w-xl mx-auto mb-10">
+        Get the latest insights, tips, and tutorials delivered straight to your inbox. Join 2,000+ readers.
+      </p>
       <form class="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
-        <input type="email" placeholder="Enter your email" class="flex-1 px-6 py-4 rounded-full outline-none" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white;">
-        <button type="submit" class="px-8 py-4 rounded-full font-semibold text-white" style="background: linear-gradient(135deg, #28A197, #1E837A); box-shadow: 0 8px 30px rgba(40,161,161,0.4);">Subscribe</button>
+        <input 
+          type="email" 
+          placeholder="Enter your email" 
+          class="newsletter-input flex-1 px-6 py-4 rounded-full bg-white/10 border border-white/20 text-white placeholder:text-white/50 focus:outline-none focus:border-teal focus:bg-white/15 transition-all"
+          required
+        >
+        <button type="submit" class="px-8 py-4 rounded-full font-semibold text-white bg-gradient-to-r from-teal to-teal-dark hover:shadow-xl hover:shadow-teal/30 transition-all hover:scale-105">
+          <i class="fas fa-paper-plane mr-2"></i> Subscribe
+        </button>
       </form>
     </div>
-  </section>
+  </section> -->
 
   <!-- Footer -->
-  <footer class="py-16" style="background: #0f1225;">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-        <p class="text-sm" style="color: rgba(255,255,255,0.4);">&copy; {% now "Y" %} HELPEX BRO. All rights reserved.</p>
-        <div class="flex gap-6">
-          <a href="#" style="color: rgba(255,255,255,0.4);">Privacy</a>
-          <a href="#" style="color: rgba(255,255,255,0.4);">Terms</a>
-          <a href="#" style="color: rgba(255,255,255,0.4);">Cookies</a>
-        </div>
-      </div>
-    </div>
-  </footer>
+  <!-- ========== REGISTERED COMPANIES ========== -->
+  {% include 'helpex_app/components/registered_companies.html' %}
+
   
+  <!-- ========== FOOTER (included from component) ========== -->
+  {% include 'helpex_app/components/footer.html' %}
+
+  <!-- ============================================================ -->
+  <!-- SCRIPTS -->
+  <!-- ============================================================ -->
   <script>
-    try { gsap.registerPlugin(ScrollTrigger); } catch(e) {}
-    
-    // Ensure posts are visible
-    document.querySelectorAll('.blog-card, .featured-card').forEach(el => {
-      el.style.opacity = '1';
-      el.style.transform = 'none';
+    // ---------- Lenis Smooth Scroll ----------
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true
     });
-  </script>
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    // Sync Lenis with GSAP ScrollTrigger
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
+
+    // ---------- GSAP Entrance Animations ----------
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Animate all elements with 'fade-up' class
+    gsap.utils.toArray('.fade-up').forEach(element => {
+      gsap.fromTo(element,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1, y: 0,
+          duration: 0.7,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: element,
+            start: 'top 88%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    });
+
+    // Animate featured cards
+    gsap.utils.toArray('.featured-card').forEach((card, index) => {
+      gsap.fromTo(card,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1, y: 0,
+          duration: 0.6,
+          delay: index * 0.1,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 90%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) lenis.scrollTo(target);
+      });
+    });
   </script>
 </body>
 </html>

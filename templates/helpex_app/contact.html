@@ -1,4 +1,7 @@
 {% load static %}
+{% load helpex_tags %}
+
+{% get_settings as settings %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,822 +9,438 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Contact HELPEX BRO - Get in touch for your next digital project">
   <title>Contact Us · HELPEX BRO</title>
-  
+
+  <!-- Tailwind CSS with custom theme -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    @media (max-width: 1023px) {
-      .navbar-cta { display: none !important; }
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            midnight: '#1A1F3B',
+            'midnight-light': '#2D3555',
+            teal: '#28A197',
+            'teal-dark': '#1E837A',
+            'teal-glow': '#3BC4B5',
+            'soft-white': '#F7F9FA',
+            'gray-soft': '#64748B',
+          },
+          fontFamily: {
+            outfit: ['Outfit', 'sans-serif'],
+            space: ['Space Grotesk', 'sans-serif'],
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-20px)' },
+            },
+          },
+        }
+      }
     }
-  </style>
+  </script>
+
+  <!-- Fonts & Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- GSAP + ScrollTrigger + Lenis -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-  
+
   <style>
-    :root {
-      --midnight: #1A1F3B;
-      --midnight-light: #2D3555;
-      --teal: #28A197;
-      --teal-dark: #1E837A;
-      --teal-glow: #3BC4B5;
-      --soft-white: #F7F9FA;
-      --pure-white: #FFFFFF;
-      --gray-100: #F8FAFC;
-      --gray-200: #EEF1F5;
-      --gray-300: #E2E8F0;
-      --gray-500: #64748B;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
     body {
       font-family: 'Outfit', sans-serif;
-      background: var(--soft-white);
-      color: var(--midnight);
-      line-height: 1.6;
+      background-color: #F7F9FA;
+      color: #1A1F3B;
+      overflow-x: hidden;
     }
-
     .font-display {
       font-family: 'Space Grotesk', sans-serif;
     }
-
-    /* ========== NAVBAR STYLES ========== */
-    .navbar {
-      background: rgba(255,255,255,0.85);
+    .gradient-text {
+      background: linear-gradient(135deg, #28A197, #3BC4B5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.7);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(40,161,151,0.15);
-      box-shadow: 0 2px 20px rgba(26,31,59,0.06);
-      padding: 0.75rem 0;
+      border: 1px solid rgba(255, 255, 255, 0.5);
     }
-
-    .navbar-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.5rem 1.5rem;
-      background: rgba(255,255,255,0.6);
-      border: 1px solid rgba(40,161,151,0.15);
-      border-radius: 100px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+    .bg-grid {
+      background-image: 
+        linear-gradient(rgba(40, 161, 151, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(40, 161, 151, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
     }
-
-    .navbar-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      text-decoration: none;
-    }
-
-    .navbar-logo img {
-      height: 40px;
-      width: auto;
-      border-radius: 10px;
-    }
-
-    .navbar-brand {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.1;
-    }
-
-    .navbar-brand-main {
-      font-size: 1.5rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-    }
-
-    .navbar-brand-sub {
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-    }
-
-    .navbar-menu {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .nav-link {
-      position: relative;
-      font-weight: 500;
-      font-size: 0.95rem;
-      padding: 0.5rem 1rem;
-      border-radius: 50px;
-      transition: all 0.3s ease;
-      text-decoration: none;
-    }
-
-    .nav-link:hover {
-      background: rgba(40,161,151,0.1);
-    }
-
-    .nav-link.active {
-      background: rgba(40,161,151,0.15);
-      color: #28A197;
-    }
-
-    .navbar-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.625rem 1.25rem;
-      background: linear-gradient(135deg, #28A197, #1E837A);
-      color: white;
-      font-weight: 600;
-      font-size: 0.875rem;
-      border-radius: 50px;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(40,161,151,0.3);
-    }
-
-    .navbar-cta:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(40,161,151,0.4);
-      color: white;
-    }
-
-    .navbar-cta i {
-      font-size: 0.75rem;
-      transition: transform 0.3s ease;
-    }
-
-    .navbar-cta:hover i {
-      transform: translateX(3px);
-    }
-
-    .navbar-mobile-toggle {
-      display: none;
-      width: 44px;
-      height: 44px;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid;
-      border-radius: 12px;
-      font-size: 1.25rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .mobile-menu-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 9998;
+    .fade-up {
       opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
+      transform: translateY(40px);
     }
-
-    .mobile-menu-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .mobile-menu {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 100%;
-      max-width: 400px;
-      height: 100vh;
-      background: linear-gradient(180deg, #1A1F3B 0%, #0d1224 100%);
-      z-index: 9999;
-      transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      padding: 2rem;
-      overflow-y: auto;
-    }
-
-    .mobile-menu.active {
-      right: 0;
-    }
-
-    .mobile-menu-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 3rem;
-    }
-
-    .mobile-menu-close {
-      width: 44px;
-      height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(255,255,255,0.1);
-      border: none;
-      border-radius: 12px;
-      color: white;
-      font-size: 1.25rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .mobile-menu-close:hover {
-      background: rgba(40,161,151,0.2);
-    }
-
-    .mobile-menu-content {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .mobile-nav-link {
-      display: block;
-      padding: 1rem 1.25rem;
-      color: rgba(255,255,255,0.8);
-      font-size: 1.25rem;
-      font-weight: 500;
-      text-decoration: none;
-      border-radius: 12px;
-      transition: all 0.3s ease;
-      opacity: 0;
-      transform: translateX(20px);
-    }
-
-    .mobile-menu.active .mobile-nav-link {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    .mobile-menu.active .mobile-nav-link:nth-child(1) { transition-delay: 0.05s; }
-    .mobile-menu.active .mobile-nav-link:nth-child(2) { transition-delay: 0.1s; }
-    .mobile-menu.active .mobile-nav-link:nth-child(3) { transition-delay: 0.15s; }
-    .mobile-menu.active .mobile-nav-link:nth-child(4) { transition-delay: 0.2s; }
-
-    .mobile-nav-link:hover,
-    .mobile-nav-link.active {
-      background: rgba(40,161,151,0.15);
-      color: #28A197;
-    }
-
-    .mobile-menu-cta {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      margin-top: 1.5rem;
-      padding: 1rem;
-      background: linear-gradient(135deg, #28A197, #1E837A);
-      color: white;
-      font-weight: 600;
-      font-size: 1rem;
-      border-radius: 50px;
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
-
-    .mobile-menu-cta:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(40,161,151,0.4);
-      color: white;
-    }
-
-    @media (max-width: 1023px) {
-      .navbar-mobile-toggle { display: flex !important; }
-    }
-
-    @media (min-width: 1024px) {
-      .navbar-mobile-toggle { display: none !important; }
-    }
-
-    @media (max-width: 640px) {
-      .navbar-inner { padding: 0.5rem 1rem; }
-      .navbar-logo img { height: 36px; }
-      .navbar-brand-main { font-size: 1.25rem; }
-    }
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(40, 161, 151, 0.15);
-      box-shadow: 0 2px 20px rgba(26, 31, 59, 0.06);
-    }
-
-    .nav-link {
-      position: relative;
-      color: var(--midnight);
-      font-weight: 500;
-      font-size: 15px;
-      transition: color 0.3s;
-      text-decoration: none;
-    }
-
-    .nav-link::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--teal);
-      transition: width 0.3s ease;
-    }
-
-    .nav-link:hover {
-      color: var(--teal);
-    }
-
-    .nav-link:hover::after {
-      width: 100%;
-    }
-
-    .nav-link.active {
-      color: var(--teal);
-    }
-
-    .nav-link.active::after {
-      width: 100%;
-    }
-
-    /* Hero Section */
-    .hero {
-      background: linear-gradient(135deg, var(--midnight) 0%, var(--midnight-light) 100%);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: radial-gradient(ellipse 60% 50% at 30% 0%, rgba(40, 161, 151, 0.2), transparent);
-    }
-
-    .hero-grid {
-      position: absolute;
-      inset: 0;
-      background-image: linear-gradient(rgba(40, 161, 151, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(40, 161, 151, 0.1) 1px, transparent 1px);
-      background-size: 50px 50px;
-    }
-
-    /* Contact Form */
-    .glass-card {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 32px;
-    }
-
+    /* Form input styles */
     .form-input {
-      width: 100%;
-      padding: 16px 20px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 12px;
-      color: white;
-      font-size: 16px;
-      font-family: 'Outfit', sans-serif;
-      outline: none;
-      transition: all 0.3s;
-    }
-
-    .form-input:focus {
-      border-color: var(--teal);
-      background: rgba(255, 255, 255, 0.15);
-    }
-
-    .form-input::placeholder {
-      color: rgba(255, 255, 255, 0.5);
-    }
-
-    .form-select {
-      width: 100%;
-      padding: 16px 20px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 12px;
-      color: white;
-      font-size: 16px;
-      font-family: 'Outfit', sans-serif;
-      outline: none;
-      transition: all 0.3s;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 16px center;
-      background-size: 20px;
-    }
-
-    .form-select option {
-      color: var(--midnight);
-      background: white;
-    }
-
-    .submit-btn {
-      width: 100%;
-      padding: 18px;
-      background: linear-gradient(135deg, var(--teal), var(--teal-dark));
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .submit-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(40, 161, 151, 0.4);
-    }
-
-    .submit-btn.sent {
-      background: linear-gradient(135deg, #10B981, #059669);
-    }
-
-    /* Contact Card */
-    .contact-card {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-    }
-
-    .contact-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 16px;
-      background: rgba(40, 161, 151, 0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .contact-icon i {
-      color: var(--teal);
-      font-size: 22px;
-    }
-
-    /* Social Links */
-    .social-link {
-      width: 56px;
-      height: 56px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s;
-    }
-
-    .social-link i {
-      color: white;
-      font-size: 22px;
-    }
-
-    .social-link:hover {
-      background: var(--teal);
-    }
-
-    /* Footer */
-    footer {
-      background: var(--midnight);
-    }
-
-    footer a {
-      color: rgba(255, 255, 255, 0.6);
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-
-    footer a:hover {
-      color: var(--teal);
-    }
-
-    /* Animations */
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    .animate-float {
-      animation: float 6s ease-in-out infinite;
-    }
-
-    /* Page Transitions */
-    .page-enter {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-
-    .page-enter-active {
-      opacity: 1;
-      transform: translateY(0);
-      transition: all 0.6s ease;
-    }
-
-    /* Breadcrumb */
-    .breadcrumb {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .breadcrumb a {
-      color: rgba(255, 255, 255, 0.6);
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-
-    .breadcrumb a:hover {
-      color: var(--teal);
-    }
-
-    .breadcrumb span {
-      color: rgba(255, 255, 255, 0.4);
-    }
-
-    .breadcrumb .current {
-      color: var(--teal);
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .hero {
-        padding-top: 100px;
-        padding-bottom: 60px;
-      }
-    }
-
-    /* Mobile Nav Link Animation */
-    .mobile-nav-link {
-      color: rgba(255, 255, 255, 0.8);
-      text-decoration: none;
-      position: relative;
       transition: all 0.3s ease;
-      opacity: 0;
-      transform: translateY(20px);
     }
-
-    #mobileMenu.active .mobile-nav-link {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    #mobileMenu.active .mobile-nav-link:nth-child(1) { transition-delay: 0.1s; }
-    #mobileMenu.active .mobile-nav-link:nth-child(2) { transition-delay: 0.2s; }
-    #mobileMenu.active .mobile-nav-link:nth-child(3) { transition-delay: 0.3s; }
-    #mobileMenu.active .mobile-nav-link:nth-child(4) { transition-delay: 0.4s; }
-
-    .mobile-nav-link:hover {
-      color: #28A197;
-      transform: translateX(10px);
+    .form-input:focus {
+      outline: none;
+      border-color: #28A197;
+      box-shadow: 0 0 0 3px rgba(40, 161, 151, 0.1);
     }
   </style>
 </head>
-<body>
+<body class="bg-gradient-to-b from-white via-soft-white to-gray-50">
+
+  <!-- Navbar -->
   {% include 'helpex_app/components/navbar.html' %}
 
-  <!-- Hero Section -->
-  <section class="py-24 pt-32 pb-16 relative overflow-hidden" style="background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);">
-    <div class="absolute inset-0 overflow-hidden pointer-events-none">
-      <div class="absolute top-0 -left-32 w-72 h-72 rounded-full mix-blend-multiply filter blur-3xl opacity-20" style="background: #28A197;"></div>
-      <div class="absolute bottom-0 right-0 w-96 h-96 rounded-full mix-blend-multiply filter blur-3xl opacity-15" style="background: #3BC4B5;"></div>
-    </div>
-    
-    <div class="max-w-7xl mx-auto px-4 relative z-10">
-      <div class="flex items-center gap-2 mb-8">
-        <a href="{% url 'index' %}" class="text-sm transition-colors" style="color: #64748B;" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='#64748B'">Home</a>
-        <span style="color: #CBD5E1;">/</span>
-        <span class="text-sm font-medium" style="color: #28A197;">Contact</span>
+  <!-- ============================================================ -->
+  <!-- HERO SECTION -->
+  <!-- ============================================================ -->
+  <section class="relative pt-32 pb-20 md:pt-44 md:pb-32 overflow-hidden bg-gradient-to-br from-midnight to-midnight-light">
+    <!-- Background effects -->
+    <div class="absolute inset-0 bg-grid opacity-10"></div>
+    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-teal/10 rounded-full filter blur-3xl animate-float"></div>
+    <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-teal-glow/10 rounded-full filter blur-3xl animate-float" style="animation-delay: -3s;"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6">
+      <!-- Breadcrumb -->
+      <div class="flex items-center gap-2 mb-10">
+        <a href="{% url 'index' %}" class="text-sm text-white/60 hover:text-teal transition-colors">Home</a>
+        <span class="text-white/30">/</span>
+        <span class="text-sm font-semibold text-teal">Contact</span>
       </div>
 
-      <div class="text-center mb-8">
-        <h1 class="text-5xl md:text-6xl font-bold mb-6" style="color: #1A1F3B;">
-          Get <span class="text-transparent bg-clip-text bg-gradient-to-r" style="background: linear-gradient(135deg, #28A197, #3BC4B5); -webkit-background-clip: text;">in Touch</span>
+      <!-- Headline -->
+      <div class="text-center max-w-4xl mx-auto">
+        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5 bg-teal/20 text-teal border border-teal/20">
+          // Let's Connect
+        </span>
+        <h1 class="font-display text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 text-white">
+          Get in <span class="gradient-text">Touch</span>
         </h1>
-        <p class="text-xl max-w-2xl mx-auto" style="color: #64748B;">
+        <p class="text-lg md:text-xl text-white/70 max-w-2xl mx-auto leading-relaxed">
           Have a project in mind? We'd love to hear from you. Let's create something amazing together.
         </p>
       </div>
     </div>
-  </section>
-    
-    <div class="max-w-7xl mx-auto px-4 relative z-10">
-      <!-- Breadcrumb -->
-      <div class="flex items-center gap-2 mb-8">
-        <a href="{% url 'index' %}" class="text-sm transition-colors" style="color: #64748B;" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='#64748B'">Home</a>
-        <span style="color: #CBD5E1;">/</span>
-        <span class="text-sm font-medium" style="color: #28A197;">Contact</span>
-      </div>
 
-      <div class="grid lg:grid-cols-5 gap-8 max-w-6xl mx-auto">
-        <!-- Contact Form -->
-        <div class="lg:col-span-3 p-8 md:p-10 rounded-3xl bg-white shadow-xl" style="border: 1px solid rgba(40,161,151,0.1);">
-          <div class="flex items-center gap-3 mb-8">
-            <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(40,161,151,0.1);">
-              <i class="fas fa-paper-plane" style="color: #28A197;"></i>
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/40 animate-bounce">
+      <span class="text-xs tracking-widest uppercase">Contact Form</span>
+      <i class="fas fa-chevron-down"></i>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- CONTACT SECTION -->
+  <!-- ============================================================ -->
+  <section class="py-24 bg-white relative -mt-10">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid lg:grid-cols-5 gap-8">
+        
+        <!-- ========== CONTACT FORM ========== -->
+        <div class="lg:col-span-3 fade-up">
+          <div class="bg-soft-white rounded-3xl p-8 md:p-10 shadow-xl border border-gray-200">
+            <div class="flex items-center gap-3 mb-8">
+              <div class="w-12 h-12 rounded-xl bg-teal/10 flex items-center justify-center text-teal text-xl">
+                <i class="fas fa-paper-plane"></i>
+              </div>
+              <h2 class="text-2xl font-bold text-midnight">Send us a message</h2>
             </div>
-            <h2 class="text-2xl font-bold" style="color: #1A1F3B;">Send us a message</h2>
+
+            <form id="contactForm" method="POST" class="space-y-5">
+              {% csrf_token %}
+              
+              <!-- Name & Email Row -->
+              <div class="grid md:grid-cols-2 gap-5">
+                <div>
+                  <label class="block text-sm font-semibold mb-2 text-midnight">Your Name *</label>
+                  <input type="text" name="name" required placeholder="John Doe" 
+                         class="form-input w-full px-5 py-4 rounded-xl bg-white border border-gray-200 text-midnight placeholder:text-gray-400">
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold mb-2 text-midnight">Email Address *</label>
+                  <input type="email" name="email" required placeholder="john@example.com" 
+                         class="form-input w-full px-5 py-4 rounded-xl bg-white border border-gray-200 text-midnight placeholder:text-gray-400">
+                </div>
+              </div>
+
+              <!-- Phone (Optional) -->
+              <div>
+                <label class="block text-sm font-semibold mb-2 text-midnight">Phone Number</label>
+                <input type="tel" name="phone" placeholder="+1 (234) 567-890" 
+                       class="form-input w-full px-5 py-4 rounded-xl bg-white border border-gray-200 text-midnight placeholder:text-gray-400">
+              </div>
+
+              <!-- Service Select -->
+              <div>
+                <label class="block text-sm font-semibold mb-2 text-midnight">Service Interested In *</label>
+                <select name="service" required 
+                        class="form-input w-full px-5 py-4 rounded-xl bg-white border border-gray-200 text-midnight appearance-none"
+                        style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724%27 height=%2724%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%2364748B%27 stroke-width=%272%27%3E%3Cpath d=%27M6 9l6 6 6-6%27/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 16px center;">
+                  <option value="">Select a service</option>
+                  <option value="web">Web Development</option>
+                  <option value="mobile">Mobile App Development</option>
+                  <option value="brand">Branding & Design</option>
+                  <option value="software">Custom Software</option>
+                  <option value="cloud">Cloud & DevOps</option>
+                  <option value="ai">AI & Automation</option>
+                  <option value="consulting">Consulting</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <!-- Budget Range -->
+              <div>
+                <label class="block text-sm font-semibold mb-2 text-midnight">Budget Range</label>
+                <select name="budget" 
+                        class="form-input w-full px-5 py-4 rounded-xl bg-white border border-gray-200 text-midnight appearance-none"
+                        style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724%27 height=%2724%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%2364748B%27 stroke-width=%272%27%3E%3Cpath d=%27M6 9l6 6 6-6%27/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 16px center;">
+                  <option value="">Select budget range</option>
+                  <option value="1k-5k">$1,000 - $5,000</option>
+                  <option value="5k-10k">$5,000 - $10,000</option>
+                  <option value="10k-25k">$10,000 - $25,000</option>
+                  <option value="25k-50k">$25,000 - $50,000</option>
+                  <option value="50k+">$50,000+</option>
+                  <option value="not-sure">Not Sure Yet</option>
+                </select>
+              </div>
+
+              <!-- Message -->
+              <div>
+                <label class="block text-sm font-semibold mb-2 text-midnight">Tell us about your project *</label>
+                <textarea name="message" rows="5" required 
+                          placeholder="Describe your project, goals, timeline, and any specific requirements..." 
+                          class="form-input w-full px-5 py-4 rounded-xl bg-white border border-gray-200 text-midnight placeholder:text-gray-400 resize-none"></textarea>
+              </div>
+
+              <!-- Submit Button -->
+              <button type="submit" id="submitBtn" 
+                      class="w-full py-4 rounded-xl font-bold text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3"
+                      style="background: linear-gradient(135deg, #28A197, #1E837A); box-shadow: 0 6px 25px rgba(40,161,151,0.3);">
+                <i class="fas fa-paper-plane"></i> Send Message
+              </button>
+              <p class="text-center text-xs text-gray-400">We typically respond within 24 hours</p>
+            </form>
           </div>
-          
-          <form id="contactForm" method="POST" class="space-y-5">
-            {% csrf_token %}
-            <div class="grid md:grid-cols-2 gap-5">
-              <div>
-                <label class="block text-sm font-medium mb-2" style="color: #334155;">Your Name *</label>
-                <input type="text" name="name" required placeholder="John Doe" class="w-full px-5 py-4 rounded-xl outline-none transition-all focus:ring-2 focus:ring-teal-500 focus:border-transparent" style="background: #F8FAFC; border: 1px solid #E2E8F0; color: #1A1F3B;">
-              </div>
-              <div>
-                <label class="block text-sm font-medium mb-2" style="color: #334155;">Email Address *</label>
-                <input type="email" name="email" required placeholder="john@example.com" class="w-full px-5 py-4 rounded-xl outline-none transition-all focus:ring-2 focus:ring-teal-500 focus:border-transparent" style="background: #F8FAFC; border: 1px solid #E2E8F0; color: #1A1F3B;">
-              </div>
-            </div>
-            
-            <div>
-              <label class="block text-sm font-medium mb-2" style="color: #334155;">Project Type *</label>
-              <select name="service" required class="w-full px-5 py-4 rounded-xl outline-none transition-all focus:ring-2 focus:ring-teal-500 focus:border-transparent" style="background: #F8FAFC; border: 1px solid #E2E8F0; color: #1A1F3B;">
-                <option value="">Select a service</option>
-                <option value="web">Web Development</option>
-                <option value="mobile">Mobile App</option>
-                <option value="brand">Brand & Design</option>
-                <option value="software">Custom Software</option>
-                <option value="cloud">Cloud & DevOps</option>
-                <option value="ai">AI & Automation</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-            
-            <div>
-              <label class="block text-sm font-medium mb-2" style="color: #334155;">Tell us about your project *</label>
-              <textarea name="message" rows="5" required placeholder="Describe your project, goals, timeline, and budget..." class="w-full px-5 py-4 rounded-xl outline-none transition-all focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none" style="background: #F8FAFC; border: 1px solid #E2E8F0; color: #1A1F3B;"></textarea>
-            </div>
-            
-            <button type="submit" id="submitBtn" class="w-full py-4 px-6 rounded-xl font-bold text-white transition-all hover:shadow-2xl hover:scale-[1.02] flex items-center justify-center gap-3" style="background: linear-gradient(135deg, #28A197, #1E837A);">
-              <i class="fas fa-paper-plane"></i> Send Message
-              <span class="opacity-70 text-sm">(Usually replies within 24h)</span>
-            </button>
-          </form>
         </div>
 
-        <!-- Contact Info -->
-        <div class="lg:col-span-2 flex flex-col gap-4">
-          <!-- Email -->
-          <div class="p-6 rounded-2xl bg-white shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1" style="border: 1px solid rgba(40,161,151,0.1);">
+        <!-- ========== CONTACT INFO SIDEBAR ========== -->
+        <div class="lg:col-span-2 space-y-4">
+          
+          <!-- Email Card -->
+          <div class="fade-up bg-soft-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
             <div class="flex items-center gap-4">
-              <div class="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0" style="background: rgba(40,161,151,0.1);">
-                <i class="fas fa-envelope text-xl" style="color: #28A197;"></i>
+              <div class="w-12 h-12 rounded-xl bg-teal/10 flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-envelope text-xl text-teal"></i>
               </div>
               <div>
-                <div class="text-sm mb-1" style="color: #64748B;">Email us</div>
-                <a href="mailto:{{ settings.email|default:'hello@helpex.com' }}" class="text-lg font-semibold hover:text-teal transition-colors" style="color: #1A1F3B;">{{ settings.email|default:'hello@helpex.com' }}</a>
+                <div class="text-xs text-gray-400 uppercase tracking-wider mb-1">Email Us</div>
+                <a href="mailto:{{ settings.email|default:'hello@helpex.com' }}" 
+                   class="text-base font-semibold text-midnight hover:text-teal transition-colors">
+                  {{ settings.email|default:'hello@helpex.com' }}
+                </a>
               </div>
             </div>
           </div>
 
-          <!-- Phone -->
-          <div class="p-6 rounded-2xl bg-white shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1" style="border: 1px solid rgba(40,161,151,0.1);">
+          <!-- Phone Card -->
+          {% if settings.phone %}
+          <div class="fade-up bg-soft-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
             <div class="flex items-center gap-4">
-              <div class="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0" style="background: rgba(40,161,151,0.1);">
-                <i class="fas fa-phone text-xl" style="color: #28A197;"></i>
+              <div class="w-12 h-12 rounded-xl bg-teal/10 flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-phone text-xl text-teal"></i>
               </div>
               <div>
-                <div class="text-sm mb-1" style="color: #64748B;">Call us</div>
-                <a href="tel:{{ settings.phone|default:'+1234567890' }}" class="text-lg font-semibold hover:text-teal transition-colors" style="color: #1A1F3B;">{{ settings.phone|default:'+1 (234) 567-890' }}</a>
+                <div class="text-xs text-gray-400 uppercase tracking-wider mb-1">Call Us</div>
+                <a href="tel:{{ settings.phone }}" 
+                   class="text-base font-semibold text-midnight hover:text-teal transition-colors">
+                  {{ settings.phone }}
+                </a>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Location Card -->
+          <div class="fade-up bg-soft-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-xl bg-teal/10 flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-map-marker-alt text-xl text-teal"></i>
+              </div>
+              <div>
+                <div class="text-xs text-gray-400 uppercase tracking-wider mb-1">Visit Us</div>
+                <div class="text-base font-semibold text-midnight">
+                  {% if settings.address %}
+                    {{ settings.address|linebreaksbr }}
+                  {% else %}
+                    123 Digital Avenue<br>Tech City, TC 10001
+                  {% endif %}
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Location -->
-          <div class="p-6 rounded-2xl bg-white shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1" style="border: 1px solid rgba(40,161,151,0.1);">
-            <div class="flex items-center gap-4">
-              <div class="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0" style="background: rgba(40,161,151,0.1);">
-                <i class="fas fa-map-marker-alt text-xl" style="color: #28A197;"></i>
-              </div>
-              <div>
-                <div class="text-sm mb-1" style="color: #64748B;">Visit us</div>
-                <div class="text-lg font-semibold" style="color: #1A1F3B;">{% if settings.address %}{{ settings.address|linebreaks }}{% else %}123 Digital Avenue<br><span class="text-base font-normal" style="color: #64748B;">Tech City, TC 10001</span>{% endif %}</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Social -->
-          <div class="p-6 rounded-2xl bg-white shadow-md" style="border: 1px solid rgba(40,161,151,0.1);">
-            <h3 class="text-lg font-semibold mb-5" style="color: #1A1F3B;">Follow us</h3>
+          <!-- Social Links -->
+          <div class="fade-up bg-soft-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+            <h3 class="text-sm font-semibold text-midnight uppercase tracking-wider mb-4">Follow Us</h3>
             <div class="flex gap-3">
-              <a href="#" class="w-11 h-11 rounded-xl flex items-center justify-center transition-all hover:scale-110 hover:bg-teal-500" style="background: #F8FAFC; color: #1A1F3B;">
-                <i class="fab fa-twitter"></i>
+              {% if settings.social_twitter %}
+              <a href="{{ settings.social_twitter }}" target="_blank" rel="noopener" 
+                 class="w-11 h-11 rounded-xl bg-gray-100 hover:bg-teal text-midnight hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110">
+                <i class="fab fa-x-twitter"></i>
               </a>
-              <a href="#" class="w-11 h-11 rounded-xl flex items-center justify-center transition-all hover:scale-110 hover:bg-teal-500" style="background: #F8FAFC; color: #1A1F3B;">
+              {% endif %}
+              {% if settings.social_instagram %}
+              <a href="{{ settings.social_instagram }}" target="_blank" rel="noopener" 
+                 class="w-11 h-11 rounded-xl bg-gray-100 hover:bg-teal text-midnight hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110">
                 <i class="fab fa-instagram"></i>
               </a>
-              <a href="#" class="w-11 h-11 rounded-xl flex items-center justify-center transition-all hover:scale-110 hover:bg-teal-500" style="background: #F8FAFC; color: #1A1F3B;">
+              {% endif %}
+              {% if settings.social_linkedin %}
+              <a href="{{ settings.social_linkedin }}" target="_blank" rel="noopener" 
+                 class="w-11 h-11 rounded-xl bg-gray-100 hover:bg-teal text-midnight hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110">
                 <i class="fab fa-linkedin-in"></i>
               </a>
-              <a href="#" class="w-11 h-11 rounded-xl flex items-center justify-center transition-all hover:scale-110 hover:bg-teal-500" style="background: #F8FAFC; color: #1A1F3B;">
+              {% endif %}
+              {% if settings.social_github %}
+              <a href="{{ settings.social_github }}" target="_blank" rel="noopener" 
+                 class="w-11 h-11 rounded-xl bg-gray-100 hover:bg-teal text-midnight hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110">
+                <i class="fab fa-github"></i>
+              </a>
+              {% endif %}
+              <a href="#" 
+                 class="w-11 h-11 rounded-xl bg-gray-100 hover:bg-teal text-midnight hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110">
                 <i class="fab fa-dribbble"></i>
               </a>
             </div>
           </div>
 
-          CTA
-          <div class="p-6 rounded-2xl text-center" style="background: rgba(40,161,151,0.1); border: 1px solid rgba(40,161,151,0.2);">
-            <p class="font-medium mb-4" style="color: #1A1F3B;">Ready to start your project?</p>
-            <a href="contact.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all hover:scale-105 hover:shadow-lg" style="background: linear-gradient(135deg, #28A197, #1E837A);">
-              <i class="fas fa-rocket"></i> Let's Talk
+          <!-- Quick CTA -->
+          <div class="fade-up rounded-2xl p-6 text-center bg-gradient-to-br from-midnight to-midnight-light shadow-lg">
+            <i class="fas fa-rocket text-2xl text-teal mb-3"></i>
+            <p class="font-semibold text-white mb-3">Ready to start your project?</p>
+            <a href="#contactForm" 
+               class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-teal to-teal-dark hover:scale-105 transition-all duration-300 text-sm">
+              <i class="fas fa-bolt"></i> Let's Talk
             </a>
-          </div>
-            <div>
-              <div class="text-sm mb-1" style="color: rgba(255,255,255,0.5);">Call us</div>
-              <a href="tel:+1234567890" class="text-lg font-semibold text-white hover:text-teal transition-colors">+1 (234) 567-890</a>
-            </div>
-          </div>
-
-          <!-- Location -->
-          <div class="p-6 rounded-2xl flex items-center gap-4 transition-all hover:bg-white/10" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
-            <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background: rgba(40,161,151,0.2);">
-              <i class="fas fa-map-marker-alt" style="color: #28A197; font-size: 20px;"></i>
-            </div>
-            <div>
-              <div class="text-sm mb-1" style="color: rgba(255,255,255,0.5);">Visit us</div>
-              <div class="text-lg font-semibold text-white">123 Digital Avenue<br><span class="text-base font-normal">Tech City, TC 10001</span></div>
-            </div>
-          </div>
-
-          <!-- Social -->
-          <div class="p-6 rounded-2xl" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
-            <h3 class="text-lg font-semibold text-white mb-4">Follow us</h3>
-            <div class="flex gap-3">
-              <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-              <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-              <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
-              <a href="#" class="social-link"><i class="fab fa-dribbble"></i></a>
-            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- ============================================================ -->
+  <!-- MAP SECTION (Optional - can be enabled) -->
+  <!-- ============================================================ -->
+  {% if settings.map_embed %}
+  <section class="py-0 bg-white">
+    <div class="w-full h-80 md:h-96 bg-gray-200 relative overflow-hidden">
+      {{ settings.map_embed|safe }}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- Footer -->
+  <!-- ========== REGISTERED COMPANIES ========== -->
+  {% include 'helpex_app/components/registered_companies.html' %}
 
   
-
+  <!-- ========== FOOTER (included from component) ========== -->
   {% include 'helpex_app/components/footer.html' %}
 
+  <!-- ============================================================ -->
+  <!-- SCRIPTS -->
+  <!-- ============================================================ -->
   <script>
-    // Initialize Lenis
+    // ---------- Lenis Smooth Scroll ----------
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true
     });
-
     function raf(time) {
       lenis.raf(time);
       requestAnimationFrame(raf);
     }
     requestAnimationFrame(raf);
 
-    // Form submission
-    function submitForm(e) {
-      e.preventDefault();
-      const btn = document.getElementById('submitBtn');
-      const originalText = btn.innerHTML;
-      
-      btn.innerHTML = '<i class="fas fa-check"></i> Sent!';
-      btn.classList.add('sent');
-      
-      setTimeout(() => {
-        btn.innerHTML = originalText;
-        btn.classList.remove('sent');
-        document.getElementById('contactForm').reset();
-      }, 3000);
-    }
+    // Sync Lenis with GSAP ScrollTrigger
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
 
-    // GSAP animations
+    // ---------- GSAP Entrance Animations ----------
     gsap.registerPlugin(ScrollTrigger);
-    
-    gsap.from('.glass-card', {
-      y: 40,
-      opacity: 0,
-      duration: 0.8,
-      stagger: 0.15,
-      scrollTrigger: {
-        trigger: '.hero',
-        start: 'top 70%'
-      }
+
+    gsap.utils.toArray('.fade-up').forEach((element, index) => {
+      gsap.fromTo(element,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1, y: 0,
+          duration: 0.6,
+          delay: index * 0.1,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: element,
+            start: 'top 88%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
     });
 
-    </script>
+    // ---------- Form Submission ----------
+    const contactForm = document.getElementById('contactForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    if (contactForm) {
+      contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Store original button content
+        const originalHTML = submitBtn.innerHTML;
+        
+        // Show success state
+        submitBtn.innerHTML = '<i class="fas fa-check-circle text-lg"></i> Message Sent Successfully!';
+        submitBtn.style.background = 'linear-gradient(135deg, #10B981, #059669)';
+        submitBtn.style.boxShadow = '0 6px 25px rgba(16, 185, 129, 0.3)';
+        submitBtn.disabled = true;
+        
+        // Submit the form data (uncomment for actual submission)
+        // const formData = new FormData(contactForm);
+        // fetch(contactForm.action, { method: 'POST', body: formData })
+        //   .then(response => response.json())
+        //   .then(data => { ... });
+        
+        // Reset after 3 seconds
+        setTimeout(() => {
+          submitBtn.innerHTML = originalHTML;
+          submitBtn.style.background = 'linear-gradient(135deg, #28A197, #1E837A)';
+          submitBtn.style.boxShadow = '0 6px 25px rgba(40,161,151,0.3)';
+          submitBtn.disabled = false;
+          contactForm.reset();
+        }, 3000);
+      });
+    }
+
+    // ---------- Smooth scroll for anchor links ----------
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) lenis.scrollTo(target);
+      });
+    });
+  </script>
 </body>
 </html>

@@ -3,43 +3,87 @@
 
 {% get_settings as settings %}
 
-<!-- ========== PROFESSIONAL FOOTER ========== -->
-<footer class="py-16" style="background: linear-gradient(180deg, #1A1F3B 0%, #0f1225 100%);">
-  <div class="max-w-7xl mx-auto px-6">
-    <!-- Main Footer Content -->
-    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
-      <!-- Column 1: Brand & About -->
-      <div class="lg:col-span-1">
-        <a href="{% url 'index' %}" class="flex items-center gap-3 mb-5">
-          <img src="{% static 'logo.png' %}" alt="{{ settings.company_name }}" class="h-11 rounded-xl" style="box-shadow: 0 4px 15px rgba(40,161,151,0.3);">
-          <div>
-            <span class="text-xl font-bold text-white">{{ settings.company_name|slice:":-1" }}<span style="color: #28A197;">.</span></span>
-            <span class="block text-[10px] font-semibold" style="color: #28A197; letter-spacing: 3px;">BRO</span>
+<!-- ============================================================ -->
+<!-- PROFESSIONAL FOOTER -->
+<!-- ============================================================ -->
+<footer class="relative pt-20 pb-8 overflow-hidden" style="background: #0B0E1A;">
+  
+  <!-- Decorative background elements -->
+  <div class="absolute inset-0 pointer-events-none">
+    <!-- Grid pattern -->
+    <div class="absolute inset-0 opacity-[0.03]" style="background-image: linear-gradient(rgba(40,161,151,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(40,161,151,0.5) 1px, transparent 1px); background-size: 40px 40px;"></div>
+    <!-- Top gradient line -->
+    <div class="absolute top-0 left-0 right-0 h-[2px]" style="background: linear-gradient(90deg, transparent 0%, #28A197 20%, #3BC4B5 50%, #28A197 80%, transparent 100%);"></div>
+    <!-- Glow orbs -->
+    <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full blur-[120px] opacity-[0.08]" style="background: #28A197;"></div>
+    <div class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full blur-[120px] opacity-[0.05]" style="background: #3BC4B5;"></div>
+  </div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-6">
+    
+    <!-- ========== MAIN FOOTER GRID ========== -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-16">
+      
+      <!-- Column 1: Brand (spans 2 cols on large) -->
+      <div class="lg:col-span-2">
+        <!-- Logo -->
+        <a href="{% url 'index' %}" class="inline-flex items-center gap-3 mb-6 group">
+          <div class="relative">
+            <img src="{% static 'logo.png' %}" alt="{{ settings.company_name }}" class="h-12 w-auto rounded-xl relative z-10 transition-transform duration-300 group-hover:scale-105" style="box-shadow: 0 6px 20px rgba(40,161,151,0.35);">
+            <div class="absolute -inset-1 rounded-xl blur-md opacity-40 group-hover:opacity-60 transition-opacity duration-300" style="background: #28A197; z-index: 0;"></div>
+          </div>
+          <div class="leading-tight">
+            <span class="text-2xl font-extrabold text-white tracking-tight">
+              {{ settings.company_name|default:"HELPEX"|slice:":-1" }}<span class="text-teal">.</span>
+            </span>
+            <span class="block text-[10px] font-bold text-teal tracking-[4px] uppercase">BRO</span>
           </div>
         </a>
-        <p class="mb-5" style="color: rgba(255,255,255,0.6); font-size: 14px; line-height: 1.7;">
-          {% if settings.description %}{{ settings.description }}{% else %}Adaptive digital studio crafting exceptional digital experiences. We combine creative design, cutting-edge technology, and strategic thinking.{% endif %}
+        
+        <!-- Description -->
+        <p class="text-sm leading-relaxed mb-6 max-w-sm" style="color: rgba(255,255,255,0.55);">
+          {% if settings.description %}
+            {{ settings.description }}
+          {% else %}
+            Adaptive digital studio crafting exceptional digital experiences. We combine creative design, cutting‑edge technology, and strategic thinking to transform businesses worldwide.
+          {% endif %}
         </p>
+        
         <!-- Social Links -->
-        <div class="flex gap-3">
+        <div class="flex gap-2.5 flex-wrap">
           {% if settings.social_twitter %}
-          <a href="{{ settings.social_twitter }}" target="_blank" class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);">
-            <i class="fab fa-twitter" style="color: rgba(255,255,255,0.6); font-size: 14px;"></i>
+          <a href="{{ settings.social_twitter }}" target="_blank" rel="noopener" aria-label="Twitter"
+             class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 group/icon"
+             style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);">
+            <i class="fab fa-x-twitter text-sm transition-all duration-300 group-hover/icon:text-white group-hover/icon:scale-110" style="color: rgba(255,255,255,0.5);"></i>
           </a>
           {% endif %}
           {% if settings.social_instagram %}
-          <a href="{{ settings.social_instagram }}" target="_blank" class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);">
-            <i class="fab fa-instagram" style="color: rgba(255,255,255,0.6); font-size: 14px;"></i>
+          <a href="{{ settings.social_instagram }}" target="_blank" rel="noopener" aria-label="Instagram"
+             class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 group/icon"
+             style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);">
+            <i class="fab fa-instagram text-sm transition-all duration-300 group-hover/icon:text-white group-hover/icon:scale-110" style="color: rgba(255,255,255,0.5);"></i>
           </a>
           {% endif %}
           {% if settings.social_linkedin %}
-          <a href="{{ settings.social_linkedin }}" target="_blank" class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);">
-            <i class="fab fa-linkedin-in" style="color: rgba(255,255,255,0.6); font-size: 14px;"></i>
+          <a href="{{ settings.social_linkedin }}" target="_blank" rel="noopener" aria-label="LinkedIn"
+             class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 group/icon"
+             style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);">
+            <i class="fab fa-linkedin-in text-sm transition-all duration-300 group-hover/icon:text-white group-hover/icon:scale-110" style="color: rgba(255,255,255,0.5);"></i>
           </a>
           {% endif %}
           {% if settings.social_github %}
-          <a href="{{ settings.social_github }}" target="_blank" class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);">
-            <i class="fab fa-github" style="color: rgba(255,255,255,0.6); font-size: 14px;"></i>
+          <a href="{{ settings.social_github }}" target="_blank" rel="noopener" aria-label="GitHub"
+             class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 group/icon"
+             style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);">
+            <i class="fab fa-github text-sm transition-all duration-300 group-hover/icon:text-white group-hover/icon:scale-110" style="color: rgba(255,255,255,0.5);"></i>
+          </a>
+          {% endif %}
+          {% if settings.social_facebook %}
+          <a href="{{ settings.social_facebook }}" target="_blank" rel="noopener" aria-label="Facebook"
+             class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 group/icon"
+             style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);">
+            <i class="fab fa-facebook-f text-sm transition-all duration-300 group-hover/icon:text-white group-hover/icon:scale-110" style="color: rgba(255,255,255,0.5);"></i>
           </a>
           {% endif %}
         </div>
@@ -47,74 +91,122 @@
 
       <!-- Column 2: Services -->
       <div>
-        <h4 class="text-white font-semibold mb-5" style="font-size: 15px; letter-spacing: 0.5px;">Services</h4>
+        <h4 class="text-white font-semibold text-sm tracking-wider uppercase mb-6 flex items-center gap-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-teal"></span> Services
+        </h4>
         <ul class="space-y-3">
-          <li><a href="{% url 'service' %}" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Web Development</a></li>
-          <li><a href="{% url 'service' %}" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">App Development</a></li>
-          <li><a href="{% url 'service' %}" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Software Solutions</a></li>
-          <li><a href="{% url 'service' %}" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Digital Marketing</a></li>
-          <li><a href="{% url 'service' %}" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">UI/UX Design</a></li>
-          <li><a href="{% url 'service' %}" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">AI Solutions</a></li>
+          <li><a href="{% url 'service' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Web Development</a></li>
+          <li><a href="{% url 'service' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">App Development</a></li>
+          <li><a href="{% url 'service' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Software Solutions</a></li>
+          <li><a href="{% url 'service' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">UI/UX Design</a></li>
+          <li><a href="{% url 'service' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">AI Solutions</a></li>
         </ul>
       </div>
 
       <!-- Column 3: Company -->
       <div>
-        <h4 class="text-white font-semibold mb-5" style="font-size: 15px; letter-spacing: 0.5px;">Company</h4>
+        <h4 class="text-white font-semibold text-sm tracking-wider uppercase mb-6 flex items-center gap-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-teal"></span> Company
+        </h4>
         <ul class="space-y-3">
-          <li><a href="{% url 'about' %}" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">About Us</a></li>
-          <li><a href="{% url 'service' %}" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Services</a></li>
-          <li><a href="{% url 'contact' %}" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Contact</a></li>
-          <li><a href="#" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Careers</a></li>
-          <li><a href="#" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Blog</a></li>
+          <li><a href="{% url 'about' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">About Us</a></li>
+          <li><a href="{% url 'service' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Services</a></li>
+          <li><a href="{% url 'gallery' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Portfolio</a></li>
+          <li><a href="{% url 'blog' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Blog</a></li>
+          <li><a href="{% url 'contact' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Contact</a></li>
         </ul>
       </div>
 
-      <!-- Column 4: Newsletter -->
+      <!-- Column 4: Newsletter (Glass card) -->
       <div>
-        <h4 class="text-white font-semibold mb-5" style="font-size: 15px; letter-spacing: 0.5px;">Stay Updated</h4>
-        <p class="text-sm mb-4" style="color: rgba(255,255,255,0.5);">Subscribe for updates & insights.</p>
-        <form class="flex gap-2" onsubmit="event.preventDefault(); alert('Thanks for subscribing!');">
-          <input type="email" placeholder="Your email" required class="flex-1 px-4 py-3 rounded-xl text-sm outline-none" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: white;">
-          <button type="submit" class="px-5 py-3 rounded-xl font-semibold text-sm transition-all duration-300 hover:scale-105" style="background: linear-gradient(135deg, #28A197, #1E837A); color: white;">
-            Go
-          </button>
-        </form>
+        <h4 class="text-white font-semibold text-sm tracking-wider uppercase mb-6 flex items-center gap-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-teal"></span> Newsletter
+        </h4>
+        <div class="p-5 rounded-2xl backdrop-blur-md" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);">
+          <p class="text-xs mb-4 leading-relaxed" style="color: rgba(255,255,255,0.5);">
+            Get the latest insights, tips, and updates delivered straight to your inbox.
+          </p>
+          <form class="space-y-3" onsubmit="event.preventDefault(); this.querySelector('button').innerHTML='<i class=\'fas fa-check\'></i> Subscribed!'; setTimeout(()=>{ this.querySelector('button').innerHTML='Subscribe'; this.reset(); }, 2500);">
+            <div class="relative">
+              <input 
+                type="email" 
+                placeholder="your@email.com" 
+                required 
+                class="w-full px-4 py-3 pr-12 rounded-xl text-sm outline-none transition-all duration-300 focus:ring-2 focus:ring-teal/50"
+                style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: white;"
+              >
+              <i class="fas fa-envelope absolute right-4 top-1/2 -translate-y-1/2 text-sm" style="color: rgba(255,255,255,0.3);"></i>
+            </div>
+            <button 
+              type="submit" 
+              class="w-full py-3 rounded-xl font-semibold text-sm transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
+              style="background: linear-gradient(135deg, #28A197, #1E837A); color: white; box-shadow: 0 4px 15px rgba(40,161,151,0.3);"
+            >
+              <i class="fas fa-paper-plane text-xs"></i> Subscribe
+            </button>
+          </form>
+        </div>
       </div>
     </div>
 
-    <!-- Divider -->
-    <div class="h-px mb-8" style="background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);"></div>
+    <!-- ========== DIVIDER ========== -->
+    <div class="h-px mb-8 opacity-30" style="background: linear-gradient(90deg, transparent 0%, rgba(40,161,151,0.4) 30%, rgba(40,161,151,0.6) 50%, rgba(40,161,151,0.4) 70%, transparent 100%);"></div>
 
-    <!-- Bottom Bar -->
+    <!-- ========== BOTTOM BAR ========== -->
     <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-      <p class="text-sm" style="color: rgba(255,255,255,0.4);">&copy; {% now "Y" %} {% if settings.copyright_text %}{{ settings.copyright_text }}{% else %}HELPEX BRO. All rights reserved.{% endif %}</p>
-      <div class="flex gap-6">
-        <a href="#" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.4);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">Privacy</a>
-        <a href="#" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.4);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">Terms</a>
-        <a href="#" class="text-sm transition-colors duration-300" style="color: rgba(255,255,255,0.4);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">Cookies</a>
+      <p class="text-xs" style="color: rgba(255,255,255,0.35);">
+        &copy; {% now "Y" %} {% if settings.copyright_text %}{{ settings.copyright_text }}{% else %}{{ settings.company_name|default:"HELPEX BRO" }}. All rights reserved.{% endif %}
+      </p>
+      <div class="flex items-center gap-5">
+        <a href="#" class="text-xs transition-colors duration-300 hover:text-teal" style="color: rgba(255,255,255,0.4);">Privacy Policy</a>
+        <span class="w-1 h-1 rounded-full" style="background: rgba(255,255,255,0.2);"></span>
+        <a href="#" class="text-xs transition-colors duration-300 hover:text-teal" style="color: rgba(255,255,255,0.4);">Terms of Service</a>
+        <span class="w-1 h-1 rounded-full" style="background: rgba(255,255,255,0.2);"></span>
+        <a href="#" class="text-xs transition-colors duration-300 hover:text-teal" style="color: rgba(255,255,255,0.4);">Cookie Policy</a>
       </div>
     </div>
-  </div>
 
-  <!-- Back to Top Button -->
-  <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" 
-    class="fixed bottom-6 right-6 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 hover:-translate-y-1 z-50"
-    style="background: linear-gradient(135deg, #28A197, #1E837A); box-shadow: 0 4px 20px rgba(40,161,151,0.4);" 
-    title="Back to top">
-    <i class="fas fa-arrow-up" style="color: white; font-size: 14px;"></i>
-  </button>
+  </div>
 </footer>
 
-<style>
-  @media (max-width: 768px) {
-    footer .grid {
-      grid-template-columns: 1fr 1fr;
+<!-- ========== BACK TO TOP BUTTON ========== -->
+<button 
+  onclick="window.scrollTo({top: 0, behavior: 'smooth'})" 
+  id="backToTop"
+  class="fixed bottom-8 right-8 w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 hover:-translate-y-1 z-50 opacity-0 invisible"
+  style="background: linear-gradient(135deg, #28A197, #1E837A); box-shadow: 0 6px 25px rgba(40,161,151,0.5);" 
+  title="Back to top"
+  aria-label="Back to top">
+  <i class="fas fa-arrow-up text-white text-sm"></i>
+</button>
+
+<script>
+  // Show/hide back to top button
+  const backToTopBtn = document.getElementById('backToTop');
+  
+  function toggleBackToTop() {
+    if (window.scrollY > 500) {
+      backToTopBtn.classList.remove('opacity-0', 'invisible');
+      backToTopBtn.classList.add('opacity-100', 'visible');
+    } else {
+      backToTopBtn.classList.add('opacity-0', 'invisible');
+      backToTopBtn.classList.remove('opacity-100', 'visible');
     }
   }
-  @media (max-width: 480px) {
-    footer .grid {
-      grid-template-columns: 1fr;
-    }
-  }
-</style>
+  
+  window.addEventListener('scroll', toggleBackToTop);
+  
+  // Social icon hover effects
+  document.querySelectorAll('.group\\/icon').forEach(icon => {
+    icon.addEventListener('mouseenter', function() {
+      this.style.background = 'linear-gradient(135deg, #28A197, #1E837A)';
+      this.style.borderColor = '#28A197';
+      this.style.boxShadow = '0 8px 20px rgba(40,161,151,0.4)';
+    });
+    icon.addEventListener('mouseleave', function() {
+      this.style.background = 'rgba(255,255,255,0.06)';
+      this.style.borderColor = 'rgba(255,255,255,0.08)';
+      this.style.boxShadow = 'none';
+    });
+  });
+</script>

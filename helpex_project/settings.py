@@ -43,6 +43,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'helpex_app.context_processors.global_context',
             ],
         },
     },
@@ -84,7 +85,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Unfold Settings
 UNFOLD = {
     "SITE_TITLE": "HELPEX Admin",
-    "SITE_HEADER": "HELPEX",
+    "SITE_HEADER": "THE ELPEX",
     "SITE_TITLE_COLOR": "#28A197",
     "SITE_LOGO": None,
     "SITEavicon": None,

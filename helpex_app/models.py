@@ -3,6 +3,32 @@ from django.urls import reverse
 from django.utils.text import slugify
 
 
+class HeroCarouselItem(models.Model):
+    """Minimal carousel items for homepage hero - images/videos only"""
+    MEDIA_CHOICES = [('image', 'Image'), ('video', 'Video')]
+    media_type = models.CharField(max_length=10, choices=MEDIA_CHOICES, default='image')
+    image = models.ImageField(upload_to='hero/carousel/', blank=True, null=True)
+    video = models.FileField(upload_to='hero/carousel/', blank=True, null=True, help_text="MP4/WebM video file")
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['order', 'id']
+        verbose_name = "Hero Carousel Item"
+        verbose_name_plural = "Hero Carousel Items"
+
+    def __str__(self):
+        return f"{'Video' if self.media_type == 'video' else 'Image'} #{self.order}"
+
+    def save(self, *args, **kwargs):
+        if self.video and not self.image:
+            self.media_type = 'video'
+        elif self.image and not self.video:
+            self.media_type = 'image'
+        super().save(*args, **kwargs)
+
+
 class HeroSection(models.Model):
     """Hero section for the homepage"""
     title_line_1 = models.CharField(max_length=100, default="Innovating the Future")
@@ -41,12 +67,23 @@ class HeroSection(models.Model):
 class Service(models.Model):
     """Services offered by the company"""
     title = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=120, unique=True, blank=True)
     description = models.TextField()
     short_description = models.CharField(max_length=200, blank=True)
     icon_class = models.CharField(max_length=100, default="fa-code", help_text="FontAwesome icon class")
+    hero_image = models.ImageField(upload_to='services/hero/', blank=True, null=True, help_text="Main hero banner image")
+    banner_image = models.ImageField(upload_to='services/banner/', blank=True, null=True, help_text="Secondary banner image")
     tags = models.JSONField(default=list, blank=True, help_text="Array of technology tags")
+    features = models.JSONField(default=list, blank=True, help_text='[{"title": "...", "description": "...", "icon": "fa-icon"}]')
+    process_steps = models.JSONField(default=list, blank=True, help_text='[{"title": "...", "description": "..."}]')
+    faqs = models.JSONField(default=list, blank=True, help_text='[{"question": "...", "answer": "..."}]')
+    stats = models.JSONField(default=list, blank=True, help_text='[{"value": "100+", "label": "..."}]')
+    timeline = models.CharField(max_length=100, blank=True, help_text="e.g., 4-8 weeks")
+    starting_price = models.CharField(max_length=100, blank=True, help_text="e.g., $2,000")
+    support = models.CharField(max_length=100, blank=True, help_text="e.g., 24/7 Support")
     order = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
+    is_featured = models.BooleanField(default=False, help_text="Show on homepage")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -57,6 +94,53 @@ class Service(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            from django.utils.text import slugify
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+
+class ServiceImage(models.Model):
+    """Additional images for a service detail page"""
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='gallery_images')
+    title = models.CharField(max_length=100, blank=True)
+    image = models.ImageField(upload_to='services/gallery/')
+    caption = models.TextField(blank=True)
+    order = models.PositiveIntegerField(default=0)
+    is_featured = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['order', 'id']
+
+    def __str__(self):
+        return f"{self.service.title} - {self.title or f'Image {self.id}'}"
+
+
+class ServiceCaseStudy(models.Model):
+    """Case studies / portfolio items linked to a service"""
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='case_studies')
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=220, unique=True, blank=True)
+    description = models.TextField()
+    image = models.ImageField(upload_to='services/case-studies/')
+    client = models.CharField(max_length=100, blank=True)
+    result = models.CharField(max_length=200, blank=True, help_text="e.g., 200% increase in traffic")
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['order', 'id']
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            from django.utils.text import slugify
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
 
 
 class Testimonial(models.Model):
@@ -503,3 +587,21 @@ class GalleryImage(models.Model):
     @property
     def image_url(self):
         return self.thumbnail.url if self.thumbnail else self.image.url
+
+
+class RegisteredCompany(models.Model):
+    """Companies/organizations the business is registered or approved with"""
+    name = models.CharField(max_length=200)
+    logo = models.ImageField(upload_to='registered/', blank=True, null=True)
+    description = models.CharField(max_length=200, blank=True, help_text="e.g., Registered with SECP")
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['order', 'name']
+        verbose_name = "Registered Company"
+        verbose_name_plural = "Registered Companies"
+
+    def __str__(self):
+        return self.name

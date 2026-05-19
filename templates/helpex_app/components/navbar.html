@@ -1,493 +1,399 @@
 {% load static %}
 
-<!-- ========== PROFESSIONAL NAVBAR ========== -->
-<nav class="navbar">
-  <div class="navbar-container">
-    <!-- Logo -->
-    <a href="{% url 'index' %}" class="navbar-logo">
-      <img src="{% static 'logo.png' %}" alt="HELPEX">
-      <div class="navbar-brand">
-        <span class="brand-main">HELPEX<span>.</span></span>
-        <span class="brand-sub">BRO</span>
+<!-- ============================================================ -->
+<!-- PROFESSIONAL NAVBAR -->
+<!-- ============================================================ -->
+<nav id="navbar" class="fixed top-0 left-0 w-full z-[9999] transition-all duration-500" style="height: 80px;">
+  <div class="h-full max-w-7xl mx-auto px-4 md:px-6 flex items-center justify-between relative">
+    
+    <!-- ========== LOGO ========== -->
+    <a href="{% url 'index' %}" class="flex items-center gap-3 group flex-shrink-0 z-10">
+      <div class="relative">
+        <img src="{% static 'logo.png' %}" alt="HELPEX" class="h-10 md:h-11 w-auto rounded-xl relative z-10 transition-transform duration-300 group-hover:scale-105" style="box-shadow: 0 4px 15px rgba(40,161,151,0.25);">
+        <div class="absolute -inset-1 rounded-xl blur-md opacity-0 group-hover:opacity-40 transition-opacity duration-300" style="background: #28A197; z-index: 0;"></div>
+      </div>
+      <div class="leading-tight hidden sm:block">
+        <span class="text-xl md:text-2xl font-extrabold text-white tracking-tight navbar-text">
+          HELPEX<span class="text-[#28A197]">.</span>
+        </span>
+        <!-- <span class="block text-[9px] font-bold text-[#28A197] tracking-[3px] uppercase">BRO</span> -->
       </div>
     </a>
 
-    <!-- Desktop Menu -->
-    <ul class="navbar-menu">
+    <!-- ========== DESKTOP MENU (Centered) ========== -->
+    <ul class="hidden lg:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
       <li><a href="{% url 'index' %}" class="nav-link {% if request.path == '/' %}active{% endif %}">Home</a></li>
-      <li><a href="{% url 'service' %}" class="nav-link {% if request.path == '/service/' %}active{% endif %}">Services</a></li>
-      <li><a href="{% url 'gallery' %}" class="nav-link {% if request.path == '/gallery/' %}active{% endif %}">Gallery</a></li>
+      <li class="relative group">
+        <a href="{% url 'service' %}" class="nav-link {% if '/service/' in request.path %}active{% endif %}">
+          Services <i class="fas fa-chevron-down text-[10px] transition-transform duration-300 group-hover:rotate-180 inline-block ml-0.5"></i>
+        </a>
+        <!-- Services Mega Dropdown -->
+        <div class="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[680px] bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 overflow-hidden">
+          <!-- Top bar -->
+          <div class="bg-gradient-to-r from-[#28A197] to-[#1E837A] px-6 py-3">
+            <p class="text-white/80 text-xs font-semibold uppercase tracking-wider">Explore Our Expertise</p>
+          </div>
+          <div class="grid grid-cols-2 gap-0 p-4">
+            {% for s in nav_services %}
+            <a href="{% url 'service_detail' s.slug %}" class="flex items-start gap-3 p-4 rounded-xl hover:bg-[#28A197]/5 transition-all duration-200 group/item">
+              <div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg bg-[#28A197]/10 text-[#28A197] group-hover/item:bg-[#28A197] group-hover/item:text-white transition-all duration-200 flex-shrink-0">
+                <i class="fas {{ s.icon_class|default:'fa-code' }}"></i>
+              </div>
+              <div class="min-w-0">
+                <p class="text-sm font-semibold text-[#1A1F3B] group-hover/item:text-[#28A197] transition-colors truncate">{{ s.title }}</p>
+                <p class="text-xs text-gray-400 mt-0.5 line-clamp-2">{{ s.short_description|default:s.description|truncatechars:70 }}</p>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+          <!-- Bottom CTA -->
+          <div class="border-t border-gray-100 px-6 py-3 bg-gray-50/50 flex items-center justify-between">
+            <a href="{% url 'service' %}" class="text-sm font-semibold text-[#28A197] hover:text-[#1E837A] transition-colors flex items-center gap-1">
+              View All Services <i class="fas fa-arrow-right text-xs"></i>
+            </a>
+            <a href="{% url 'contact' %}" class="text-xs font-medium text-gray-400 hover:text-[#28A197] transition-colors">
+              Need Help Deciding?
+            </a>
+          </div>
+        </div>
+      </li>
+      <li><a href="{% url 'gallery' %}" class="nav-link {% if request.path == '/gallery/' %}active{% endif %}">Portfolio</a></li>
       <li><a href="{% url 'clients' %}" class="nav-link {% if request.path == '/clients/' %}active{% endif %}">Clients</a></li>
       <li><a href="{% url 'blog' %}" class="nav-link {% if request.path == '/blog/' %}active{% endif %}">Blog</a></li>
       <li><a href="{% url 'pricing' %}" class="nav-link {% if request.path == '/pricing/' %}active{% endif %}">Pricing</a></li>
-      <li><a href="{% url 'why_choose_us' %}" class="nav-link {% if request.path == '/why-choose-us/' %}active{% endif %}">Why Choose Us</a></li>
-      <li><a href="{% url 'about' %}" class="nav-link {% if request.path == '/about/' %}active{% endif %}">About Us</a></li>
-      <li><a href="{% url 'contact' %}" class="nav-link {% if request.path == '/contact/' %}active{% endif %}">Contact</a></li>
+      <li class="relative group">
+        <a href="#" class="nav-link flex items-center gap-1">
+          More <i class="fas fa-chevron-down text-[10px] transition-transform duration-300 group-hover:rotate-180"></i>
+        </a>
+        <!-- Dropdown -->
+        <div class="absolute top-full left-0 mt-2 w-48 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 py-2">
+          <a href="{% url 'why_choose_us' %}" class="block px-4 py-2.5 text-sm text-[#1A1F3B] hover:bg-[#28A197]/10 hover:text-[#28A197] transition-colors {% if request.path == '/why-choose-us/' %}text-[#28A197] bg-[#28A197]/10{% endif %}">Why Choose Us</a>
+          <a href="{% url 'about' %}" class="block px-4 py-2.5 text-sm text-[#1A1F3B] hover:bg-[#28A197]/10 hover:text-[#28A197] transition-colors {% if request.path == '/about/' %}text-[#28A197] bg-[#28A197]/10{% endif %}">About Us</a>
+          <a href="{% url 'contact' %}" class="block px-4 py-2.5 text-sm text-[#1A1F3B] hover:bg-[#28A197]/10 hover:text-[#28A197] transition-colors {% if request.path == '/contact/' %}text-[#28A197] bg-[#28A197]/10{% endif %}">Contact</a>
+        </div>
+      </li>
     </ul>
 
-    <!-- CTA Button -->
-    <a href="{% url 'contact' %}" class="navbar-cta">
-      Start Project <i class="fas fa-arrow-right"></i>
-    </a>
-
-    <!-- Mobile Toggle -->
-    <button class="mobile-toggle" aria-label="Toggle menu" onclick="toggleMobileMenu()">
-      <span class="hamburger"></span>
+    <!-- ========== MOBILE HAMBURGER ========== -->
+    <button id="hamburger" class="lg:hidden relative w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300"
+            style="background: linear-gradient(135deg, #28A197, #1E837A); box-shadow: 0 4px 15px rgba(40,161,151,0.3);"
+            aria-label="Toggle menu">
+      <span class="hamburger-line block w-5 h-[2px] bg-white relative transition-all duration-300"></span>
     </button>
   </div>
 </nav>
 
-<!-- Mobile Menu Overlay -->
-<div class="mobile-overlay" id="mobileOverlay" onclick="closeMobileMenu()"></div>
+<!-- ========== MOBILE DRAWER OVERLAY ========== -->
+<div id="drawerOverlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9998] opacity-0 invisible transition-all duration-400"></div>
 
-<!-- Mobile Menu -->
-<div class="mobile-menu" id="mobileMenu">
-  <div class="mobile-header">
-    <a href="{% url 'index' %}" class="navbar-logo" onclick="closeMobileMenu()">
-      <img src="{% static 'logo.png' %}" alt="HELPEX">
-      <div class="navbar-brand">
-        <span class="brand-main">HELPEX<span>.</span></span>
-        <span class="brand-sub">BRO</span>
-      </div>
+<!-- ========== MOBILE DRAWER ========== -->
+<div id="mobileDrawer" class="fixed top-0 right-0 h-full w-[85%] max-w-[420px] z-[9999] translate-x-full transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] flex flex-col"
+     style="background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);">
+  
+  <!-- Drawer Header -->
+  <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100 flex-shrink-0">
+    <a href="{% url 'index' %}" class="flex items-center gap-3" onclick="closeDrawer()">
+      <img src="{% static 'logo.png' %}" alt="HELPEX" class="h-9 w-auto rounded-lg">
+      <span class="text-lg font-extrabold text-[#1A1F3B]">HELPEX<span class="text-[#28A197]">.</span></span>
     </a>
-    <button class="mobile-close" onclick="closeMobileMenu()" aria-label="Close menu">
-      <i class="fas fa-times"></i>
+    <button onclick="closeDrawer()" class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-[#28A197] hover:text-white flex items-center justify-center transition-all duration-300 text-[#1A1F3B]">
+      <i class="fas fa-times text-lg"></i>
     </button>
   </div>
-  
-  <div class="mobile-content">
-    <a href="{% url 'index' %}" class="mobile-link {% if request.path == '/' %}active{% endif %}" onclick="closeMobileMenu()">
+
+  <!-- Drawer Links -->
+  <div class="flex-1 overflow-y-auto px-4 py-6 space-y-1">
+    <a href="{% url 'index' %}" class="drawer-link {% if request.path == '/' %}active{% endif %}" onclick="closeDrawer()">
       <i class="fas fa-home"></i> Home
     </a>
-    <a href="{% url 'service' %}" class="mobile-link {% if request.path == '/service/' %}active{% endif %}" onclick="closeMobileMenu()">
-      <i class="fas fa-cog"></i> Services
+    
+    <!-- Services Accordion -->
+    <div class="drawer-accordion">
+      <button class="drawer-link w-full justify-between" onclick="toggleServiceAccordion(this)">
+        <span class="flex items-center gap-3"><i class="fas fa-cog"></i> Services</span>
+        <i class="fas fa-chevron-down text-xs text-gray-400 transition-transform duration-300 accordion-arrow"></i>
+      </button>
+      <div class="accordion-content max-h-0 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
+        <div class="pl-12 pr-4 py-2 space-y-1">
+          <a href="{% url 'service' %}" class="block px-4 py-2 rounded-lg text-sm font-medium text-gray-500 hover:text-[#28A197] hover:bg-[#28A197]/5 transition-all" onclick="closeDrawer()">
+            <i class="fas fa-th-large mr-2"></i>View All Services
+          </a>
+          {% for s in nav_services %}
+          <a href="{% url 'service_detail' s.slug %}" class="block px-4 py-2 rounded-lg text-sm text-gray-600 hover:text-[#28A197] hover:bg-[#28A197]/5 transition-all {% if request.path == '/service/'|add:s.slug|add:'/' %}text-[#28A197] bg-[#28A197]/10{% endif %}" onclick="closeDrawer()">
+            <i class="fas {{ s.icon_class|default:'fa-code' }} mr-2 text-[#28A197]/60"></i>{{ s.title }}
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    
+    <a href="{% url 'gallery' %}" class="drawer-link {% if request.path == '/gallery/' %}active{% endif %}" onclick="closeDrawer()">
+      <i class="fas fa-images"></i> Portfolio
     </a>
-    <a href="{% url 'gallery' %}" class="mobile-link {% if request.path == '/gallery/' %}active{% endif %}" onclick="closeMobileMenu()">
-      <i class="fas fa-images"></i> Gallery
-    </a>
-    <a href="{% url 'clients' %}" class="mobile-link {% if request.path == '/clients/' %}active{% endif %}" onclick="closeMobileMenu()">
+    <a href="{% url 'clients' %}" class="drawer-link {% if request.path == '/clients/' %}active{% endif %}" onclick="closeDrawer()">
       <i class="fas fa-users"></i> Clients
     </a>
-    <a href="{% url 'blog' %}" class="mobile-link {% if request.path == '/blog/' %}active{% endif %}" onclick="closeMobileMenu()">
+    <a href="{% url 'blog' %}" class="drawer-link {% if request.path == '/blog/' %}active{% endif %}" onclick="closeDrawer()">
       <i class="fas fa-blog"></i> Blog
     </a>
-    <a href="{% url 'pricing' %}" class="mobile-link {% if request.path == '/pricing/' %}active{% endif %}" onclick="closeMobileMenu()">
+    <a href="{% url 'pricing' %}" class="drawer-link {% if request.path == '/pricing/' %}active{% endif %}" onclick="closeDrawer()">
       <i class="fas fa-tags"></i> Pricing
     </a>
-    <a href="{% url 'why_choose_us' %}" class="mobile-link {% if request.path == '/why-choose-us/' %}active{% endif %}" onclick="closeMobileMenu()">
+    
+    <!-- Divider -->
+    <div class="h-px bg-gray-200 my-4"></div>
+    
+    <a href="{% url 'why_choose_us' %}" class="drawer-link {% if request.path == '/why-choose-us/' %}active{% endif %}" onclick="closeDrawer()">
       <i class="fas fa-award"></i> Why Choose Us
     </a>
-    <a href="{% url 'about' %}" class="mobile-link {% if request.path == '/about/' %}active{% endif %}" onclick="closeMobileMenu()">
+    <a href="{% url 'about' %}" class="drawer-link {% if request.path == '/about/' %}active{% endif %}" onclick="closeDrawer()">
       <i class="fas fa-info-circle"></i> About Us
     </a>
-    <a href="{% url 'contact' %}" class="mobile-link {% if request.path == '/contact/' %}active{% endif %}" onclick="closeMobileMenu()">
+    <a href="{% url 'contact' %}" class="drawer-link {% if request.path == '/contact/' %}active{% endif %}" onclick="closeDrawer()">
       <i class="fas fa-envelope"></i> Contact
     </a>
-    <a href="{% url 'contact' %}" class="mobile-cta" onclick="closeMobileMenu()">
-      Start Project <i class="fas fa-arrow-right"></i>
+  </div>
+
+  <!-- Drawer Footer CTA -->
+  <div class="px-4 py-5 border-t border-gray-100 flex-shrink-0">
+    <a href="{% url 'contact' %}" onclick="closeDrawer()" 
+       class="flex items-center justify-center gap-3 w-full py-4 rounded-2xl font-semibold text-white text-base transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+       style="background: linear-gradient(135deg, #28A197, #1E837A); box-shadow: 0 6px 25px rgba(40,161,151,0.4);">
+      <i class="fas fa-rocket"></i> Start Your Project
     </a>
+    <p class="text-center text-xs text-gray-400 mt-3">Let's build something amazing</p>
   </div>
 </div>
 
 <style>
   /* ========== NAVBAR STYLES ========== */
-  :root {
-    --nav-midnight: #1A1F3B;
-    --nav-teal: #28A197;
-    --nav-teal-dark: #1E837A;
-    --nav-teal-light: #3BC4B5;
-    --nav-white: #FFFFFF;
-    --nav-gray-100: #F8FAFC;
-    --nav-gray-200: #E2E8F0;
-    --nav-gray-500: #64748B;
+  #navbar {
+    background: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  .navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 9999;
-    height: 80px;
-    background: rgba(255,255,255,0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(40,161,151,0.1);
-  }
-
-  .navbar-container {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  /* Logo */
-  .navbar-logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    text-decoration: none;
-    flex-shrink: 0;
-  }
-
-  .navbar-logo img {
-    height: 44px;
-    width: auto;
-    border-radius: 12px;
-    object-fit: contain;
-  }
-
-  .navbar-brand {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.1;
-  }
-
-  .brand-main {
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--nav-midnight);
-    letter-spacing: -0.5px;
-  }
-
-  .brand-main span {
-    color: var(--nav-teal);
-  }
-
-  .brand-sub {
-    font-size: 9px;
-    font-weight: 700;
-    color: var(--nav-teal);
-    letter-spacing: 3px;
-    text-transform: uppercase;
-  }
-
-  /* Desktop Menu */
-  .navbar-menu {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
+  /* Desktop Nav Links - White text for transparent bg */
   .nav-link {
     position: relative;
-    display: block;
+    display: inline-block;
     padding: 10px 16px;
     font-size: 15px;
     font-weight: 500;
-    color: var(--nav-midnight);
+    color: rgba(255, 255, 255, 0.85);
     text-decoration: none;
-    transition: color 0.3s ease;
-    border-radius: 8px;
-  }
-
-  .nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: 6px;
-    left: 16px;
-    right: 16px;
-    height: 2px;
-    background: var(--nav-teal);
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
-  }
-
-  .nav-link:hover,
-  .nav-link.active {
-    color: var(--nav-teal);
-  }
-
-  .nav-link:hover::after,
-  .nav-link.active::after {
-    transform: scaleX(1);
-  }
-
-  /* CTA Button */
-  .navbar-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 24px;
-    background: linear-gradient(135deg, var(--nav-teal), var(--nav-teal-dark));
-    color: var(--nav-white);
-    border-radius: 50px;
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(40,161,151,0.3);
-    flex-shrink: 0;
-  }
-
-  .navbar-cta:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(40,161,151,0.4);
-  }
-
-  .navbar-cta i {
-    font-size: 12px;
-    transition: transform 0.3s ease;
-  }
-
-  .navbar-cta:hover i {
-    transform: translateX(4px);
-  }
-
-  /* Mobile Toggle */
-  .mobile-toggle {
-    display: none;
-    width: 44px;
-    height: 44px;
-    background: var(--nav-teal);
-    border: none;
     border-radius: 10px;
-    cursor: pointer;
-    position: relative;
-    flex-shrink: 0;
-  }
-
-  .hamburger {
-    display: block;
-    width: 20px;
-    height: 2px;
-    background: white;
-    position: relative;
     transition: all 0.3s ease;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   }
 
-  .hamburger::before,
-  .hamburger::after {
-    content: '';
-    position: absolute;
-    width: 20px;
-    height: 2px;
-    background: white;
-    left: 0;
-    transition: all 0.3s ease;
+  .nav-link:hover {
+    color: #28A197;
+    background: rgba(255, 255, 255, 0.1);
+    text-shadow: none;
   }
 
-  .hamburger::before { top: -6px; }
-  .hamburger::after { bottom: -6px; }
-
-  /* Mobile Overlay */
-  .mobile-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 9998;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
+  .nav-link.active {
+    color: #28A197;
+    background: rgba(255, 255, 255, 0.15);
+    font-weight: 600;
+    text-shadow: none;
   }
 
-  .mobile-overlay.active {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  /* Mobile Menu */
-  .mobile-menu {
-    position: fixed;
-    top: 0;
-    right: -100%;
-    width: 85%;
-    max-width: 400px;
-    height: 100vh;
-    background: rgba(255,255,255,0.98);
+  /* Scrolled state - dark text with glass bg */
+  #navbar.scrolled {
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    z-index: 9999;
-    transition: right 0.4s ease;
-    display: flex;
-    flex-direction: column;
+    border-bottom: 1px solid rgba(40, 161, 151, 0.15);
+    box-shadow: 0 4px 30px rgba(26, 31, 59, 0.08);
   }
 
-  .mobile-menu.active {
-    right: 0;
+  #navbar.scrolled .nav-link {
+    color: rgba(26, 31, 59, 0.75);
+    text-shadow: none;
   }
 
-  .mobile-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid var(--nav-gray-200);
-    flex-shrink: 0;
+  #navbar.scrolled .nav-link:hover {
+    color: #28A197;
+    background: rgba(40, 161, 151, 0.06);
   }
 
-  .mobile-close {
-    width: 40px;
-    height: 40px;
-    background: var(--nav-gray-100);
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    color: var(--nav-midnight);
+  #navbar.scrolled .nav-link.active {
+    color: #28A197;
+    background: rgba(40, 161, 151, 0.1);
+  }
+
+  #navbar.scrolled .navbar-text {
+    color: #1A1F3B;
+  }
+
+  /* Hamburger Lines */
+  .hamburger-line::before,
+  .hamburger-line::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 2px;
+    background: white;
+    left: 0;
     transition: all 0.3s ease;
   }
+  .hamburger-line::before { top: -7px; }
+  .hamburger-line::after { top: 7px; }
 
-  .mobile-close:hover {
-    background: var(--nav-teal);
-    color: white;
+  /* Hamburger Active State */
+  #hamburger.active .hamburger-line {
+    background: transparent;
+  }
+  #hamburger.active .hamburger-line::before {
+    top: 0;
+    transform: rotate(45deg);
+  }
+  #hamburger.active .hamburger-line::after {
+    top: 0;
+    transform: rotate(-45deg);
   }
 
-  .mobile-content {
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    overflow-y: auto;
-    flex: 1;
-  }
-
-  .mobile-link {
+  /* Drawer Links */
+  .drawer-link {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 14px 16px;
-    border-radius: 12px;
-    font-weight: 500;
+    gap: 14px;
+    padding: 14px 18px;
+    border-radius: 14px;
     font-size: 16px;
-    color: var(--nav-midnight);
+    font-weight: 500;
+    color: #1A1F3B;
     text-decoration: none;
     transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateX(30px);
   }
 
-  .mobile-link i {
-    width: 20px;
+  .drawer-link i {
+    width: 22px;
     text-align: center;
-    color: var(--nav-gray-500);
+    font-size: 16px;
+    color: #64748B;
     transition: color 0.3s ease;
   }
 
-  .mobile-link:hover,
-  .mobile-link.active {
-    background: rgba(40,161,151,0.1);
-    color: var(--nav-teal);
+  .drawer-link:hover,
+  .drawer-link.active {
+    background: rgba(40, 161, 151, 0.08);
+    color: #28A197;
   }
 
-  .mobile-link:hover i,
-  .mobile-link.active i {
-    color: var(--nav-teal);
+  .drawer-link:hover i,
+  .drawer-link.active i {
+    color: #28A197;
   }
 
-  .mobile-cta {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 1rem;
-    padding: 16px 24px;
-    background: linear-gradient(135deg, var(--nav-teal), var(--nav-teal-dark));
-    color: white;
-    border-radius: 50px;
-    font-weight: 600;
-    font-size: 16px;
-    text-decoration: none;
-    text-align: center;
+  /* Staggered animation when drawer opens */
+  #mobileDrawer.open .drawer-link {
+    opacity: 1;
+    transform: translateX(0);
   }
+  #mobileDrawer.open .drawer-link:nth-child(1) { transition-delay: 0.05s; }
+  #mobileDrawer.open .drawer-link:nth-child(2) { transition-delay: 0.1s; }
+  #mobileDrawer.open .drawer-link:nth-child(3) { transition-delay: 0.15s; }
+  #mobileDrawer.open .drawer-link:nth-child(4) { transition-delay: 0.2s; }
+  #mobileDrawer.open .drawer-link:nth-child(5) { transition-delay: 0.25s; }
+  #mobileDrawer.open .drawer-link:nth-child(6) { transition-delay: 0.3s; }
+  #mobileDrawer.open .drawer-link:nth-child(7) { transition-delay: 0.35s; }
+  #mobileDrawer.open .drawer-link:nth-child(8) { transition-delay: 0.4s; }
+  #mobileDrawer.open .drawer-link:nth-child(9) { transition-delay: 0.45s; }
 
-  .mobile-cta:hover {
-    box-shadow: 0 8px 25px rgba(40,161,151,0.4);
+  /* Accordion styles */
+  .drawer-accordion .drawer-link {
+    opacity: 1;
+    transform: translateX(0);
+    cursor: pointer;
   }
-
-  /* Responsive */
-  @media (max-width: 1023px) {
-    .navbar-menu,
-    .navbar-cta {
-      display: none;
-    }
-
-    .mobile-toggle {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .mobile-toggle.active .hamburger {
-      background: transparent;
-    }
-
-    .mobile-toggle.active .hamburger::before {
-      top: 0;
-      transform: rotate(45deg);
-    }
-
-    .mobile-toggle.active .hamburger::after {
-      bottom: 0;
-      transform: rotate(-45deg);
-    }
+  .accordion-content.open {
+    max-height: 600px;
   }
 
   @media (max-width: 640px) {
-    .navbar-container {
-      padding: 0 1rem;
-    }
-
-    .navbar-logo img {
-      height: 38px;
-    }
-
-    .brand-main {
-      font-size: 18px;
-    }
-
-    .mobile-menu {
-      width: 100%;
-      max-width: none;
+    #navbar {
+      height: 68px;
     }
   }
 </style>
 
 <script>
-  function toggleMobileMenu() {
-    const menu = document.getElementById('mobileMenu');
-    const overlay = document.getElementById('mobileOverlay');
-    const toggle = document.querySelector('.mobile-toggle');
+  const hamburger = document.getElementById('hamburger');
+  const drawer = document.getElementById('mobileDrawer');
+  const overlay = document.getElementById('drawerOverlay');
+
+  function toggleServiceAccordion(button) {
+    const content = button.nextElementSibling;
+    const arrow = button.querySelector('.accordion-arrow');
+    const isOpen = content.classList.contains('open');
     
-    menu.classList.toggle('active');
-    overlay.classList.toggle('active');
-    toggle.classList.toggle('active');
-    document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+    if (isOpen) {
+      content.classList.remove('open');
+      content.style.maxHeight = '0px';
+      arrow.style.transform = 'rotate(0deg)';
+    } else {
+      content.classList.add('open');
+      content.style.maxHeight = content.scrollHeight + 'px';
+      arrow.style.transform = 'rotate(180deg)';
+    }
   }
 
-  function closeMobileMenu() {
-    const menu = document.getElementById('mobileMenu');
-    const overlay = document.getElementById('mobileOverlay');
-    const toggle = document.querySelector('.mobile-toggle');
-    
-    menu.classList.remove('active');
-    overlay.classList.remove('active');
-    toggle.classList.remove('active');
+  function openDrawer() {
+    drawer.classList.add('open');
+    drawer.style.transform = 'translateX(0)';
+    overlay.classList.add('opacity-100', 'visible');
+    overlay.classList.remove('opacity-0', 'invisible');
+    hamburger.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeDrawer() {
+    drawer.classList.remove('open');
+    drawer.style.transform = 'translateX(100%)';
+    overlay.classList.add('opacity-0', 'invisible');
+    overlay.classList.remove('opacity-100', 'visible');
+    hamburger.classList.remove('active');
     document.body.style.overflow = '';
   }
 
-  // Close on escape key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      closeMobileMenu();
+  hamburger.addEventListener('click', () => {
+    if (drawer.style.transform === 'translateX(0px)') {
+      closeDrawer();
+    } else {
+      openDrawer();
     }
   });
 
-  // Close on resize to desktop
+  overlay.addEventListener('click', closeDrawer);
+
+  // Close on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && drawer.style.transform === 'translateX(0px)') {
+      closeDrawer();
+    }
+  });
+
+  // Close on window resize to desktop
   window.addEventListener('resize', () => {
-    if (window.innerWidth > 1023) {
-      closeMobileMenu();
+    if (window.innerWidth >= 1024 && drawer.style.transform === 'translateX(0px)') {
+      closeDrawer();
+    }
+  });
+
+  // ========== NAVBAR SCROLL EFFECT ==========
+  const navbar = document.getElementById('navbar');
+
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset;
+    
+    if (currentScroll > 80) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
     }
   });
 </script>

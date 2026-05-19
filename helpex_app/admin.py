@@ -3,11 +3,11 @@ from django.urls import path
 from django.http import HttpResponseRedirect
 from django.utils.html import format_html
 from .models import (
-    HeroSection, Service, Testimonial, ProcessStep,
+    HeroSection, HeroCarouselItem, Service, ServiceImage, ServiceCaseStudy, Testimonial, ProcessStep,
     PortfolioCategory, PortfolioItem, SiteSettings,
     ContactMessage, TeamMember, Client, BlogCategory, BlogPost,
     GalleryCategory, GalleryImage, PricingPlan, PricingFeature,
-    WhyChooseUsSection, WhyChooseUsReason, WhyChooseUsStat
+    WhyChooseUsSection, WhyChooseUsReason, WhyChooseUsStat, RegisteredCompany
 )
 
 
@@ -40,13 +40,66 @@ class HeroSectionAdmin(admin.ModelAdmin):
     ordering = ['-created_at']
 
 
+@admin.register(HeroCarouselItem)
+class HeroCarouselItemAdmin(admin.ModelAdmin):
+    list_display = ['media_type', 'order', 'is_active', 'created_at']
+    list_filter = ['media_type', 'is_active']
+    list_editable = ['order', 'is_active']
+    ordering = ['order', 'id']
+    fieldsets = (
+        ('Media', {
+            'fields': ('media_type', 'image', 'video'),
+            'description': 'Upload either an image OR a video file.'
+        }),
+        ('Settings', {
+            'fields': ('order', 'is_active'),
+        }),
+    )
+
+
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
-    list_display = ['title', 'icon_class', 'order', 'is_active']
-    list_filter = ['is_active']
-    search_fields = ['title', 'description']
-    list_editable = ['order', 'is_active']
+    list_display = ['title', 'icon_class', 'order', 'is_active', 'is_featured']
+    list_filter = ['is_active', 'is_featured']
+    search_fields = ['title', 'description', 'short_description']
+    list_editable = ['order', 'is_active', 'is_featured']
     ordering = ['order', 'title']
+    prepopulated_fields = {'slug': ('title',)}
+    fieldsets = (
+        ('Basic Info', {
+            'fields': ('title', 'slug', 'short_description', 'icon_class', 'order', 'is_active', 'is_featured')
+        }),
+        ('Images', {
+            'fields': ('hero_image', 'banner_image'),
+            'classes': ('collapse',)
+        }),
+        ('Content', {
+            'fields': ('description', 'tags', 'features', 'process_steps', 'faqs', 'stats'),
+            'description': 'Use JSON format for arrays. Example for features: [{"title": "Fast", "description": "Quick delivery", "icon": "fa-bolt"}]'
+        }),
+        ('Details', {
+            'fields': ('timeline', 'starting_price', 'support'),
+            'classes': ('collapse',)
+        }),
+    )
+
+
+@admin.register(ServiceImage)
+class ServiceImageAdmin(admin.ModelAdmin):
+    list_display = ['title', 'service', 'order', 'is_featured']
+    list_filter = ['service', 'is_featured']
+    list_editable = ['order', 'is_featured']
+    ordering = ['service', 'order']
+
+
+@admin.register(ServiceCaseStudy)
+class ServiceCaseStudyAdmin(admin.ModelAdmin):
+    list_display = ['title', 'service', 'client', 'order', 'is_active']
+    list_filter = ['service', 'is_active']
+    search_fields = ['title', 'description', 'client']
+    list_editable = ['order', 'is_active']
+    ordering = ['service', 'order']
+    prepopulated_fields = {'slug': ('title',)}
 
 
 @admin.register(Testimonial)
@@ -226,70 +279,23 @@ class GalleryImageAdmin(admin.ModelAdmin):
     def make_inactive(self, request, queryset):
         queryset.update(is_active=False)
     make_inactive.short_description = "Mark selected as inactive"
-
-    def make_featured(self, request, queryset):
-        queryset.update(is_featured=True)
-    make_featured.short_description = "Mark as featured"
-
-    def remove_featured(self, request, queryset):
-        queryset.update(is_featured=False)
-    remove_featured.short_description = "Remove from featured"
+    
+    actions = ['make_active', 'make_inactive']
 
 
-class PricingFeatureInline(admin.TabularInline):
-    model = PricingFeature
-    extra = 3
-    fields = ['text', 'included', 'order']
-    ordering = ['order']
-
-
-@admin.register(PricingPlan)
-class PricingPlanAdmin(admin.ModelAdmin):
-    list_display = ['name', 'plan_type', 'price_display', 'popular_badge', 'order', 'is_active', 'feature_count']
-    list_filter = ['is_active', 'plan_type', 'popular_badge']
+@admin.register(RegisteredCompany)
+class RegisteredCompanyAdmin(admin.ModelAdmin):
+    list_display = ['name', 'logo_preview', 'order', 'is_active']
+    list_filter = ['is_active']
     search_fields = ['name', 'description']
     list_editable = ['order', 'is_active']
     ordering = ['order', 'name']
-    prepopulated_fields = {'slug': ('name',)}
-    
-    fieldsets = (
-        ('Basic Information', {
-            'fields': ('name', 'slug', 'description')
-        }),
-        ('Pricing', {
-            'fields': ('plan_type', 'price', 'currency', 'billing_period')
-        }),
-        ('Display', {
-            'fields': ('popular_badge', 'icon_class', 'color_accent')
-        }),
-        ('Call to Action', {
-            'fields': ('cta_text', 'cta_url')
-        }),
-        ('Settings', {
-            'fields': ('order', 'is_active')
-        }),
-    )
-    
-    inlines = [PricingFeatureInline]
-    
-    def price_display(self, obj):
-        return f"{obj.currency}{obj.price}"
-    price_display.short_description = 'Price'
-    price_display.admin_order_field = 'price'
-    
-    def feature_count(self, obj):
-        return obj.features.count()
-    feature_count.short_description = 'Features'
-    
-    def make_active(self, request, queryset):
-        queryset.update(is_active=True)
-    make_active.short_description = "Mark selected as active"
-    
-    def make_inactive(self, request, queryset):
-        queryset.update(is_active=False)
-    make_inactive.short_description = "Mark selected as inactive"
-    
-    actions = ['make_active', 'make_inactive']
+
+    def logo_preview(self, obj):
+        if obj.logo:
+            return format_html('<img src="{}" style="width:50px;height:50px;object-fit:contain;border-radius:8px;" />', obj.logo.url)
+        return '—'
+    logo_preview.short_description = 'Logo'
 
 
 @admin.register(WhyChooseUsSection)

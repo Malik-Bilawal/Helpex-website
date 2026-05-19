@@ -6,925 +6,496 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Pricing Plans - HELPEX BRO">
   <title>Pricing · HELPEX BRO</title>
-  
+
+  <!-- Tailwind CSS with custom theme -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    @media (max-width: 1023px) {
-      .navbar-cta { display: none !important; }
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            midnight: '#1A1F3B',
+            'midnight-light': '#2D3555',
+            teal: '#28A197',
+            'teal-dark': '#1E837A',
+            'teal-glow': '#3BC4B5',
+            'soft-white': '#F7F9FA',
+            'gray-soft': '#64748B',
+          },
+          fontFamily: {
+            outfit: ['Outfit', 'sans-serif'],
+            space: ['Space Grotesk', 'sans-serif'],
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-20px)' },
+            },
+          },
+        }
+      }
     }
-  </style>
+  </script>
+
+  <!-- Fonts & Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- GSAP + ScrollTrigger + Lenis -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  
-  <style>
-    :root {
-      --midnight: #1A1F3B;
-      --teal: #28A197;
-      --teal-dark: #1E837A;
-      --teal-glow: #3BC4B5;
-      --gray-100: #F8FAFC;
-      --gray-500: #64748B;
-    }
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+  <style>
     body {
       font-family: 'Outfit', sans-serif;
-      background: var(--gray-100);
-      color: var(--midnight);
-      line-height: 1.6;
+      background-color: #F7F9FA;
+      color: #1A1F3B;
+      overflow-x: hidden;
     }
-
-    .font-display { font-family: 'Space Grotesk', sans-serif; }
-
-    /* ========== NAVBAR STYLES ========== */
-    .navbar {
-      background: rgba(255,255,255,0.85);
+    .font-display {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    /* Gradient text */
+    .gradient-text {
+      background: linear-gradient(135deg, #28A197, #3BC4B5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    /* Glass card */
+    .glass {
+      background: rgba(255, 255, 255, 0.7);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(40,161,151,0.15);
-      box-shadow: 0 2px 20px rgba(26,31,59,0.06);
-      padding: 0.75rem 0;
+      border: 1px solid rgba(255, 255, 255, 0.5);
     }
-
-    .navbar-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.5rem 1.5rem;
-      background: rgba(255,255,255,0.6);
-      border: 1px solid rgba(40,161,151,0.15);
-      border-radius: 100px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+    /* Grid pattern */
+    .bg-grid {
+      background-image: 
+        linear-gradient(rgba(40, 161, 151, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(40, 161, 151, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
     }
-
-    .navbar-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      text-decoration: none;
-    }
-
-    .navbar-logo img {
-      height: 40px;
-      width: auto;
-      border-radius: 10px;
-    }
-
-    .navbar-brand {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.1;
-    }
-
-    .navbar-brand-main {
-      font-size: 1.5rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-    }
-
-    .navbar-brand-sub {
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-    }
-
-    .navbar-menu {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .nav-link {
-      padding: 0.5rem 1rem;
-      border-radius: 100px;
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 0.9rem;
-      color: var(--midnight);
-      transition: all 0.3s ease;
-      position: relative;
-    }
-
-    .nav-link:hover {
-      background: rgba(40,161,151,0.1);
-      color: var(--teal);
-    }
-
-    .nav-link.active {
-      background: var(--teal);
-      color: white;
-    }
-
-    .navbar-cta {
-      padding: 0.75rem 1.5rem;
-      background: var(--midnight);
-      color: white;
-      border-radius: 100px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .navbar-cta:hover {
-      background: var(--teal);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(40,161,151,0.3);
-    }
-
-    .hamburger {
-      display: none;
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--midnight);
-      padding: 0.5rem;
-    }
-
-    @media (max-width: 1023px) {
-      .hamburger { display: block !important; }
-      .navbar-menu { display: none !important; }
-    }
-
-    /* ========== MOBILE MENU ========== */
-    .mobile-menu {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 85%;
-      max-width: 400px;
-      height: 100vh;
-      background: white;
-      z-index: 10001;
-      padding: 2rem;
-      transition: right 0.3s ease;
-      overflow-y: auto;
-    }
-
-    .mobile-menu.active { right: 0; }
-
-    .mobile-menu-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-    }
-
-    .mobile-menu-close {
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--midnight);
-    }
-
-    .mobile-menu-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(26,31,59,0.5);
-      z-index: 10000;
+    /* Entrance animation */
+    .fade-up {
       opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
+      transform: translateY(40px);
     }
-
-    .mobile-menu-overlay.active {
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    .mobile-nav-link {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1rem;
-      border-radius: 12px;
-      text-decoration: none;
-      color: var(--midnight);
-      font-weight: 500;
-      font-size: 1.1rem;
-      transition: all 0.3s ease;
-      margin-bottom: 0.5rem;
-    }
-
-    .mobile-nav-link:hover,
-    .mobile-nav-link.active {
-      background: rgba(40,161,151,0.1);
-      color: var(--teal);
-    }
-
-    .mobile-nav-link i {
-      width: 24px;
-      text-align: center;
-      color: var(--teal);
-    }
-
-    /* ========== PRICING PAGE STYLES ========== */
-    .pricing-hero {
-      background: linear-gradient(135deg, var(--midnight) 0%, #2A3158 100%);
-      padding: 8rem 2rem 6rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .pricing-hero::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: radial-gradient(circle at 50% 50%, rgba(40,161,151,0.15) 0%, transparent 50%);
-      pointer-events: none;
-    }
-
-    .pricing-hero h1 {
-      font-size: clamp(2.5rem, 5vw, 4rem);
-      font-weight: 800;
-      color: white;
-      margin-bottom: 1rem;
-      position: relative;
-      z-index: 1;
-    }
-
-    .pricing-hero p {
-      font-size: clamp(1rem, 2vw, 1.25rem);
-      color: rgba(255,255,255,0.8);
-      max-width: 600px;
-      margin: 0 auto 2rem;
-      position: relative;
-      z-index: 1;
-    }
-
-    .billing-toggle {
-      display: inline-flex;
-      background: rgba(255,255,255,0.1);
-      border-radius: 100px;
-      padding: 0.5rem;
-      gap: 0.5rem;
-      position: relative;
-      z-index: 1;
-    }
-
+    /* Billing toggle */
     .billing-btn {
-      padding: 0.75rem 2rem;
-      border: none;
-      background: transparent;
-      color: rgba(255,255,255,0.7);
-      font-weight: 600;
-      border-radius: 100px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-size: 0.95rem;
-    }
-
-    .billing-btn.active {
-      background: var(--teal);
-      color: white;
-      box-shadow: 0 4px 12px rgba(40,161,151,0.4);
-    }
-
-    .pricing-section {
-      padding: 4rem 2rem;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 2rem;
-      margin-top: 3rem;
-    }
-
-    .pricing-card {
-      background: white;
-      border-radius: 24px;
-      padding: 2.5rem;
       position: relative;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      border: 2px solid transparent;
-      box-shadow: 0 4px 20px rgba(26,31,59,0.08);
+      transition: all 0.3s ease;
     }
-
-    .pricing-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(26,31,59,0.15);
-    }
-
-    .pricing-card.popular {
-      border-color: var(--teal);
-      background: linear-gradient(135deg, white 0%, rgba(40,161,151,0.03) 100%);
-    }
-
-    .pricing-card.popular::before {
-      content: attr(data-badge);
-      position: absolute;
-      top: -12px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--teal);
+    .billing-btn.active {
+      background: #28A197;
       color: white;
-      padding: 0.5rem 1.5rem;
-      border-radius: 100px;
+      box-shadow: 0 4px 15px rgba(40, 161, 151, 0.4);
+    }
+    .billing-btn .save-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #3BC4B5;
+      color: white;
+      font-size: 0.65rem;
+      padding: 2px 8px;
+      border-radius: 50px;
       font-weight: 700;
-      font-size: 0.85rem;
+    }
+    /* Pricing card */
+    .pricing-card {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .pricing-card:hover {
+      transform: translateY(-10px);
+    }
+    .pricing-card.popular {
+      border: 2px solid #28A197;
+      background: linear-gradient(180deg, rgba(40,161,151,0.03) 0%, white 100%);
+    }
+    .popular-badge {
+      background: linear-gradient(135deg, #28A197, #1E837A);
+      color: white;
+      padding: 6px 20px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
-      box-shadow: 0 4px 12px rgba(40,161,151,0.4);
+      box-shadow: 0 4px 15px rgba(40, 161, 151, 0.3);
     }
-
-    .pricing-icon {
-      width: 60px;
-      height: 60px;
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      margin-bottom: 1.5rem;
-      background: rgba(40,161,151,0.1);
-      color: var(--teal);
-    }
-
-    .pricing-card.popular .pricing-icon {
-      background: var(--teal);
-      color: white;
-    }
-
-    .pricing-card h3 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      color: var(--midnight);
-    }
-
-    .pricing-card .description {
-      color: var(--gray-500);
-      font-size: 0.95rem;
-      margin-bottom: 1.5rem;
-      min-height: 45px;
-    }
-
-    .pricing-amount {
-      display: flex;
-      align-items: baseline;
-      gap: 0.25rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .pricing-amount .currency {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--midnight);
-    }
-
-    .pricing-amount .price {
-      font-size: 3.5rem;
-      font-weight: 800;
-      color: var(--midnight);
-      line-height: 1;
-    }
-
-    .pricing-amount .period {
-      font-size: 1rem;
-      color: var(--gray-500);
-      font-weight: 500;
-    }
-
-    .pricing-cta {
-      display: block;
-      width: 100%;
-      padding: 1rem;
-      margin: 1.5rem 0;
-      background: var(--midnight);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-align: center;
-      text-decoration: none;
-    }
-
-    .pricing-cta:hover {
-      background: var(--teal);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 16px rgba(40,161,151,0.3);
-    }
-
-    .pricing-card.popular .pricing-cta {
-      background: var(--teal);
-    }
-
-    .pricing-card.popular .pricing-cta:hover {
-      background: var(--teal-dark);
-    }
-
-    .features-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .features-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-      padding: 0.75rem 0;
-      border-bottom: 1px solid rgba(26,31,59,0.08);
-      font-size: 0.95rem;
-    }
-
-    .features-list li:last-child {
-      border-bottom: none;
-    }
-
-    .features-list li i {
-      margin-top: 0.25rem;
-      flex-shrink: 0;
-    }
-
-    .features-list li.included i {
-      color: var(--teal);
-    }
-
-    .features-list li.excluded {
-      color: var(--gray-500);
-      text-decoration: line-through;
-      opacity: 0.6;
-    }
-
-    .features-list li.excluded i {
-      color: #EF4444;
-    }
-
-    .faq-section {
-      padding: 4rem 2rem;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .faq-section h2 {
-      font-size: 2.5rem;
-      font-weight: 800;
-      text-align: center;
-      margin-bottom: 3rem;
-      color: var(--midnight);
-    }
-
-    .faq-item {
-      background: white;
-      border-radius: 16px;
-      margin-bottom: 1rem;
-      overflow: hidden;
-      box-shadow: 0 2px 12px rgba(26,31,59,0.06);
-    }
-
-    .faq-question {
-      padding: 1.5rem;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: 600;
-      font-size: 1.1rem;
-      color: var(--midnight);
-      transition: all 0.3s ease;
-    }
-
-    .faq-question:hover {
-      color: var(--teal);
-    }
-
-    .faq-question i {
-      transition: transform 0.3s ease;
-      color: var(--teal);
-    }
-
-    .faq-item.active .faq-question i {
-      transform: rotate(180deg);
-    }
-
+    /* FAQ */
     .faq-answer {
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.3s ease;
+      transition: max-height 0.4s ease, padding 0.4s ease;
     }
-
-    .faq-answer-content {
-      padding: 0 1.5rem 1.5rem;
-      color: var(--gray-500);
-      line-height: 1.7;
+    .faq-item.active .faq-answer {
+      max-height: 300px;
     }
-
-    .cta-section {
-      background: linear-gradient(135deg, var(--midnight) 0%, #2A3158 100%);
-      padding: 5rem 2rem;
-      text-align: center;
-      margin-top: 4rem;
+    .faq-item.active .faq-chevron {
+      transform: rotate(180deg);
     }
-
-    .cta-section h2 {
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 800;
-      color: white;
-      margin-bottom: 1rem;
-    }
-
-    .cta-section p {
-      font-size: 1.2rem;
-      color: rgba(255,255,255,0.8);
-      max-width: 600px;
-      margin: 0 auto 2rem;
-    }
-
-    .cta-button {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 1.25rem 2.5rem;
-      background: var(--teal);
-      color: white;
-      border-radius: 100px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 1.1rem;
-      transition: all 0.3s ease;
-      box-shadow: 0 8px 24px rgba(40,161,151,0.4);
-    }
-
-    .cta-button:hover {
-      background: var(--teal-glow);
-      transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(40,161,151,0.5);
-    }
-
-    @media (max-width: 768px) {
-      .pricing-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .pricing-card {
-        padding: 2rem;
-      }
-
-      .pricing-hero {
-        padding: 6rem 1.5rem 4rem;
-      }
-
-      .billing-toggle {
-        flex-direction: column;
-        width: 100%;
-        max-width: 300px;
-      }
-
-      .billing-btn {
-        width: 100%;
-      }
-    }
-
-    /* ========== FOOTER STYLES ========== */
-    .footer {
-      background: var(--midnight);
-      color: white;
-      padding: 4rem 2rem 2rem;
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 3rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .footer-brand h3 {
-      font-size: 1.5rem;
-      font-weight: 800;
-      margin-bottom: 1rem;
-    }
-
-    .footer-brand p {
-      color: rgba(255,255,255,0.7);
-      line-height: 1.7;
-    }
-
-    .footer-links h4 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 1.5rem;
-      color: var(--teal);
-    }
-
-    .footer-links a {
-      display: block;
-      color: rgba(255,255,255,0.7);
-      text-decoration: none;
-      padding: 0.5rem 0;
-      transition: all 0.3s ease;
-    }
-
-    .footer-links a:hover {
-      color: var(--teal);
-      padding-left: 0.5rem;
-    }
-
-    .footer-social {
-      display: flex;
-      gap: 1rem;
-      margin-top: 1.5rem;
-    }
-
-    .footer-social a {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
-
-    .footer-social a:hover {
-      background: var(--teal);
-      transform: translateY(-4px);
-    }
-
-    .footer-bottom {
-      max-width: 1200px;
-      margin: 3rem auto 0;
-      padding-top: 2rem;
-      border-top: 1px solid rgba(255,255,255,0.1);
-      text-align: center;
-      color: rgba(255,255,255,0.6);
+    /* Yearly price display */
+    .yearly-price {
+      display: none;
     }
   </style>
 </head>
-<body>
+<body class="bg-gradient-to-b from-white via-soft-white to-gray-50">
+
+  <!-- Navbar -->
   {% include 'helpex_app/components/navbar.html' %}
 
-  <div class="mobile-menu-overlay" id="mobileOverlay"></div>
-  <div class="mobile-menu" id="mobileMenu">
-    <div class="mobile-menu-header">
-      <a href="/" class="navbar-logo">
-        <img src="{% static 'logo.png' %}" alt="HELPEX">
-        <div class="navbar-brand">
-          <span class="navbar-brand-main">{{ settings.company_name|default:"HELPEX BRO" }}</span>
-          <span class="navbar-brand-sub">{{ settings.tagline|default:"ADAPTIVE DIGITAL STUDIO" }}</span>
-        </div>
-      </a>
-      <button class="mobile-menu-close" id="mobileClose">
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
-    <a href="/" class="mobile-nav-link"><i class="fas fa-home"></i> Home</a>
-    <a href="/service/" class="mobile-nav-link"><i class="fas fa-cogs"></i> Services</a>
-    <a href="/gallery/" class="mobile-nav-link"><i class="fas fa-images"></i> Gallery</a>
-    <a href="/clients/" class="mobile-nav-link"><i class="fas fa-users"></i> Clients</a>
-    <a href="/blog/" class="mobile-nav-link"><i class="fas fa-blog"></i> Blog</a>
-    <a href="/pricing/" class="mobile-nav-link active"><i class="fas fa-tags"></i> Pricing</a>
-    <a href="/about/" class="mobile-nav-link"><i class="fas fa-info-circle"></i> About Us</a>
-    <a href="/contact/" class="mobile-nav-link"><i class="fas fa-envelope"></i> Contact</a>
-    <a href="/contact/" class="navbar-cta" style="margin-top: 2rem; justify-content: center;">
-      Start Project <i class="fas fa-arrow-right"></i>
-    </a>
-  </div>
+  <!-- ============================================================ -->
+  <!-- HERO SECTION -->
+  <!-- ============================================================ -->
+  <section class="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden bg-gradient-to-br from-midnight to-midnight-light">
+    <!-- Background effects -->
+    <div class="absolute inset-0 bg-grid opacity-10"></div>
+    <div class="absolute top-0 right-0 w-96 h-96 bg-teal/10 rounded-full filter blur-3xl"></div>
+    <div class="absolute bottom-0 left-0 w-80 h-80 bg-teal-glow/10 rounded-full filter blur-3xl"></div>
 
-  <section class="pricing-hero">
-    <h1>Simple, Transparent Pricing</h1>
-    <p>Choose the perfect plan for your needs. No hidden fees, no surprises.</p>
-    <div class="billing-toggle">
-      <button class="billing-btn active" data-billing="monthly">Monthly</button>
-      <button class="billing-btn" data-billing="yearly">Yearly <span class="text-xs opacity-75">(Save 20%)</span></button>
+    <div class="relative z-10 max-w-7xl mx-auto px-6">
+      <!-- Breadcrumb -->
+      <div class="flex items-center gap-2 mb-10">
+        <a href="{% url 'index' %}" class="text-sm text-white/60 hover:text-teal transition-colors">Home</a>
+        <span class="text-white/30">/</span>
+        <span class="text-sm font-semibold text-teal">Pricing</span>
+      </div>
+
+      <!-- Headline -->
+      <div class="text-center max-w-4xl mx-auto">
+        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5 bg-teal/20 text-teal border border-teal/20">
+          // Pricing Plans
+        </span>
+        <h1 class="font-display text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 text-white">
+          Simple, <span class="gradient-text">Transparent</span> Pricing
+        </h1>
+        <p class="text-lg md:text-xl text-white/70 max-w-2xl mx-auto mb-10">
+          Choose the perfect plan for your needs. No hidden fees, no surprises. All plans include a 14-day free trial.
+        </p>
+
+        <!-- Billing Toggle -->
+        <div class="inline-flex items-center gap-2 bg-white/10 p-1.5 rounded-full backdrop-blur-md">
+          <button class="billing-btn active px-6 py-3 rounded-full font-semibold text-sm text-white/70" data-billing="monthly">
+            <i class="far fa-calendar-check mr-2"></i> Monthly
+          </button>
+          <button class="billing-btn px-6 py-3 rounded-full font-semibold text-sm text-white/70 relative" data-billing="yearly">
+            <i class="far fa-calendar-alt mr-2"></i> Yearly
+            <span class="save-badge">Save 20%</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/40 animate-bounce">
+      <span class="text-xs tracking-widest uppercase">View Plans</span>
+      <i class="fas fa-chevron-down"></i>
     </div>
   </section>
 
-  <section class="pricing-section">
-    <div class="pricing-grid">
-      {% for plan in plans %}
-      <div class="pricing-card {% if plan.popular_badge != 'none' %}popular{% endif %}" data-billing="{{ plan.plan_type }}" data-badge="{{ plan.get_popular_badge_display }}">
-        <div class="pricing-icon" style="{% if plan.color_accent %}background: {{ plan.color_accent }}20; color: {{ plan.color_accent }};{% endif %}">
-          <i class="fas {{ plan.icon_class }}"></i>
-        </div>
-        <h3>{{ plan.name }}</h3>
-        <p class="description">{{ plan.description }}</p>
-        <div class="pricing-amount">
-          <span class="currency">{{ plan.currency }}</span>
-          <span class="price">{{ plan.price|floatformat:0 }}</span>
-          <span class="period">{{ plan.billing_period }}</span>
-        </div>
-        <a href="{{ plan.cta_url }}" class="pricing-cta">{{ plan.cta_text }}</a>
-        <ul class="features-list">
-          {% for feature in plan.features.all %}
-          <li class="{% if feature.included %}included{% else %}excluded{% endif %}">
-            <i class="fas {% if feature.included %}fa-check-circle{% else %}fa-times-circle{% endif %}"></i>
-            <span>{{ feature.text }}</span>
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
-      {% empty %}
-      <div class="col-span-full text-center py-16">
-        <i class="fas fa-tags text-6xl text-gray-300 mb-4"></i>
-        <h3 class="text-2xl font-bold text-gray-600 mb-2">Pricing Plans Coming Soon</h3>
-        <p class="text-gray-500">We're working on bringing you the best pricing options.</p>
-      </div>
-      {% endfor %}
-    </div>
-  </section>
+  <!-- ============================================================ -->
+  <!-- PRICING CARDS -->
+  <!-- ============================================================ -->
+  <section class="py-24 bg-white relative">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        {% for plan in plans %}
+        <div class="fade-up pricing-card bg-white rounded-3xl p-8 shadow-md border border-gray-200 relative {% if plan.popular_badge != 'none' %}popular{% endif %}" data-billing="{{ plan.plan_type }}">
+          
+          <!-- Popular Badge -->
+          {% if plan.popular_badge != 'none' %}
+          <div class="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
+            <span class="popular-badge">
+              <i class="fas fa-star mr-1"></i> {{ plan.get_popular_badge_display }}
+            </span>
+          </div>
+          {% endif %}
 
-  <section class="faq-section">
-    <h2>Frequently Asked Questions</h2>
-    <div class="faq-item">
-      <div class="faq-question">
-        <span>Can I switch plans at any time?</span>
-        <i class="fas fa-chevron-down"></i>
-      </div>
-      <div class="faq-answer">
-        <div class="faq-answer-content">
-          Yes, you can upgrade or downgrade your plan at any time. Changes will be reflected in your next billing cycle.
+          <!-- Icon -->
+          <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl mb-6 {% if plan.popular_badge != 'none' %}bg-teal text-white{% else %}bg-teal/10 text-teal{% endif %}">
+            <i class="fas {{ plan.icon_class|default:'fa-rocket' }}"></i>
+          </div>
+
+          <!-- Name & Description -->
+          <h3 class="text-2xl font-bold mb-2 text-midnight">{{ plan.name }}</h3>
+          <p class="text-gray-soft text-sm mb-6 leading-relaxed">{{ plan.description }}</p>
+
+          <!-- Price -->
+          <div class="mb-6">
+            <div class="flex items-baseline gap-1">
+              <span class="text-xl font-bold text-midnight">{{ plan.currency }}</span>
+              <span class="text-5xl font-extrabold text-midnight monthly-price">{{ plan.price|floatformat:0 }}</span>
+              {% if plan.yearly_price %}
+              <span class="text-5xl font-extrabold text-midnight yearly-price" style="display:none;">{{ plan.yearly_price|floatformat:0 }}</span>
+              {% endif %}
+              <span class="text-gray-soft text-sm monthly-period">/{{ plan.billing_period }}</span>
+              <span class="text-gray-soft text-sm yearly-period" style="display:none;">/year</span>
+            </div>
+          </div>
+
+          <!-- CTA Button -->
+          <a href="{{ plan.cta_url|default:'/contact/' }}" class="block w-full text-center py-3.5 rounded-xl font-bold text-sm transition-all duration-300 hover:-translate-y-1 {% if plan.popular_badge != 'none' %}bg-teal text-white hover:bg-teal-dark hover:shadow-lg hover:shadow-teal/30{% else %}bg-midnight text-white hover:bg-teal{% endif %}">
+            {{ plan.cta_text|default:"Get Started" }} <i class="fas fa-arrow-right ml-2"></i>
+          </a>
+
+          <!-- Features -->
+          <ul class="mt-8 space-y-3">
+            {% for feature in plan.features.all %}
+            <li class="flex items-start gap-3 text-sm {% if not feature.included %}line-through text-gray-400 opacity-60{% endif %}">
+              {% if feature.included %}
+              <i class="fas fa-check-circle text-teal mt-0.5 flex-shrink-0"></i>
+              {% else %}
+              <i class="fas fa-times-circle text-red-400 mt-0.5 flex-shrink-0"></i>
+              {% endif %}
+              <span class="{% if feature.included %}text-midnight{% endif %}">{{ feature.text }}</span>
+            </li>
+            {% endfor %}
+          </ul>
         </div>
-      </div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-question">
-        <span>Is there a free trial available?</span>
-        <i class="fas fa-chevron-down"></i>
-      </div>
-      <div class="faq-answer">
-        <div class="faq-answer-content">
-          We offer a 14-day free trial on most of our plans so you can experience the full features before committing.
+        {% empty %}
+        <!-- Empty state -->
+        <div class="col-span-full text-center py-16">
+          <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 bg-teal/10">
+            <i class="fas fa-tags text-3xl text-teal"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-2 text-midnight">Pricing Plans Coming Soon</h3>
+          <p class="text-gray-soft">We're working on bringing you the best pricing options.</p>
         </div>
-      </div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-question">
-        <span>What payment methods do you accept?</span>
-        <i class="fas fa-chevron-down"></i>
-      </div>
-      <div class="faq-answer">
-        <div class="faq-answer-content">
-          We accept all major credit cards, PayPal, and bank transfers. All payments are processed securely.
-        </div>
-      </div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-question">
-        <span>Can I cancel my subscription?</span>
-        <i class="fas fa-chevron-down"></i>
-      </div>
-      <div class="faq-answer">
-        <div class="faq-answer-content">
-          Absolutely! You can cancel your subscription at any time with no cancellation fees. Your access will continue until the end of your billing period.
-        </div>
+        {% endfor %}
       </div>
     </div>
   </section>
 
-  <section class="cta-section">
-    <h2>Ready to Get Started?</h2>
-    <p>Let's build something amazing together. Contact us today to discuss your project.</p>
-    <a href="/contact/" class="cta-button">
-      Start Your Project <i class="fas fa-arrow-right"></i>
-    </a>
+  <!-- ============================================================ -->
+  <!-- FAQ SECTION -->
+  <!-- ============================================================ -->
+  <section class="py-24 bg-soft-white">
+    <div class="max-w-3xl mx-auto px-6">
+      <div class="text-center mb-14">
+        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5 bg-teal/10 text-teal border border-teal/20">
+          // Got Questions?
+        </span>
+        <h2 class="font-display text-4xl md:text-5xl font-bold text-midnight">
+          Frequently <span class="gradient-text">Asked Questions</span>
+        </h2>
+      </div>
+
+      <div class="space-y-3">
+        <!-- FAQ Item 1 -->
+        <div class="faq-item bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+          <button class="faq-question w-full flex items-center justify-between p-6 text-left font-semibold text-midnight hover:text-teal transition-colors">
+            <span>Can I switch plans at any time?</span>
+            <i class="fas fa-chevron-down faq-chevron text-teal transition-transform duration-300"></i>
+          </button>
+          <div class="faq-answer">
+            <div class="px-6 pb-6 text-gray-soft leading-relaxed">
+              Yes, you can upgrade or downgrade your plan at any time. Changes will be reflected in your next billing cycle. No penalties, no hidden fees.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ Item 2 -->
+        <div class="faq-item bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+          <button class="faq-question w-full flex items-center justify-between p-6 text-left font-semibold text-midnight hover:text-teal transition-colors">
+            <span>Is there a free trial available?</span>
+            <i class="fas fa-chevron-down faq-chevron text-teal transition-transform duration-300"></i>
+          </button>
+          <div class="faq-answer">
+            <div class="px-6 pb-6 text-gray-soft leading-relaxed">
+              Absolutely! We offer a 14-day free trial on all plans. No credit card required. Experience all features before committing.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ Item 3 -->
+        <div class="faq-item bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+          <button class="faq-question w-full flex items-center justify-between p-6 text-left font-semibold text-midnight hover:text-teal transition-colors">
+            <span>What payment methods do you accept?</span>
+            <i class="fas fa-chevron-down faq-chevron text-teal transition-transform duration-300"></i>
+          </button>
+          <div class="faq-answer">
+            <div class="px-6 pb-6 text-gray-soft leading-relaxed">
+              We accept all major credit cards (Visa, Mastercard, Amex), PayPal, and bank transfers for annual plans. All payments are processed securely via Stripe.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ Item 4 -->
+        <div class="faq-item bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+          <button class="faq-question w-full flex items-center justify-between p-6 text-left font-semibold text-midnight hover:text-teal transition-colors">
+            <span>Can I cancel my subscription?</span>
+            <i class="fas fa-chevron-down faq-chevron text-teal transition-transform duration-300"></i>
+          </button>
+          <div class="faq-answer">
+            <div class="px-6 pb-6 text-gray-soft leading-relaxed">
+              Yes, you can cancel anytime with no cancellation fees. Your access will continue until the end of your current billing period. Simple and fair.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ Item 5 -->
+        <div class="faq-item bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+          <button class="faq-question w-full flex items-center justify-between p-6 text-left font-semibold text-midnight hover:text-teal transition-colors">
+            <span>Do you offer custom plans for larger teams?</span>
+            <i class="fas fa-chevron-down faq-chevron text-teal transition-transform duration-300"></i>
+          </button>
+          <div class="faq-answer">
+            <div class="px-6 pb-6 text-gray-soft leading-relaxed">
+              Yes! For teams of 10+ or enterprise requirements, we offer fully customized plans with dedicated support, custom integrations, and volume pricing. <a href="/contact/" class="text-teal hover:underline">Contact us</a> to discuss.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
+  <!-- ============================================================ -->
+  <!-- CTA SECTION -->
+
+  <!-- Footer -->
+  <!-- ========== REGISTERED COMPANIES ========== -->
+  {% include 'helpex_app/components/registered_companies.html' %}
+
+  
+  <!-- ========== FOOTER (included from component) ========== -->
   {% include 'helpex_app/components/footer.html' %}
 
+  <!-- ============================================================ -->
+  <!-- SCRIPTS -->
+  <!-- ============================================================ -->
   <script>
-    const mobileMenu = document.getElementById('mobileMenu');
-    const mobileOverlay = document.getElementById('mobileOverlay');
-    const mobileClose = document.getElementById('mobileClose');
-    const hamburger = document.querySelector('.hamburger');
-
-    function openMobileMenu() {
-      mobileMenu.classList.add('active');
-      mobileOverlay.classList.add('active');
-      document.body.style.overflow = 'hidden';
+    // ---------- Lenis Smooth Scroll ----------
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true
+    });
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
     }
+    requestAnimationFrame(raf);
 
-    function closeMobileMenu() {
-      mobileMenu.classList.remove('active');
-      mobileOverlay.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    if (hamburger) hamburger.addEventListener('click', openMobileMenu);
-    mobileClose.addEventListener('click', closeMobileMenu);
-    mobileOverlay.addEventListener('click', closeMobileMenu);
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeMobileMenu();
+    // Sync Lenis with GSAP ScrollTrigger
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
     });
+    gsap.ticker.lagSmoothing(0);
 
-    window.addEventListener('resize', () => {
-      if (window.innerWidth >= 1024) closeMobileMenu();
-    });
-
-    const billingBtns = document.querySelectorAll('.billing-btn');
-    const pricingCards = document.querySelectorAll('.pricing-card');
-
-    function filterPricingCards(billingType) {
-      pricingCards.forEach(card => {
-        if (card.dataset.billing === billingType || billingType === 'all') {
-          card.style.display = 'block';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-      
-      // Refresh GSAP ScrollTrigger after filtering
-      setTimeout(() => {
-        ScrollTrigger.refresh();
-      }, 100);
-    }
-
-    // Initialize on page load
-    document.addEventListener('DOMContentLoaded', () => {
-      const activeBtn = document.querySelector('.billing-btn.active');
-      if (activeBtn) {
-        filterPricingCards(activeBtn.dataset.billing);
-      }
-    });
-
-    billingBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        billingBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        filterPricingCards(btn.dataset.billing);
-      });
-    });
-
-    const faqItems = document.querySelectorAll('.faq-item');
-    faqItems.forEach(item => {
-      const question = item.querySelector('.faq-question');
-      question.addEventListener('click', () => {
-        const isActive = item.classList.contains('active');
-        faqItems.forEach(i => {
-          i.classList.remove('active');
-          i.querySelector('.faq-answer').style.maxHeight = null;
-        });
-        
-        if (!isActive) {
-          item.classList.add('active');
-          const answer = item.querySelector('.faq-answer');
-          answer.style.maxHeight = answer.scrollHeight + 'px';
-        }
-      });
-    });
-
+    // ---------- GSAP Entrance Animations ----------
     gsap.registerPlugin(ScrollTrigger);
-    
-    function animatePricingCards() {
-      const visibleCards = document.querySelectorAll('.pricing-card[style*="display: block"], .pricing-card:not([style*="display"])');
-      
-      gsap.fromTo(visibleCards, 
-        { y: 50, opacity: 0 },
+
+    // Animate pricing cards
+    gsap.utils.toArray('.pricing-card').forEach((card, index) => {
+      gsap.fromTo(card,
+        { opacity: 0, y: 50 },
         {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          stagger: 0.2,
+          opacity: 1, y: 0,
+          duration: 0.7,
+          delay: index * 0.15,
           ease: 'power3.out',
           scrollTrigger: {
-            trigger: '.pricing-grid',
-            start: 'top 80%',
+            trigger: card,
+            start: 'top 85%',
+            toggleActions: 'play none none none'
           }
         }
       );
-    }
-    
-    animatePricingCards();
+    });
 
-    gsap.from('.faq-item', {
-      scrollTrigger: {
-        trigger: '.faq-section',
-        start: 'top 80%',
-      },
-      y: 30,
-      opacity: 0,
-      duration: 0.6,
-      stagger: 0.1,
-      ease: 'power2.out'
+    // Animate FAQ items
+    gsap.utils.toArray('.faq-item').forEach((item, index) => {
+      gsap.fromTo(item,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1, y: 0,
+          duration: 0.5,
+          delay: index * 0.1,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '.faq-item',
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    });
+
+    // ---------- Billing Toggle ----------
+    const billingBtns = document.querySelectorAll('.billing-btn');
+    const pricingCards = document.querySelectorAll('.pricing-card');
+
+    function switchBilling(billingType) {
+      // Update active button
+      billingBtns.forEach(b => b.classList.remove('active'));
+      const activeBtn = document.querySelector(`.billing-btn[data-billing="${billingType}"]`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      // Show/hide cards based on billing type
+      pricingCards.forEach(card => {
+        if (card.dataset.billing === billingType || billingType === 'all') {
+          card.style.display = 'block';
+          gsap.to(card, { opacity: 1, scale: 1, duration: 0.4, ease: 'power2.out' });
+        } else {
+          gsap.to(card, {
+            opacity: 0, scale: 0.95, duration: 0.3, ease: 'power2.in',
+            onComplete: () => { card.style.display = 'none'; }
+          });
+        }
+      });
+
+      // Toggle monthly/yearly price displays
+      document.querySelectorAll('.monthly-price, .monthly-period').forEach(el => {
+        el.style.display = billingType === 'yearly' ? 'none' : '';
+      });
+      document.querySelectorAll('.yearly-price, .yearly-period').forEach(el => {
+        el.style.display = billingType === 'yearly' ? '' : 'none';
+      });
+
+      // Refresh ScrollTrigger
+      setTimeout(() => ScrollTrigger.refresh(), 400);
+    }
+
+    billingBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        switchBilling(btn.dataset.billing);
+      });
+    });
+
+    // ---------- FAQ Accordion ----------
+    document.querySelectorAll('.faq-question').forEach(question => {
+      question.addEventListener('click', () => {
+        const faqItem = question.parentElement;
+        const isActive = faqItem.classList.contains('active');
+
+        // Close all
+        document.querySelectorAll('.faq-item').forEach(item => {
+          item.classList.remove('active');
+        });
+
+        // Open clicked (if wasn't already open)
+        if (!isActive) {
+          faqItem.classList.add('active');
+        }
+      });
+    });
+
+    // ---------- Smooth scroll for anchor links ----------
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) lenis.scrollTo(target);
+      });
     });
   </script>
 </body>
