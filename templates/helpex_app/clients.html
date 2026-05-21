@@ -27,11 +27,12 @@
           },
           animation: {
             'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 4s ease-in-out infinite',
           },
           keyframes: {
             float: {
-              '0%, 100%': { transform: 'translateY(0px)' },
-              '50%': { transform: 'translateY(-20px)' },
+              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+              '50%': { transform: 'translateY(-20px) rotate(5deg)' },
             },
           },
         }
@@ -55,10 +56,19 @@
       color: #1A1F3B;
       overflow-x: hidden;
     }
-    .font-display {
-      font-family: 'Space Grotesk', sans-serif;
+    .font-display { font-family: 'Space Grotesk', sans-serif; }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(5deg); }
     }
-    /* Glass effect */
+    @keyframes pulse-slow {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.05); }
+    }
+    .animate-float { animation: float 6s ease-in-out infinite; }
+    .animate-pulse-slow { animation: pulse-slow 4s ease-in-out infinite; }
+
     .glass {
       background: rgba(255, 255, 255, 0.7);
       backdrop-filter: blur(20px);
@@ -71,120 +81,224 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-    /* Grid pattern */
     .bg-grid {
       background-image: 
         linear-gradient(rgba(40, 161, 151, 0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(40, 161, 151, 0.03) 1px, transparent 1px);
       background-size: 60px 60px;
     }
-    /* Entrance animation base */
-    .fade-up {
-      opacity: 0;
-      transform: translateY(40px);
+    .magnetic-btn {
+      transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* Testimonial Carousel */
+    .testimonial-track {
+      display: flex;
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .testimonial-slide {
+      min-width: 100%;
+      flex-shrink: 0;
+    }
+
+    /* Client Card 3D */
+    .client-card-3d {
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
+
+    /* Marquee Animation */
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .marquee-track {
+      animation: marquee 30s linear infinite;
+    }
+    .marquee-track:hover {
+      animation-play-state: paused;
+    }
+
+    /* Scroll Indicator */
+    @keyframes scroll-bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+      40% { transform: translateY(-10px) translateX(-50%); }
+      60% { transform: translateY(-5px) translateX(-50%); }
     }
   </style>
 </head>
-<body class="bg-gradient-to-b from-white via-soft-white to-gray-50">
+<body>
 
   <!-- Navbar -->
   {% include 'helpex_app/components/navbar.html' %}
 
   <!-- ============================================================ -->
-  <!-- HERO SECTION -->
+  <!-- HERO SECTION - DARK PREMIUM -->
   <!-- ============================================================ -->
-  <section class="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden bg-white">
-    <!-- Background Effects -->
-    <div class="absolute inset-0 bg-grid"></div>
-    <div class="absolute top-20 -left-32 w-96 h-96 bg-teal/10 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float"></div>
-    <div class="absolute bottom-20 -right-32 w-80 h-80 bg-teal-glow/10 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float" style="animation-delay: -3s;"></div>
+  <section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#0A0F1E] via-[#0F1629] to-[#0A0F1E]" id="clients-hero">
+    <!-- Particle Canvas -->
+    <canvas id="hero-canvas" class="absolute inset-0 w-full h-full opacity-30"></canvas>
+    
+    <!-- Gradient Orbs -->
+    <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-teal/15 rounded-full filter blur-[120px] animate-pulse-slow"></div>
+    <div class="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-teal-glow/10 rounded-full filter blur-[100px] animate-pulse-slow" style="animation-delay: -1.5s;"></div>
+    <div class="absolute top-[40%] left-[60%] w-[300px] h-[300px] bg-purple-500/8 rounded-full filter blur-[80px] animate-pulse-slow" style="animation-delay: -3s;"></div>
 
-    <div class="relative z-10 max-w-7xl mx-auto px-6">
+    <!-- Floating Shapes -->
+    <div class="absolute inset-0 pointer-events-none" id="floating-shapes">
+      <div class="absolute top-[15%] left-[10%] w-4 h-4 border-2 border-teal/30 rotate-45 animate-float" data-speed="0.5"></div>
+      <div class="absolute top-[25%] right-[15%] w-6 h-6 rounded-full border border-teal-glow/20 animate-float" style="animation-delay: -1s;" data-speed="0.8"></div>
+      <div class="absolute bottom-[30%] left-[20%] w-3 h-3 bg-teal/20 rounded-full animate-float" style="animation-delay: -2s;" data-speed="1.2"></div>
+      <div class="absolute top-[60%] right-[25%] w-5 h-5 border border-teal/20 rotate-12 animate-float" style="animation-delay: -3s;" data-speed="0.6"></div>
+      <div class="absolute bottom-[20%] right-[10%] w-8 h-8 border-2 border-teal-glow/10 rounded-lg rotate-45 animate-float" style="animation-delay: -2.5s;" data-speed="0.7"></div>
+    </div>
+
+    <!-- Mouse Follower -->
+    <div class="absolute w-[400px] h-[400px] bg-teal/8 rounded-full filter blur-[80px] pointer-events-none transition-transform duration-300 ease-out" id="mouse-glow"></div>
+
+    <!-- Content -->
+    <div class="relative z-10 max-w-7xl mx-auto px-6 py-32 text-center w-full">
       <!-- Breadcrumb -->
-      <div class="flex items-center gap-2 mb-10">
-        <a href="{% url 'index' %}" class="text-sm text-gray-soft hover:text-teal transition-colors">Home</a>
-        <span class="text-gray-300">/</span>
+      <div class="flex items-center justify-center gap-3 mb-8 opacity-0" id="clients-breadcrumb">
+        <a href="{% url 'index' %}" class="text-sm text-gray-500 hover:text-teal transition-colors">Home</a>
+        <span class="text-gray-700">/</span>
         <span class="text-sm font-semibold text-teal">Clients</span>
       </div>
 
-      <!-- Headline -->
-      <div class="text-center mb-16">
-        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5 bg-teal/10 text-teal border border-teal/20">
-          // Our Partners
+      <!-- Badge -->
+      <div class="opacity-0" id="clients-badge">
+        <span class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-semibold tracking-wider uppercase bg-teal/10 text-teal border border-teal/20 backdrop-blur-sm mb-8">
+          <span class="w-2 h-2 bg-teal rounded-full animate-pulse"></span>
+          Our Partners
         </span>
-        <h1 class="font-display text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 text-midnight">
-          Trusted by <span class="gradient-text">Industry Leaders</span>
-        </h1>
-        <p class="text-lg md:text-xl text-gray-soft max-w-2xl mx-auto">
-          We've had the privilege of working with innovative companies across the globe. Every client relationship is built on trust, excellence, and shared vision.
-        </p>
       </div>
 
+      <!-- Title -->
+      <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-extrabold leading-[1.1] mb-8 opacity-0" id="clients-title">
+        <span class="text-white">Trusted by</span>
+        <span class="bg-gradient-to-r from-teal via-teal-glow to-teal bg-clip-text text-transparent">Industry Leaders</span>
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-14 opacity-0 leading-relaxed" id="clients-subtitle">
+        We've had the privilege of working with innovative companies across the globe. Every client relationship is built on trust, excellence, and shared vision.
+      </p>
+
       <!-- Stats Row -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-        <div class="glass p-6 rounded-2xl shadow-sm text-center">
-          <div class="text-4xl md:text-5xl font-bold gradient-text mb-1">{{ clients|length|default:"50" }}</div>
-          <div class="text-sm text-gray-soft">Active Clients</div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto opacity-0" id="clients-stats">
+        <div class="stat-card group p-6 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-teal/30 hover:bg-teal/5 transition-all duration-500">
+          <div class="text-3xl md:text-4xl font-bold text-teal counter" data-target="{{ clients|length|default:'50' }}">0</div>
+          <div class="text-sm text-gray-400 mt-1 group-hover:text-gray-300 transition-colors">Active Clients</div>
         </div>
-        <div class="glass p-6 rounded-2xl shadow-sm text-center">
-          <div class="text-4xl md:text-5xl font-bold gradient-text mb-1">180+</div>
-          <div class="text-sm text-gray-soft">Projects Delivered</div>
+        <div class="stat-card group p-6 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-teal/30 hover:bg-teal/5 transition-all duration-500">
+          <div class="text-3xl md:text-4xl font-bold text-teal counter" data-target="180">0</div>
+          <div class="text-sm text-gray-400 mt-1 group-hover:text-gray-300 transition-colors">Projects Delivered</div>
         </div>
-        <div class="glass p-6 rounded-2xl shadow-sm text-center">
-          <div class="text-4xl md:text-5xl font-bold gradient-text mb-1">98%</div>
-          <div class="text-sm text-gray-soft">Client Retention</div>
+        <div class="stat-card group p-6 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-teal/30 hover:bg-teal/5 transition-all duration-500">
+          <div class="text-3xl md:text-4xl font-bold text-teal"><span class="counter" data-target="98">0</span>%</div>
+          <div class="text-sm text-gray-400 mt-1 group-hover:text-gray-300 transition-colors">Client Retention</div>
         </div>
-        <div class="glass p-6 rounded-2xl shadow-sm text-center">
-          <div class="text-4xl md:text-5xl font-bold gradient-text mb-1">15+</div>
-          <div class="text-sm text-gray-soft">Countries</div>
+        <div class="stat-card group p-6 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-teal/30 hover:bg-teal/5 transition-all duration-500">
+          <div class="text-3xl md:text-4xl font-bold text-teal counter" data-target="15">0</div>
+          <div class="text-sm text-gray-400 mt-1 group-hover:text-gray-300 transition-colors">Countries</div>
         </div>
       </div>
     </div>
 
-    <!-- Scroll indicator -->
-    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-400 animate-bounce">
-      <span class="text-xs tracking-widest uppercase">Scroll</span>
-      <i class="fas fa-chevron-down"></i>
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-0" id="scroll-indicator">
+      <span class="text-xs tracking-widest uppercase text-gray-500">Scroll to explore</span>
+      <div class="w-6 h-10 rounded-full border-2 border-gray-600 flex justify-center pt-2">
+        <div class="w-1 h-3 bg-teal rounded-full animate-bounce"></div>
+      </div>
     </div>
   </section>
 
   <!-- ============================================================ -->
-  <!-- FEATURED CLIENTS (Dark Section) -->
+  <!-- CLIENT LOGO MARQUEE -->
+  <!-- ============================================================ -->
+  <section class="py-16 bg-gradient-to-b from-[#0A0F1E] to-[#0F1629] border-y border-white/5 overflow-hidden" id="marquee-section">
+    <div class="text-center mb-10">
+      <p class="text-sm text-gray-500 uppercase tracking-widest font-semibold">Trusted by companies worldwide</p>
+    </div>
+    
+    <div class="relative">
+      <div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0A0F1E] to-transparent z-10"></div>
+      <div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0A0F1E] to-transparent z-10"></div>
+      
+      <div class="flex overflow-hidden">
+        <div class="marquee-track flex items-center gap-12 px-6">
+          {% for client in clients %}
+          <div class="flex-shrink-0 w-40 h-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center p-4 hover:bg-teal/10 hover:border-teal/30 transition-all duration-300 group">
+            {% if client.logo %}
+            <img src="{{ client.logo.url }}" alt="{{ client.name }}" class="max-w-full max-h-full object-contain opacity-60 group-hover:opacity-100 transition-opacity grayscale group-hover:grayscale-0">
+            {% else %}
+            <span class="text-sm font-semibold text-gray-400 group-hover:text-teal transition-colors whitespace-nowrap">{{ client.name }}</span>
+            {% endif %}
+          </div>
+          {% endfor %}
+          <!-- Duplicate for seamless loop -->
+          {% for client in clients %}
+          <div class="flex-shrink-0 w-40 h-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center p-4 hover:bg-teal/10 hover:border-teal/30 transition-all duration-300 group">
+            {% if client.logo %}
+            <img src="{{ client.logo.url }}" alt="{{ client.name }}" class="max-w-full max-h-full object-contain opacity-60 group-hover:opacity-100 transition-opacity grayscale group-hover:grayscale-0">
+            {% else %}
+            <span class="text-sm font-semibold text-gray-400 group-hover:text-teal transition-colors whitespace-nowrap">{{ client.name }}</span>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- FEATURED CLIENTS - 3D CARDS -->
   <!-- ============================================================ -->
   {% if featured_clients %}
-  <section class="py-24 bg-gradient-to-br from-midnight to-midnight-light relative overflow-hidden">
-    <div class="absolute inset-0 bg-grid opacity-10"></div>
-    <div class="relative z-10 max-w-7xl mx-auto px-6">
-      <div class="text-center mb-14">
-        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5 bg-teal/20 text-teal border border-teal/20">
+  <section class="py-32 bg-gradient-to-b from-[#0F1629] via-[#0A0F1E] to-[#0F1629] relative overflow-hidden" id="featured-section">
+    <!-- Background Effects -->
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(40,161,151,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(40,161,151,0.03)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
+      <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-teal/5 rounded-full filter blur-[120px]"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+      <!-- Section Header -->
+      <div class="text-center mb-20">
+        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-6 bg-teal/10 text-teal border border-teal/20 backdrop-blur-sm opacity-0" id="featured-badge">
           // Strategic Partners
         </span>
-        <h2 class="font-display text-4xl md:text-5xl font-bold text-white">
-          Featured <span class="gradient-text">Partnerships</span>
+        <h2 class="font-display text-4xl md:text-6xl font-bold text-white mb-6 opacity-0" id="featured-title">
+          Featured <span class="bg-gradient-to-r from-teal to-teal-glow bg-clip-text text-transparent">Partnerships</span>
         </h2>
-        <p class="text-lg mt-4 max-w-xl mx-auto text-white/60">
-          Long-term strategic partnerships with industry leaders.
-        </p>
+        <p class="text-lg text-gray-400 max-w-xl mx-auto opacity-0" id="featured-desc">Long-term strategic partnerships with industry leaders.</p>
       </div>
 
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Featured Grid -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {% for client in featured_clients %}
-        <div class="fade-up group relative p-8 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300 hover:-translate-y-2 overflow-hidden">
-          <!-- Hover glow -->
-          <div class="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style="background: radial-gradient(ellipse at center, rgba(40,161,151,0.2), transparent 70%);"></div>
+        <div class="featured-card client-card-3d group relative p-10 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] hover:border-teal/30 transition-all duration-500 opacity-0" data-index="{{ forloop.counter0 }}">
+          <!-- Hover Glow -->
+          <div class="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+            <div class="absolute inset-0 rounded-3xl bg-gradient-to-r from-teal via-teal-glow to-teal opacity-10 blur-sm"></div>
+          </div>
+          
+          <!-- Corner Glow -->
+          <div class="absolute -top-20 -right-20 w-40 h-40 bg-teal/10 rounded-full filter blur-[60px] group-hover:bg-teal/20 transition-all duration-500"></div>
 
           <div class="relative z-10 text-center">
-            <!-- Logo / Icon -->
-            <div class="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg shadow-teal/20 transition-transform group-hover:scale-110" style="background: linear-gradient(135deg, #28A197, #1E837A);">
+            <!-- Logo -->
+            <div class="w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-teal/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 bg-gradient-to-br from-teal to-teal-dark">
               {% if client.logo %}
-              <img src="{{ client.logo.url }}" alt="{{ client.name }}" class="w-full h-full object-cover rounded-2xl">
+              <img src="{{ client.logo.url }}" alt="{{ client.name }}" class="w-full h-full object-cover rounded-3xl">
               {% else %}
-              <span class="text-2xl font-bold text-white">{{ client.name|slice:":2" }}</span>
+              <span class="text-3xl font-bold text-white">{{ client.name|slice:":2" }}</span>
               {% endif %}
             </div>
 
-            <h3 class="text-xl font-bold mb-2 text-white">{{ client.name }}</h3>
-            <p class="text-sm mb-4 text-white/60">{{ client.industry|default:"Technology" }}</p>
+            <h3 class="text-2xl font-bold mb-3 text-white group-hover:text-teal transition-colors duration-300">{{ client.name }}</h3>
+            <p class="text-sm mb-6 text-gray-400">{{ client.industry|default:"Technology" }}</p>
 
             {% if client.website %}
             <a href="{{ client.website }}" target="_blank" class="inline-flex items-center gap-2 text-sm font-medium text-teal transition-all group-hover:gap-3">
@@ -192,6 +306,9 @@
             </a>
             {% endif %}
           </div>
+
+          <!-- Bottom Accent -->
+          <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal/30 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
         </div>
         {% endfor %}
       </div>
@@ -202,49 +319,57 @@
   <!-- ============================================================ -->
   <!-- ALL CLIENTS GRID -->
   <!-- ============================================================ -->
-  <section class="py-24 bg-white">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="text-center mb-14">
-        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5 bg-teal/10 text-teal border border-teal/20">
+  <section class="py-32 bg-gradient-to-b from-[#F8FAFC] via-white to-[#F0F4F5] relative overflow-hidden" id="all-clients-section">
+    <!-- Background Effects -->
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(40,161,151,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(40,161,151,0.04)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
+      <div class="absolute top-1/3 right-0 w-[500px] h-[500px] bg-teal/5 rounded-full filter blur-[100px]"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+      <!-- Section Header -->
+      <div class="text-center mb-20">
+        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-6 bg-teal/10 text-teal border border-teal/20 backdrop-blur-sm opacity-0" id="all-badge">
           // Our Clients
         </span>
-        <h2 class="font-display text-4xl md:text-5xl font-bold text-midnight">
-          Every Client <span class="gradient-text">Matters</span>
+        <h2 class="font-display text-4xl md:text-6xl font-bold text-midnight mb-6 opacity-0" id="all-title">
+          Every Client <span class="bg-gradient-to-r from-teal to-teal-glow bg-clip-text text-transparent">Matters</span>
         </h2>
-        <p class="text-lg mt-4 max-w-xl mx-auto text-gray-soft">
-          We're proud to partner with companies that share our passion for innovation and excellence.
-        </p>
+        <p class="text-lg text-gray-500 max-w-xl mx-auto opacity-0" id="all-desc">We're proud to partner with companies that share our passion for innovation and excellence.</p>
       </div>
 
+      <!-- Clients Grid -->
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {% for client in clients %}
-        <div class="fade-up group text-center p-6 rounded-2xl border border-gray-200 bg-soft-white hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+        <div class="client-card group text-center p-8 rounded-3xl bg-white border border-gray-200/60 shadow-sm hover:shadow-xl hover:border-teal/30 transition-all duration-500 hover:-translate-y-2 opacity-0" data-index="{{ forloop.counter0 }}">
           <!-- Logo -->
-          <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-teal/5 group-hover:scale-110 transition-transform">
+          <div class="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-5 bg-teal/10 border border-teal/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
             {% if client.logo %}
-            <img src="{{ client.logo.url }}" alt="{{ client.name }}" class="w-full h-full object-contain">
+            <img src="{{ client.logo.url }}" alt="{{ client.name }}" class="w-full h-full object-contain p-2">
             {% else %}
             <i class="fas fa-building text-2xl text-teal"></i>
             {% endif %}
           </div>
 
-          <h3 class="text-base font-bold mb-1 text-midnight">{{ client.name }}</h3>
-          <p class="text-sm text-gray-soft">{{ client.industry|default:"Technology" }}</p>
+          <h3 class="text-lg font-bold mb-1 text-midnight group-hover:text-teal transition-colors duration-300">{{ client.name }}</h3>
+          <p class="text-sm text-gray-500">{{ client.industry|default:"Technology" }}</p>
 
-          <!-- Hover reveal link -->
-          <div class="mt-3 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+          <!-- Hover Reveal Link -->
+          <div class="mt-4 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
             {% if client.website %}
-            <a href="{{ client.website }}" target="_blank" class="text-xs font-semibold text-teal hover:underline">Visit →</a>
+            <a href="{{ client.website }}" target="_blank" class="inline-flex items-center gap-2 text-xs font-semibold text-teal hover:underline">
+              Visit Website <i class="fas fa-external-link-alt"></i>
+            </a>
             {% endif %}
           </div>
         </div>
         {% empty %}
-        <div class="col-span-full text-center py-16">
-          <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 bg-teal/10">
+        <div class="col-span-full text-center py-20">
+          <div class="w-20 h-20 rounded-full bg-teal/10 flex items-center justify-center mx-auto mb-6">
             <i class="fas fa-building text-3xl text-teal"></i>
           </div>
-          <h3 class="text-xl font-bold mb-2 text-midnight">No clients yet</h3>
-          <p class="text-gray-soft">Add clients from the admin panel to display them here.</p>
+          <h3 class="text-2xl font-bold text-midnight mb-3">No clients yet</h3>
+          <p class="text-gray-500">Add clients from the admin panel to display them here.</p>
         </div>
         {% endfor %}
       </div>
@@ -252,66 +377,326 @@
   </section>
 
   <!-- ============================================================ -->
-  <!-- TESTIMONIALS -->
+  <!-- TESTIMONIALS - CAROUSEL -->
   <!-- ============================================================ -->
   {% if testimonials %}
-  <section class="py-24 bg-soft-white">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="text-center mb-14">
-        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5 bg-teal/10 text-teal border border-teal/20">
+  <section class="py-32 bg-gradient-to-b from-[#0A0F1E] via-[#0F1629] to-[#0A0F1E] relative overflow-hidden" id="testimonials-section">
+    <!-- Background Effects -->
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(40,161,151,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(40,161,151,0.03)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
+      <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-teal/5 rounded-full filter blur-[120px]"></div>
+    </div>
+
+    <div class="max-w-5xl mx-auto px-6 relative z-10">
+      <!-- Section Header -->
+      <div class="text-center mb-20">
+        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-6 bg-teal/10 text-teal border border-teal/20 backdrop-blur-sm opacity-0" id="testimonials-badge">
           // Client Stories
         </span>
-        <h2 class="font-display text-4xl md:text-5xl font-bold text-midnight">
-          What <span class="gradient-text">They Say</span>
+        <h2 class="font-display text-4xl md:text-6xl font-bold text-white mb-6 opacity-0" id="testimonials-title">
+          What <span class="bg-gradient-to-r from-teal to-teal-glow bg-clip-text text-transparent">They Say</span>
         </h2>
-        <p class="text-lg mt-4 max-w-xl mx-auto text-gray-soft">
-          Don't just take our word for it — hear from the people we've worked with.
-        </p>
+        <p class="text-lg text-gray-400 max-w-xl mx-auto opacity-0" id="testimonials-desc">Don't just take our word for it — hear from the people we've worked with.</p>
       </div>
 
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {% for testimonial in testimonials %}
-        <div class="fade-up bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
-          <!-- Stars -->
-          <div class="flex gap-1 mb-4 text-teal text-sm">
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-          </div>
+      <!-- Testimonial Carousel -->
+      <div class="relative opacity-0" id="testimonial-carousel">
+        <div class="overflow-hidden rounded-3xl">
+          <div class="testimonial-track" id="testimonialTrack">
+            {% for testimonial in testimonials %}
+            <div class="testimonial-slide px-4">
+              <div class="p-10 md:p-14 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.08]">
+                <!-- Stars -->
+                <div class="flex gap-1.5 mb-8 text-teal">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                </div>
 
-          <p class="text-midnight leading-relaxed mb-6">"{{ testimonial.quote }}"</p>
+                <!-- Quote -->
+                <p class="text-xl md:text-2xl text-white leading-relaxed mb-10 font-light italic">"{{ testimonial.quote }}"</p>
 
-          <div class="flex items-center gap-4">
-            <div class="w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold text-white bg-gradient-to-br from-teal to-teal-dark">
-              {{ testimonial.name|slice:":2"|upper }}
+                <!-- Author -->
+                <div class="flex items-center gap-4">
+                  <div class="w-14 h-14 rounded-full flex items-center justify-center text-lg font-bold text-white bg-gradient-to-br from-teal to-teal-dark shadow-lg shadow-teal/20">
+                    {{ testimonial.name|slice:":2"|upper }}
+                  </div>
+                  <div>
+                    <div class="font-semibold text-white text-lg">{{ testimonial.name }}</div>
+                    <div class="text-sm text-gray-400">{{ testimonial.role }}, {{ testimonial.company }}</div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div>
-              <div class="font-semibold text-midnight">{{ testimonial.name }}</div>
-              <div class="text-sm text-gray-soft">{{ testimonial.role }}, {{ testimonial.company }}</div>
-            </div>
+            {% endfor %}
           </div>
         </div>
-        {% endfor %}
+
+        <!-- Navigation -->
+        <div class="flex items-center justify-center gap-4 mt-10">
+          <button class="testimonial-prev w-14 h-14 rounded-full bg-white/5 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:bg-teal/20 hover:border-teal/40 hover:text-teal transition-all duration-300 group">
+            <i class="fas fa-chevron-left group-hover:-translate-x-0.5 transition-transform"></i>
+          </button>
+          
+          <!-- Dots -->
+          <div class="flex gap-3" id="testimonialDots">
+            {% for testimonial in testimonials %}
+            <button class="testimonial-dot w-3 h-3 rounded-full bg-white/20 border border-white/10 transition-all duration-300 hover:bg-teal/40" data-index="{{ forloop.counter0 }}"></button>
+            {% endfor %}
+          </div>
+
+          <button class="testimonial-next w-14 h-14 rounded-full bg-white/5 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:bg-teal/20 hover:border-teal/40 hover:text-teal transition-all duration-300 group">
+            <i class="fas fa-chevron-right group-hover:translate-x-0.5 transition-transform"></i>
+          </button>
+        </div>
       </div>
     </div>
   </section>
   {% endif %}
 
+  <!-- ============================================================ -->
+  <!-- CTA SECTION -->
+  <!-- ============================================================ -->
+  <section class="py-32 bg-gradient-to-b from-[#F0F4F5] via-white to-[#F8FAFC] relative overflow-hidden" id="cta-section">
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-r from-teal/8 via-teal-glow/5 to-teal/8 rounded-full filter blur-[120px]"></div>
+    </div>
+
+    <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+      <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-8 bg-teal/10 text-teal border border-teal/20 backdrop-blur-sm opacity-0" id="cta-badge">
+        // Join Our Network
+      </span>
+      <h2 class="font-display text-4xl md:text-6xl font-bold text-midnight mb-8 opacity-0" id="cta-title">
+        Ready to Become Our Next <span class="bg-gradient-to-r from-teal to-teal-glow bg-clip-text text-transparent">Success Story?</span>
+      </h2>
+      <p class="text-lg text-gray-500 max-w-xl mx-auto mb-12 opacity-0" id="cta-desc">Let's build something extraordinary together. Get in touch and let's discuss your vision.</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center opacity-0" id="cta-buttons">
+        <a href="{% url 'contact' %}" class="magnetic-btn inline-flex items-center justify-center gap-3 px-10 py-5 rounded-full font-semibold text-white bg-gradient-to-r from-teal to-teal-dark hover:shadow-xl hover:shadow-teal/30 transition-all hover:scale-105">
+          <i class="fas fa-rocket"></i> Get Started
+        </a>
+        <a href="{% url 'contact' %}" class="magnetic-btn inline-flex items-center justify-center gap-3 px-10 py-5 rounded-full font-semibold text-teal border border-teal/30 hover:bg-teal/5 transition-all">
+          <i class="fas fa-calendar"></i> Book a Call
+        </a>
+      </div>
+    </div>
+  </section>
 
   <!-- Footer -->
-  <!-- ========== REGISTERED COMPANIES ========== -->
   {% include 'helpex_app/components/registered_companies.html' %}
-
-  
-  <!-- ========== FOOTER (included from component) ========== -->
   {% include 'helpex_app/components/footer.html' %}
 
   <!-- ============================================================ -->
   <!-- SCRIPTS -->
   <!-- ============================================================ -->
   <script>
+    // ---------- Particle Canvas Background ----------
+    const canvas = document.getElementById('hero-canvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+      let animationId;
+      let mouse = { x: null, y: null };
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      class Particle {
+        constructor() {
+          this.x = Math.random() * canvas.width;
+          this.y = Math.random() * canvas.height;
+          this.size = Math.random() * 2 + 0.5;
+          this.speedX = (Math.random() - 0.5) * 0.5;
+          this.speedY = (Math.random() - 0.5) * 0.5;
+          this.opacity = Math.random() * 0.5 + 0.1;
+        }
+        update() {
+          this.x += this.speedX;
+          this.y += this.speedY;
+          if (this.x > canvas.width) this.x = 0;
+          if (this.x < 0) this.x = canvas.width;
+          if (this.y > canvas.height) this.y = 0;
+          if (this.y < 0) this.y = canvas.height;
+        }
+        draw() {
+          ctx.fillStyle = `rgba(40, 161, 151, ${this.opacity})`;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      function initParticles() {
+        particles = [];
+        const count = Math.min(80, Math.floor((canvas.width * canvas.height) / 15000));
+        for (let i = 0; i < count; i++) {
+          particles.push(new Particle());
+        }
+      }
+      initParticles();
+
+      function connectParticles() {
+        for (let a = 0; a < particles.length; a++) {
+          for (let b = a + 1; b < particles.length; b++) {
+            const dx = particles[a].x - particles[b].x;
+            const dy = particles[a].y - particles[b].y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < 120) {
+              const opacity = (1 - distance / 120) * 0.15;
+              ctx.strokeStyle = `rgba(40, 161, 151, ${opacity})`;
+              ctx.lineWidth = 0.5;
+              ctx.beginPath();
+              ctx.moveTo(particles[a].x, particles[a].y);
+              ctx.lineTo(particles[b].x, particles[b].y);
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          p.update();
+          p.draw();
+        });
+        connectParticles();
+        animationId = requestAnimationFrame(animateParticles);
+      }
+      animateParticles();
+
+      canvas.addEventListener('mousemove', e => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+        particles.forEach(p => {
+          const dx = mouse.x - p.x;
+          const dy = mouse.y - p.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 100) {
+            p.x -= dx * 0.02;
+            p.y -= dy * 0.02;
+          }
+        });
+      });
+    }
+
+    // ---------- Mouse Glow Follower ----------
+    const mouseGlow = document.getElementById('mouse-glow');
+    const heroSection = document.getElementById('clients-hero');
+    if (mouseGlow && heroSection) {
+      heroSection.addEventListener('mousemove', e => {
+        const rect = heroSection.getBoundingClientRect();
+        const x = e.clientX - rect.left - 200;
+        const y = e.clientY - rect.top - 200;
+        mouseGlow.style.transform = `translate(${x}px, ${y}px)`;
+      });
+    }
+
+    // ---------- Parallax Floating Shapes ----------
+    const floatingShapes = document.getElementById('floating-shapes');
+    if (floatingShapes && heroSection) {
+      heroSection.addEventListener('mousemove', e => {
+        const shapes = floatingShapes.querySelectorAll('[data-speed]');
+        const rect = heroSection.getBoundingClientRect();
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const mouseX = e.clientX - rect.left - centerX;
+        const mouseY = e.clientY - rect.top - centerY;
+
+        shapes.forEach(shape => {
+          const speed = parseFloat(shape.dataset.speed);
+          const x = mouseX * speed * 0.05;
+          const y = mouseY * speed * 0.05;
+          shape.style.transform = `translate(${x}px, ${y}px)`;
+        });
+      });
+    }
+
+    // ---------- 3D Tilt Effect for Featured Cards ----------
+    const featuredCards = document.querySelectorAll('.featured-card');
+    featuredCards.forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = (y - centerY) / centerY * -5;
+        const rotateY = (x - centerX) / centerX * 5;
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+      });
+    });
+
+    // ---------- Testimonial Carousel ----------
+    const track = document.getElementById('testimonialTrack');
+    const dots = document.querySelectorAll('.testimonial-dot');
+    const prevBtn = document.querySelector('.testimonial-prev');
+    const nextBtn = document.querySelector('.testimonial-next');
+    let currentSlide = 0;
+    const totalSlides = dots.length;
+    let autoplayInterval;
+
+    function goToSlide(index) {
+      currentSlide = ((index % totalSlides) + totalSlides) % totalSlides;
+      track.style.transform = `translateX(-${currentSlide * 100}%)`;
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentSlide);
+        if (i === currentSlide) {
+          dot.style.backgroundColor = '#28A197';
+          dot.style.width = '24px';
+          dot.style.borderRadius = '9999px';
+          dot.style.boxShadow = '0 0 12px rgba(40, 161, 151, 0.4)';
+        } else {
+          dot.style.backgroundColor = '';
+          dot.style.width = '';
+          dot.style.borderRadius = '';
+          dot.style.boxShadow = '';
+        }
+      });
+      resetAutoplay();
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+    if (nextBtn) nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.index)));
+    });
+
+    function startAutoplay() {
+      autoplayInterval = setInterval(() => goToSlide(currentSlide + 1), 5000);
+    }
+    function resetAutoplay() {
+      clearInterval(autoplayInterval);
+      startAutoplay();
+    }
+
+    const carousel = document.getElementById('testimonial-carousel');
+    if (carousel) {
+      carousel.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+      carousel.addEventListener('mouseleave', startAutoplay);
+    }
+
+    // Touch swipe
+    let touchStartX = 0;
+    if (track) {
+      track.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+      track.addEventListener('touchend', e => {
+        const diff = touchStartX - e.changedTouches[0].screenX;
+        if (Math.abs(diff) > 50) goToSlide(currentSlide + (diff > 0 ? 1 : -1));
+      }, { passive: true });
+    }
+
+    // Init first dot
+    if (dots.length > 0) goToSlide(0);
+
     // ---------- Lenis Smooth Scroll ----------
     const lenis = new Lenis({
       duration: 1.2,
@@ -324,7 +709,6 @@
     }
     requestAnimationFrame(raf);
 
-    // Sync Lenis with GSAP ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add((time) => {
       lenis.raf(time * 1000);
@@ -334,33 +718,139 @@
     // ---------- GSAP Entrance Animations ----------
     gsap.registerPlugin(ScrollTrigger);
 
-    gsap.utils.toArray('.fade-up').forEach(element => {
-      gsap.fromTo(element,
-        { opacity: 0, y: 40 },
-        {
-          opacity: 1, y: 0,
-          duration: 0.7,
+    // Hero Timeline
+    const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    heroTl
+      .to('#clients-breadcrumb', { opacity: 1, y: 0, duration: 0.6, delay: 0.2 })
+      .fromTo('#clients-breadcrumb', { y: -20 }, { y: 0, duration: 0.6 }, '<')
+      .to('#clients-badge', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+      .fromTo('#clients-badge', { y: 20 }, { y: 0, duration: 0.6 }, '<')
+      .fromTo('#clients-title', { opacity: 0, y: 80, rotateX: -90 }, { opacity: 1, y: 0, rotateX: 0, duration: 0.8 }, '-=0.3')
+      .to('#clients-subtitle', { opacity: 1, y: 0, duration: 0.7 }, '-=0.4')
+      .fromTo('#clients-subtitle', { y: 30 }, { y: 0, duration: 0.7 }, '<')
+      .to('#clients-stats', { opacity: 1, duration: 0.5 }, '-=0.3')
+      .fromTo('.stat-card',
+        { opacity: 0, y: 40, scale: 0.95 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.6, stagger: 0.15, ease: 'power2.out' },
+        '-=0.3'
+      )
+      .to('#scroll-indicator', { opacity: 1, duration: 0.5 }, '-=0.2');
+
+    // Counter Animation
+    const counters = document.querySelectorAll('.counter');
+    counters.forEach(counter => {
+      const target = parseInt(counter.dataset.target) || 0;
+      if (target > 0) {
+        gsap.to(counter, {
+          innerText: target,
+          duration: 2,
+          delay: 1,
+          snap: { innerText: 1 },
           ease: 'power2.out',
-          scrollTrigger: {
-            trigger: element,
-            start: 'top 88%',
-            toggleActions: 'play none none none'
+          onUpdate: function() {
+            counter.textContent = Math.round(parseFloat(counter.textContent));
           }
-        }
-      );
+        });
+      }
     });
 
-    // ---------- Navbar scroll effect ----------
-    const navbar = document.getElementById('navbar');
-    if (navbar) {
-      window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-          navbar.classList.add('scrolled');
-        } else {
-          navbar.classList.remove('scrolled');
+    // Featured Section
+    const featuredTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#featured-badge',
+        start: 'top 85%',
+        toggleActions: 'play none none none'
+      }
+    });
+    featuredTl
+      .to('#featured-badge', { opacity: 1, y: 0, duration: 0.5 })
+      .fromTo('#featured-badge', { y: 20 }, { y: 0, duration: 0.5 }, '<')
+      .to('#featured-title', { opacity: 1, y: 0, duration: 0.6 }, '-=0.2')
+      .fromTo('#featured-title', { y: 30 }, { y: 0, duration: 0.6 }, '<')
+      .to('#featured-desc', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+      .fromTo('#featured-desc', { y: 20 }, { y: 0, duration: 0.6 }, '<');
+
+    gsap.fromTo('.featured-card',
+      { opacity: 0, y: 60, scale: 0.95 },
+      {
+        opacity: 1, y: 0, scale: 1,
+        duration: 0.7,
+        stagger: 0.15,
+        ease: 'back.out(1.7)',
+        scrollTrigger: {
+          trigger: '.featured-card',
+          start: 'top 85%',
+          toggleActions: 'play none none none'
         }
-      });
-    }
+      }
+    );
+
+    // All Clients Section
+    const allTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#all-badge',
+        start: 'top 85%',
+        toggleActions: 'play none none none'
+      }
+    });
+    allTl
+      .to('#all-badge', { opacity: 1, y: 0, duration: 0.5 })
+      .fromTo('#all-badge', { y: 20 }, { y: 0, duration: 0.5 }, '<')
+      .to('#all-title', { opacity: 1, y: 0, duration: 0.6 }, '-=0.2')
+      .fromTo('#all-title', { y: 30 }, { y: 0, duration: 0.6 }, '<')
+      .to('#all-desc', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+      .fromTo('#all-desc', { y: 20 }, { y: 0, duration: 0.6 }, '<');
+
+    gsap.fromTo('.client-card',
+      { opacity: 0, y: 40, scale: 0.95 },
+      {
+        opacity: 1, y: 0, scale: 1,
+        duration: 0.5,
+        stagger: 0.08,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.client-card',
+          start: 'top 85%',
+          toggleActions: 'play none none none'
+        }
+      }
+    );
+
+    // Testimonials Section
+    const testimonialsTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#testimonials-badge',
+        start: 'top 85%',
+        toggleActions: 'play none none none'
+      }
+    });
+    testimonialsTl
+      .to('#testimonials-badge', { opacity: 1, y: 0, duration: 0.5 })
+      .fromTo('#testimonials-badge', { y: 20 }, { y: 0, duration: 0.5 }, '<')
+      .to('#testimonials-title', { opacity: 1, y: 0, duration: 0.6 }, '-=0.2')
+      .fromTo('#testimonials-title', { y: 30 }, { y: 0, duration: 0.6 }, '<')
+      .to('#testimonials-desc', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+      .fromTo('#testimonials-desc', { y: 20 }, { y: 0, duration: 0.6 }, '<')
+      .to('#testimonial-carousel', { opacity: 1, y: 0, duration: 0.7 }, '-=0.3')
+      .fromTo('#testimonial-carousel', { y: 40 }, { y: 0, duration: 0.7 }, '<');
+
+    // CTA Section
+    const ctaTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#cta-badge',
+        start: 'top 85%',
+        toggleActions: 'play none none none'
+      }
+    });
+    ctaTl
+      .to('#cta-badge', { opacity: 1, y: 0, duration: 0.5 })
+      .fromTo('#cta-badge', { y: 20 }, { y: 0, duration: 0.5 }, '<')
+      .to('#cta-title', { opacity: 1, y: 0, duration: 0.7 }, '-=0.2')
+      .fromTo('#cta-title', { y: 40 }, { y: 0, duration: 0.7 }, '<')
+      .to('#cta-desc', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+      .fromTo('#cta-desc', { y: 30 }, { y: 0, duration: 0.6 }, '<')
+      .to('#cta-buttons', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+      .fromTo('#cta-buttons', { y: 20 }, { y: 0, duration: 0.6 }, '<');
 
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {

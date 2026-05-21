@@ -31,11 +31,12 @@
           },
           animation: {
             'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 4s ease-in-out infinite',
           },
           keyframes: {
             float: {
-              '0%, 100%': { transform: 'translateY(0px)' },
-              '50%': { transform: 'translateY(-20px)' },
+              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+              '50%': { transform: 'translateY(-20px) rotate(5deg)' },
             },
           },
         }
@@ -59,20 +60,28 @@
       color: #1A1F3B;
       overflow-x: hidden;
     }
-    .font-display {
-      font-family: 'Space Grotesk', sans-serif;
+    .font-display { font-family: 'Space Grotesk', sans-serif; }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(5deg); }
     }
+    @keyframes pulse-slow {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.05); }
+    }
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    .animate-float { animation: float 6s ease-in-out infinite; }
+    .animate-pulse-slow { animation: pulse-slow 4s ease-in-out infinite; }
+
     .gradient-text {
       background: linear-gradient(135deg, #28A197, #3BC4B5);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-    }
-    .glass {
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.5);
     }
     .bg-grid {
       background-image: 
@@ -80,11 +89,11 @@
         linear-gradient(90deg, rgba(40, 161, 151, 0.03) 1px, transparent 1px);
       background-size: 60px 60px;
     }
-    .fade-up {
-      opacity: 0;
-      transform: translateY(40px);
+    .magnetic-btn {
+      transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
-    /* Form input styles */
+
+    /* Form Input Styles */
     .form-input {
       transition: all 0.3s ease;
     }
@@ -93,97 +102,182 @@
       border-color: #28A197;
       box-shadow: 0 0 0 3px rgba(40, 161, 151, 0.1);
     }
+    .form-group {
+      position: relative;
+    }
+    .form-group label {
+      transition: all 0.3s ease;
+    }
+    .form-group input:focus + label,
+    .form-group input:not(:placeholder-shown) + label,
+    .form-group textarea:focus + label,
+    .form-group textarea:not(:placeholder-shown) + label {
+      transform: translateY(-24px) scale(0.85);
+      color: #28A197;
+    }
+
+    /* Contact Info Card */
+    .contact-info-card {
+      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .contact-info-card:hover {
+      transform: translateY(-8px);
+    }
+
+    /* Social Link */
+    .social-link {
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .social-link:hover {
+      transform: translateY(-4px) scale(1.1);
+    }
+
+    /* Scroll Indicator */
+    @keyframes scroll-bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+      40% { transform: translateY(-10px) translateX(-50%); }
+      60% { transform: translateY(-5px) translateX(-50%); }
+    }
   </style>
 </head>
-<body class="bg-gradient-to-b from-white via-soft-white to-gray-50">
+<body>
 
   <!-- Navbar -->
   {% include 'helpex_app/components/navbar.html' %}
 
   <!-- ============================================================ -->
-  <!-- HERO SECTION -->
+  <!-- HERO SECTION - DARK PREMIUM -->
   <!-- ============================================================ -->
-  <section class="relative pt-32 pb-20 md:pt-44 md:pb-32 overflow-hidden bg-gradient-to-br from-midnight to-midnight-light">
-    <!-- Background effects -->
-    <div class="absolute inset-0 bg-grid opacity-10"></div>
-    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-teal/10 rounded-full filter blur-3xl animate-float"></div>
-    <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-teal-glow/10 rounded-full filter blur-3xl animate-float" style="animation-delay: -3s;"></div>
+  <section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#0A0F1E] via-[#0F1629] to-[#0A0F1E]" id="contact-hero">
+    <!-- Particle Canvas -->
+    <canvas id="hero-canvas" class="absolute inset-0 w-full h-full opacity-30"></canvas>
+    
+    <!-- Gradient Orbs -->
+    <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-teal/15 rounded-full filter blur-[120px] animate-pulse-slow"></div>
+    <div class="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-teal-glow/10 rounded-full filter blur-[100px] animate-pulse-slow" style="animation-delay: -1.5s;"></div>
+    <div class="absolute top-[40%] left-[60%] w-[300px] h-[300px] bg-purple-500/8 rounded-full filter blur-[80px] animate-pulse-slow" style="animation-delay: -3s;"></div>
 
-    <div class="relative z-10 max-w-7xl mx-auto px-6">
+    <!-- Floating Shapes -->
+    <div class="absolute inset-0 pointer-events-none" id="floating-shapes">
+      <div class="absolute top-[15%] left-[10%] w-4 h-4 border-2 border-teal/30 rotate-45 animate-float" data-speed="0.5"></div>
+      <div class="absolute top-[25%] right-[15%] w-6 h-6 rounded-full border border-teal-glow/20 animate-float" style="animation-delay: -1s;" data-speed="0.8"></div>
+      <div class="absolute bottom-[30%] left-[20%] w-3 h-3 bg-teal/20 rounded-full animate-float" style="animation-delay: -2s;" data-speed="1.2"></div>
+      <div class="absolute top-[60%] right-[25%] w-5 h-5 border border-teal/20 rotate-12 animate-float" style="animation-delay: -3s;" data-speed="0.6"></div>
+      <div class="absolute bottom-[20%] right-[10%] w-8 h-8 border-2 border-teal-glow/10 rounded-lg rotate-45 animate-float" style="animation-delay: -2.5s;" data-speed="0.7"></div>
+    </div>
+
+    <!-- Mouse Follower -->
+    <div class="absolute w-[400px] h-[400px] bg-teal/8 rounded-full filter blur-[80px] pointer-events-none transition-transform duration-300 ease-out" id="mouse-glow"></div>
+
+    <!-- Content -->
+    <div class="relative z-10 max-w-7xl mx-auto px-6 py-32 text-center w-full">
       <!-- Breadcrumb -->
-      <div class="flex items-center gap-2 mb-10">
-        <a href="{% url 'index' %}" class="text-sm text-white/60 hover:text-teal transition-colors">Home</a>
-        <span class="text-white/30">/</span>
+      <div class="flex items-center justify-center gap-3 mb-8 opacity-0" id="contact-breadcrumb">
+        <a href="{% url 'index' %}" class="text-sm text-gray-500 hover:text-teal transition-colors">Home</a>
+        <span class="text-gray-700">/</span>
         <span class="text-sm font-semibold text-teal">Contact</span>
       </div>
 
-      <!-- Headline -->
-      <div class="text-center max-w-4xl mx-auto">
-        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5 bg-teal/20 text-teal border border-teal/20">
-          // Let's Connect
+      <!-- Badge -->
+      <div class="opacity-0" id="contact-badge">
+        <span class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-semibold tracking-wider uppercase bg-teal/10 text-teal border border-teal/20 backdrop-blur-sm mb-8">
+          <span class="w-2 h-2 bg-teal rounded-full animate-pulse"></span>
+          Let's Connect
         </span>
-        <h1 class="font-display text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 text-white">
-          Get in <span class="gradient-text">Touch</span>
-        </h1>
-        <p class="text-lg md:text-xl text-white/70 max-w-2xl mx-auto leading-relaxed">
-          Have a project in mind? We'd love to hear from you. Let's create something amazing together.
-        </p>
+      </div>
+
+      <!-- Title -->
+      <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-extrabold leading-[1.1] mb-8 opacity-0" id="contact-title">
+        <span class="text-white">Get in</span>
+        <span class="bg-gradient-to-r from-teal via-teal-glow to-teal bg-clip-text text-transparent">Touch</span>
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-14 opacity-0 leading-relaxed" id="contact-subtitle">
+        Have a project in mind? We'd love to hear from you. Let's create something amazing together.
+      </p>
+
+      <!-- Quick Contact Pills -->
+      <div class="flex flex-wrap justify-center gap-4 opacity-0" id="contact-pills">
+        <a href="mailto:{{ settings.email|default:'hello@helpex.com' }}" class="magnetic-btn inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-gray-300 hover:bg-teal/10 hover:border-teal/30 hover:text-teal transition-all duration-300">
+          <i class="fas fa-envelope"></i>
+          <span class="text-sm font-medium">{{ settings.email|default:'hello@helpex.com' }}</span>
+        </a>
+        {% if settings.phone %}
+        <a href="tel:{{ settings.phone }}" class="magnetic-btn inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-gray-300 hover:bg-teal/10 hover:border-teal/30 hover:text-teal transition-all duration-300">
+          <i class="fas fa-phone"></i>
+          <span class="text-sm font-medium">{{ settings.phone }}</span>
+        </a>
+        {% endif %}
       </div>
     </div>
 
-    <!-- Scroll indicator -->
-    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/40 animate-bounce">
-      <span class="text-xs tracking-widest uppercase">Contact Form</span>
-      <i class="fas fa-chevron-down"></i>
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-0" id="scroll-indicator">
+      <span class="text-xs tracking-widest uppercase text-gray-500">Scroll to contact</span>
+      <div class="w-6 h-10 rounded-full border-2 border-gray-600 flex justify-center pt-2">
+        <div class="w-1 h-3 bg-teal rounded-full animate-bounce"></div>
+      </div>
     </div>
   </section>
 
   <!-- ============================================================ -->
   <!-- CONTACT SECTION -->
   <!-- ============================================================ -->
-  <section class="py-24 bg-white relative -mt-10">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="grid lg:grid-cols-5 gap-8">
+  <section class="py-32 bg-gradient-to-b from-[#F8FAFC] via-white to-[#F0F4F5] relative overflow-hidden -mt-20" id="contact-section">
+    <!-- Background Effects -->
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(40,161,151,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(40,161,151,0.04)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
+      <div class="absolute top-1/3 right-0 w-[500px] h-[500px] bg-teal/5 rounded-full filter blur-[100px]"></div>
+      <div class="absolute bottom-1/3 left-0 w-[400px] h-[400px] bg-teal-glow/5 rounded-full filter blur-[100px]"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+      <div class="grid lg:grid-cols-5 gap-10">
         
         <!-- ========== CONTACT FORM ========== -->
-        <div class="lg:col-span-3 fade-up">
-          <div class="bg-soft-white rounded-3xl p-8 md:p-10 shadow-xl border border-gray-200">
-            <div class="flex items-center gap-3 mb-8">
-              <div class="w-12 h-12 rounded-xl bg-teal/10 flex items-center justify-center text-teal text-xl">
-                <i class="fas fa-paper-plane"></i>
+        <div class="lg:col-span-3">
+          <div class="contact-form bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-gray-200/60 opacity-0" id="contact-form">
+            <!-- Form Header -->
+            <div class="flex items-center gap-4 mb-10">
+              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center text-teal text-xl shadow-lg shadow-teal/20">
+                <i class="fas fa-paper-plane text-white"></i>
               </div>
-              <h2 class="text-2xl font-bold text-midnight">Send us a message</h2>
+              <div>
+                <h2 class="text-2xl font-bold text-midnight">Send us a message</h2>
+                <p class="text-sm text-gray-500">We'll get back to you within 24 hours</p>
+              </div>
             </div>
 
-            <form id="contactForm" method="POST" class="space-y-5">
+            <form id="contactForm" method="POST" class="space-y-6">
               {% csrf_token %}
               
               <!-- Name & Email Row -->
-              <div class="grid md:grid-cols-2 gap-5">
-                <div>
-                  <label class="block text-sm font-semibold mb-2 text-midnight">Your Name *</label>
-                  <input type="text" name="name" required placeholder="John Doe" 
-                         class="form-input w-full px-5 py-4 rounded-xl bg-white border border-gray-200 text-midnight placeholder:text-gray-400">
+              <div class="grid md:grid-cols-2 gap-6">
+                <div class="form-group">
+                  <input type="text" name="name" required placeholder=" " 
+                         class="form-input w-full px-5 py-4 rounded-xl bg-gray-50 border border-gray-200 text-midnight placeholder:text-gray-400 focus:bg-white">
+                  <label class="absolute left-5 top-4 text-sm text-gray-400 pointer-events-none bg-transparent px-1">Your Name *</label>
                 </div>
-                <div>
-                  <label class="block text-sm font-semibold mb-2 text-midnight">Email Address *</label>
-                  <input type="email" name="email" required placeholder="john@example.com" 
-                         class="form-input w-full px-5 py-4 rounded-xl bg-white border border-gray-200 text-midnight placeholder:text-gray-400">
+                <div class="form-group">
+                  <input type="email" name="email" required placeholder=" " 
+                         class="form-input w-full px-5 py-4 rounded-xl bg-gray-50 border border-gray-200 text-midnight placeholder:text-gray-400 focus:bg-white">
+                  <label class="absolute left-5 top-4 text-sm text-gray-400 pointer-events-none bg-transparent px-1">Email Address *</label>
                 </div>
               </div>
 
-              <!-- Phone (Optional) -->
-              <div>
-                <label class="block text-sm font-semibold mb-2 text-midnight">Phone Number</label>
-                <input type="tel" name="phone" placeholder="+1 (234) 567-890" 
-                       class="form-input w-full px-5 py-4 rounded-xl bg-white border border-gray-200 text-midnight placeholder:text-gray-400">
+              <!-- Phone -->
+              <div class="form-group">
+                <input type="tel" name="phone" placeholder=" " 
+                       class="form-input w-full px-5 py-4 rounded-xl bg-gray-50 border border-gray-200 text-midnight placeholder:text-gray-400 focus:bg-white">
+                <label class="absolute left-5 top-4 text-sm text-gray-400 pointer-events-none bg-transparent px-1">Phone Number</label>
               </div>
 
               <!-- Service Select -->
               <div>
                 <label class="block text-sm font-semibold mb-2 text-midnight">Service Interested In *</label>
                 <select name="service" required 
-                        class="form-input w-full px-5 py-4 rounded-xl bg-white border border-gray-200 text-midnight appearance-none"
+                        class="form-input w-full px-5 py-4 rounded-xl bg-gray-50 border border-gray-200 text-midnight appearance-none focus:bg-white"
                         style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724%27 height=%2724%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%2364748B%27 stroke-width=%272%27%3E%3Cpath d=%27M6 9l6 6 6-6%27/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 16px center;">
                   <option value="">Select a service</option>
                   <option value="web">Web Development</option>
@@ -201,7 +295,7 @@
               <div>
                 <label class="block text-sm font-semibold mb-2 text-midnight">Budget Range</label>
                 <select name="budget" 
-                        class="form-input w-full px-5 py-4 rounded-xl bg-white border border-gray-200 text-midnight appearance-none"
+                        class="form-input w-full px-5 py-4 rounded-xl bg-gray-50 border border-gray-200 text-midnight appearance-none focus:bg-white"
                         style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724%27 height=%2724%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%2364748B%27 stroke-width=%272%27%3E%3Cpath d=%27M6 9l6 6 6-6%27/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 16px center;">
                   <option value="">Select budget range</option>
                   <option value="1k-5k">$1,000 - $5,000</option>
@@ -214,17 +308,15 @@
               </div>
 
               <!-- Message -->
-              <div>
-                <label class="block text-sm font-semibold mb-2 text-midnight">Tell us about your project *</label>
-                <textarea name="message" rows="5" required 
-                          placeholder="Describe your project, goals, timeline, and any specific requirements..." 
-                          class="form-input w-full px-5 py-4 rounded-xl bg-white border border-gray-200 text-midnight placeholder:text-gray-400 resize-none"></textarea>
+              <div class="form-group">
+                <textarea name="message" rows="5" required placeholder=" " 
+                          class="form-input w-full px-5 py-4 rounded-xl bg-gray-50 border border-gray-200 text-midnight placeholder:text-gray-400 resize-none focus:bg-white"></textarea>
+                <label class="absolute left-5 top-4 text-sm text-gray-400 pointer-events-none bg-transparent px-1">Tell us about your project *</label>
               </div>
 
               <!-- Submit Button -->
               <button type="submit" id="submitBtn" 
-                      class="w-full py-4 rounded-xl font-bold text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3"
-                      style="background: linear-gradient(135deg, #28A197, #1E837A); box-shadow: 0 6px 25px rgba(40,161,151,0.3);">
+                      class="magnetic-btn w-full py-4 rounded-xl font-bold text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3 bg-gradient-to-r from-teal to-teal-dark hover:shadow-xl hover:shadow-teal/30">
                 <i class="fas fa-paper-plane"></i> Send Message
               </button>
               <p class="text-center text-xs text-gray-400">We typically respond within 24 hours</p>
@@ -233,50 +325,52 @@
         </div>
 
         <!-- ========== CONTACT INFO SIDEBAR ========== -->
-        <div class="lg:col-span-2 space-y-4">
+        <div class="lg:col-span-2 space-y-6">
           
           <!-- Email Card -->
-          <div class="fade-up bg-soft-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
-            <div class="flex items-center gap-4">
-              <div class="w-12 h-12 rounded-xl bg-teal/10 flex items-center justify-center flex-shrink-0">
+          <div class="contact-info-card bg-white rounded-2xl p-8 border border-gray-200/60 shadow-sm opacity-0" data-index="0">
+            <div class="flex items-start gap-5">
+              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal/10 to-teal-glow/10 flex items-center justify-center flex-shrink-0 border border-teal/20">
                 <i class="fas fa-envelope text-xl text-teal"></i>
               </div>
               <div>
-                <div class="text-xs text-gray-400 uppercase tracking-wider mb-1">Email Us</div>
+                <div class="text-xs text-gray-400 uppercase tracking-wider mb-2 font-semibold">Email Us</div>
                 <a href="mailto:{{ settings.email|default:'hello@helpex.com' }}" 
                    class="text-base font-semibold text-midnight hover:text-teal transition-colors">
                   {{ settings.email|default:'hello@helpex.com' }}
                 </a>
+                <p class="text-sm text-gray-400 mt-1">We'll respond within 24 hours</p>
               </div>
             </div>
           </div>
 
           <!-- Phone Card -->
           {% if settings.phone %}
-          <div class="fade-up bg-soft-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
-            <div class="flex items-center gap-4">
-              <div class="w-12 h-12 rounded-xl bg-teal/10 flex items-center justify-center flex-shrink-0">
+          <div class="contact-info-card bg-white rounded-2xl p-8 border border-gray-200/60 shadow-sm opacity-0" data-index="1">
+            <div class="flex items-start gap-5">
+              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal/10 to-teal-glow/10 flex items-center justify-center flex-shrink-0 border border-teal/20">
                 <i class="fas fa-phone text-xl text-teal"></i>
               </div>
               <div>
-                <div class="text-xs text-gray-400 uppercase tracking-wider mb-1">Call Us</div>
+                <div class="text-xs text-gray-400 uppercase tracking-wider mb-2 font-semibold">Call Us</div>
                 <a href="tel:{{ settings.phone }}" 
                    class="text-base font-semibold text-midnight hover:text-teal transition-colors">
                   {{ settings.phone }}
                 </a>
+                <p class="text-sm text-gray-400 mt-1">Mon-Fri from 9am to 6pm</p>
               </div>
             </div>
           </div>
           {% endif %}
 
           <!-- Location Card -->
-          <div class="fade-up bg-soft-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
-            <div class="flex items-center gap-4">
-              <div class="w-12 h-12 rounded-xl bg-teal/10 flex items-center justify-center flex-shrink-0">
+          <div class="contact-info-card bg-white rounded-2xl p-8 border border-gray-200/60 shadow-sm opacity-0" data-index="2">
+            <div class="flex items-start gap-5">
+              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal/10 to-teal-glow/10 flex items-center justify-center flex-shrink-0 border border-teal/20">
                 <i class="fas fa-map-marker-alt text-xl text-teal"></i>
               </div>
               <div>
-                <div class="text-xs text-gray-400 uppercase tracking-wider mb-1">Visit Us</div>
+                <div class="text-xs text-gray-400 uppercase tracking-wider mb-2 font-semibold">Visit Us</div>
                 <div class="text-base font-semibold text-midnight">
                   {% if settings.address %}
                     {{ settings.address|linebreaksbr }}
@@ -289,46 +383,49 @@
           </div>
 
           <!-- Social Links -->
-          <div class="fade-up bg-soft-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-            <h3 class="text-sm font-semibold text-midnight uppercase tracking-wider mb-4">Follow Us</h3>
+          <div class="contact-info-card bg-white rounded-2xl p-8 border border-gray-200/60 shadow-sm opacity-0" data-index="3">
+            <h3 class="text-sm font-semibold text-midnight uppercase tracking-wider mb-5">Follow Us</h3>
             <div class="flex gap-3">
               {% if settings.social_twitter %}
               <a href="{{ settings.social_twitter }}" target="_blank" rel="noopener" 
-                 class="w-11 h-11 rounded-xl bg-gray-100 hover:bg-teal text-midnight hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110">
+                 class="social-link w-12 h-12 rounded-xl bg-gray-100 hover:bg-teal text-midnight hover:text-white flex items-center justify-center">
                 <i class="fab fa-x-twitter"></i>
               </a>
               {% endif %}
               {% if settings.social_instagram %}
               <a href="{{ settings.social_instagram }}" target="_blank" rel="noopener" 
-                 class="w-11 h-11 rounded-xl bg-gray-100 hover:bg-teal text-midnight hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110">
+                 class="social-link w-12 h-12 rounded-xl bg-gray-100 hover:bg-teal text-midnight hover:text-white flex items-center justify-center">
                 <i class="fab fa-instagram"></i>
               </a>
               {% endif %}
               {% if settings.social_linkedin %}
               <a href="{{ settings.social_linkedin }}" target="_blank" rel="noopener" 
-                 class="w-11 h-11 rounded-xl bg-gray-100 hover:bg-teal text-midnight hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110">
+                 class="social-link w-12 h-12 rounded-xl bg-gray-100 hover:bg-teal text-midnight hover:text-white flex items-center justify-center">
                 <i class="fab fa-linkedin-in"></i>
               </a>
               {% endif %}
               {% if settings.social_github %}
               <a href="{{ settings.social_github }}" target="_blank" rel="noopener" 
-                 class="w-11 h-11 rounded-xl bg-gray-100 hover:bg-teal text-midnight hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110">
+                 class="social-link w-12 h-12 rounded-xl bg-gray-100 hover:bg-teal text-midnight hover:text-white flex items-center justify-center">
                 <i class="fab fa-github"></i>
               </a>
               {% endif %}
               <a href="#" 
-                 class="w-11 h-11 rounded-xl bg-gray-100 hover:bg-teal text-midnight hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110">
+                 class="social-link w-12 h-12 rounded-xl bg-gray-100 hover:bg-teal text-midnight hover:text-white flex items-center justify-center">
                 <i class="fab fa-dribbble"></i>
               </a>
             </div>
           </div>
 
           <!-- Quick CTA -->
-          <div class="fade-up rounded-2xl p-6 text-center bg-gradient-to-br from-midnight to-midnight-light shadow-lg">
-            <i class="fas fa-rocket text-2xl text-teal mb-3"></i>
-            <p class="font-semibold text-white mb-3">Ready to start your project?</p>
+          <div class="contact-info-card rounded-2xl p-8 text-center bg-gradient-to-br from-[#0A0F1E] to-[#0F1629] shadow-lg border border-white/10 opacity-0" data-index="4">
+            <div class="w-16 h-16 rounded-2xl bg-teal/10 flex items-center justify-center mx-auto mb-4 border border-teal/20">
+              <i class="fas fa-rocket text-2xl text-teal"></i>
+            </div>
+            <p class="font-semibold text-white mb-2 text-lg">Ready to start your project?</p>
+            <p class="text-sm text-gray-400 mb-5">Let's discuss your vision and make it happen.</p>
             <a href="#contactForm" 
-               class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-teal to-teal-dark hover:scale-105 transition-all duration-300 text-sm">
+               class="magnetic-btn inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-white bg-gradient-to-r from-teal to-teal-dark hover:shadow-lg hover:shadow-teal/30 transition-all duration-300 hover:scale-105 text-sm">
               <i class="fas fa-bolt"></i> Let's Talk
             </a>
           </div>
@@ -338,28 +435,177 @@
   </section>
 
   <!-- ============================================================ -->
-  <!-- MAP SECTION (Optional - can be enabled) -->
+  <!-- MAP SECTION -->
   <!-- ============================================================ -->
   {% if settings.map_embed %}
-  <section class="py-0 bg-white">
-    <div class="w-full h-80 md:h-96 bg-gray-200 relative overflow-hidden">
+  <section class="py-0 bg-gradient-to-b from-[#F0F4F5] to-white" id="map-section">
+    <div class="w-full h-[500px] relative overflow-hidden">
+      <!-- Map Overlay -->
+      <div class="absolute inset-0 bg-gradient-to-b from-white via-transparent to-white z-10 pointer-events-none"></div>
       {{ settings.map_embed|safe }}
     </div>
   </section>
   {% endif %}
 
   <!-- Footer -->
-  <!-- ========== REGISTERED COMPANIES ========== -->
   {% include 'helpex_app/components/registered_companies.html' %}
-
-  
-  <!-- ========== FOOTER (included from component) ========== -->
   {% include 'helpex_app/components/footer.html' %}
 
   <!-- ============================================================ -->
   <!-- SCRIPTS -->
   <!-- ============================================================ -->
   <script>
+    // ---------- Particle Canvas Background ----------
+    const canvas = document.getElementById('hero-canvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+      let animationId;
+      let mouse = { x: null, y: null };
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      class Particle {
+        constructor() {
+          this.x = Math.random() * canvas.width;
+          this.y = Math.random() * canvas.height;
+          this.size = Math.random() * 2 + 0.5;
+          this.speedX = (Math.random() - 0.5) * 0.5;
+          this.speedY = (Math.random() - 0.5) * 0.5;
+          this.opacity = Math.random() * 0.5 + 0.1;
+        }
+        update() {
+          this.x += this.speedX;
+          this.y += this.speedY;
+          if (this.x > canvas.width) this.x = 0;
+          if (this.x < 0) this.x = canvas.width;
+          if (this.y > canvas.height) this.y = 0;
+          if (this.y < 0) this.y = canvas.height;
+        }
+        draw() {
+          ctx.fillStyle = `rgba(40, 161, 151, ${this.opacity})`;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      function initParticles() {
+        particles = [];
+        const count = Math.min(80, Math.floor((canvas.width * canvas.height) / 15000));
+        for (let i = 0; i < count; i++) {
+          particles.push(new Particle());
+        }
+      }
+      initParticles();
+
+      function connectParticles() {
+        for (let a = 0; a < particles.length; a++) {
+          for (let b = a + 1; b < particles.length; b++) {
+            const dx = particles[a].x - particles[b].x;
+            const dy = particles[a].y - particles[b].y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < 120) {
+              const opacity = (1 - distance / 120) * 0.15;
+              ctx.strokeStyle = `rgba(40, 161, 151, ${opacity})`;
+              ctx.lineWidth = 0.5;
+              ctx.beginPath();
+              ctx.moveTo(particles[a].x, particles[a].y);
+              ctx.lineTo(particles[b].x, particles[b].y);
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          p.update();
+          p.draw();
+        });
+        connectParticles();
+        animationId = requestAnimationFrame(animateParticles);
+      }
+      animateParticles();
+
+      canvas.addEventListener('mousemove', e => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+        particles.forEach(p => {
+          const dx = mouse.x - p.x;
+          const dy = mouse.y - p.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 100) {
+            p.x -= dx * 0.02;
+            p.y -= dy * 0.02;
+          }
+        });
+      });
+    }
+
+    // ---------- Mouse Glow Follower ----------
+    const mouseGlow = document.getElementById('mouse-glow');
+    const heroSection = document.getElementById('contact-hero');
+    if (mouseGlow && heroSection) {
+      heroSection.addEventListener('mousemove', e => {
+        const rect = heroSection.getBoundingClientRect();
+        const x = e.clientX - rect.left - 200;
+        const y = e.clientY - rect.top - 200;
+        mouseGlow.style.transform = `translate(${x}px, ${y}px)`;
+      });
+    }
+
+    // ---------- Parallax Floating Shapes ----------
+    const floatingShapes = document.getElementById('floating-shapes');
+    if (floatingShapes && heroSection) {
+      heroSection.addEventListener('mousemove', e => {
+        const shapes = floatingShapes.querySelectorAll('[data-speed]');
+        const rect = heroSection.getBoundingClientRect();
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const mouseX = e.clientX - rect.left - centerX;
+        const mouseY = e.clientY - rect.top - centerY;
+
+        shapes.forEach(shape => {
+          const speed = parseFloat(shape.dataset.speed);
+          const x = mouseX * speed * 0.05;
+          const y = mouseY * speed * 0.05;
+          shape.style.transform = `translate(${x}px, ${y}px)`;
+        });
+      });
+    }
+
+    // ---------- Form Submission ----------
+    const contactForm = document.getElementById('contactForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    if (contactForm) {
+      contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const originalHTML = submitBtn.innerHTML;
+        
+        submitBtn.innerHTML = '<i class="fas fa-check-circle text-lg"></i> Message Sent Successfully!';
+        submitBtn.style.background = 'linear-gradient(135deg, #10B981, #059669)';
+        submitBtn.style.boxShadow = '0 6px 25px rgba(16, 185, 129, 0.3)';
+        submitBtn.disabled = true;
+        
+        setTimeout(() => {
+          submitBtn.innerHTML = originalHTML;
+          submitBtn.style.background = '';
+          submitBtn.style.boxShadow = '';
+          submitBtn.disabled = false;
+          contactForm.reset();
+        }, 3000);
+      });
+    }
+
     // ---------- Lenis Smooth Scroll ----------
     const lenis = new Lenis({
       duration: 1.2,
@@ -372,7 +618,6 @@
     }
     requestAnimationFrame(raf);
 
-    // Sync Lenis with GSAP ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add((time) => {
       lenis.raf(time * 1000);
@@ -382,58 +627,50 @@
     // ---------- GSAP Entrance Animations ----------
     gsap.registerPlugin(ScrollTrigger);
 
-    gsap.utils.toArray('.fade-up').forEach((element, index) => {
-      gsap.fromTo(element,
-        { opacity: 0, y: 40 },
-        {
-          opacity: 1, y: 0,
-          duration: 0.6,
-          delay: index * 0.1,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: element,
-            start: 'top 88%',
-            toggleActions: 'play none none none'
-          }
-        }
-      );
+    // Hero Timeline
+    const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    heroTl
+      .to('#contact-breadcrumb', { opacity: 1, y: 0, duration: 0.6, delay: 0.2 })
+      .fromTo('#contact-breadcrumb', { y: -20 }, { y: 0, duration: 0.6 }, '<')
+      .to('#contact-badge', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+      .fromTo('#contact-badge', { y: 20 }, { y: 0, duration: 0.6 }, '<')
+      .fromTo('#contact-title', { opacity: 0, y: 80, rotateX: -90 }, { opacity: 1, y: 0, rotateX: 0, duration: 0.8 }, '-=0.3')
+      .to('#contact-subtitle', { opacity: 1, y: 0, duration: 0.7 }, '-=0.4')
+      .fromTo('#contact-subtitle', { y: 30 }, { y: 0, duration: 0.7 }, '<')
+      .to('#contact-pills', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+      .fromTo('#contact-pills', { y: 20 }, { y: 0, duration: 0.6 }, '<')
+      .to('#scroll-indicator', { opacity: 1, duration: 0.5 }, '-=0.2');
+
+    // Contact Form
+    gsap.to('#contact-form', {
+      opacity: 1, y: 0,
+      duration: 0.8,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '#contact-section',
+        start: 'top 70%',
+        toggleActions: 'play none none none'
+      }
     });
+    gsap.fromTo('#contact-form', { y: 50 }, { y: 0, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: '#contact-section', start: 'top 70%', toggleActions: 'play none none none' } });
 
-    // ---------- Form Submission ----------
-    const contactForm = document.getElementById('contactForm');
-    const submitBtn = document.getElementById('submitBtn');
+    // Contact Info Cards
+    gsap.fromTo('.contact-info-card',
+      { opacity: 0, y: 40, scale: 0.95 },
+      {
+        opacity: 1, y: 0, scale: 1,
+        duration: 0.6,
+        stagger: 0.15,
+        ease: 'back.out(1.7)',
+        scrollTrigger: {
+          trigger: '.contact-info-card',
+          start: 'top 85%',
+          toggleActions: 'play none none none'
+        }
+      }
+    );
 
-    if (contactForm) {
-      contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Store original button content
-        const originalHTML = submitBtn.innerHTML;
-        
-        // Show success state
-        submitBtn.innerHTML = '<i class="fas fa-check-circle text-lg"></i> Message Sent Successfully!';
-        submitBtn.style.background = 'linear-gradient(135deg, #10B981, #059669)';
-        submitBtn.style.boxShadow = '0 6px 25px rgba(16, 185, 129, 0.3)';
-        submitBtn.disabled = true;
-        
-        // Submit the form data (uncomment for actual submission)
-        // const formData = new FormData(contactForm);
-        // fetch(contactForm.action, { method: 'POST', body: formData })
-        //   .then(response => response.json())
-        //   .then(data => { ... });
-        
-        // Reset after 3 seconds
-        setTimeout(() => {
-          submitBtn.innerHTML = originalHTML;
-          submitBtn.style.background = 'linear-gradient(135deg, #28A197, #1E837A)';
-          submitBtn.style.boxShadow = '0 6px 25px rgba(40,161,151,0.3)';
-          submitBtn.disabled = false;
-          contactForm.reset();
-        }, 3000);
-      });
-    }
-
-    // ---------- Smooth scroll for anchor links ----------
+    // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
         e.preventDefault();

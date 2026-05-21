@@ -88,6 +88,34 @@
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
     }
+    /* Hero animations */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(5deg); }
+    }
+    @keyframes pulse-slow {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.05); }
+    }
+    .animate-float {
+      animation: float 6s ease-in-out infinite;
+    }
+    .animate-pulse-slow {
+      animation: pulse-slow 4s ease-in-out infinite;
+    }
+    /* Magnetic button effect */
+    .magnetic-btn {
+      transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    /* Text reveal clip */
+    .text-reveal {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+    }
+    /* Gradient border animation */
+    @keyframes border-glow {
+      0%, 100% { border-color: rgba(40, 161, 151, 0.2); }
+      50% { border-color: rgba(40, 161, 151, 0.5); }
+    }
   </style>
 </head>
 <body class="bg-gradient-to-b from-white via-soft-white to-gray-50">
@@ -96,99 +124,173 @@
   {% include 'helpex_app/components/navbar.html' %}
 
   <!-- ============================================================ -->
-  <!-- HERO SECTION -->
+  <!-- HERO SECTION - NEXT LEVEL ANIMATED -->
   <!-- ============================================================ -->
-  <section class="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden bg-white">
-    <!-- Decorative blobs -->
-    <div class="absolute top-0 -left-32 w-96 h-96 bg-teal/10 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float"></div>
-    <div class="absolute bottom-0 right-0 w-80 h-80 bg-teal-glow/10 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float" style="animation-delay: -3s;"></div>
+  <section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#0A0F1E] via-[#0F1629] to-[#0A0F1E]" id="hero-section">
+    <!-- Animated grid background -->
+    <canvas id="hero-canvas" class="absolute inset-0 w-full h-full opacity-40"></canvas>
+    
+    <!-- Gradient orbs -->
+    <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-teal/15 rounded-full filter blur-[120px] animate-pulse-slow" id="orb-1"></div>
+    <div class="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-teal-glow/10 rounded-full filter blur-[100px] animate-pulse-slow" style="animation-delay: -1.5s;" id="orb-2"></div>
+    <div class="absolute top-[40%] left-[60%] w-[300px] h-[300px] bg-purple-500/8 rounded-full filter blur-[80px] animate-pulse-slow" style="animation-delay: -3s;" id="orb-3"></div>
 
-    <div class="max-w-7xl mx-auto px-6 relative z-10">
+    <!-- Floating geometric shapes -->
+    <div class="absolute inset-0 pointer-events-none" id="floating-shapes">
+      <div class="absolute top-[15%] left-[10%] w-4 h-4 border-2 border-teal/30 rotate-45 animate-float" data-speed="0.5"></div>
+      <div class="absolute top-[25%] right-[15%] w-6 h-6 rounded-full border border-teal-glow/20 animate-float" style="animation-delay: -1s;" data-speed="0.8"></div>
+      <div class="absolute bottom-[30%] left-[20%] w-3 h-3 bg-teal/20 rounded-full animate-float" style="animation-delay: -2s;" data-speed="1.2"></div>
+      <div class="absolute top-[60%] right-[25%] w-5 h-5 border border-teal/20 rotate-12 animate-float" style="animation-delay: -3s;" data-speed="0.6"></div>
+      <div class="absolute top-[10%] left-[50%] w-2 h-8 bg-gradient-to-b from-teal/20 to-transparent animate-float" style="animation-delay: -4s;" data-speed="0.9"></div>
+      <div class="absolute bottom-[20%] right-[10%] w-8 h-8 border-2 border-teal-glow/10 rounded-lg rotate-45 animate-float" style="animation-delay: -2.5s;" data-speed="0.7"></div>
+    </div>
+
+    <!-- Mouse follower glow -->
+    <div class="absolute w-[400px] h-[400px] bg-teal/8 rounded-full filter blur-[80px] pointer-events-none transition-transform duration-300 ease-out" id="mouse-glow"></div>
+
+    <!-- Main content -->
+    <div class="relative z-10 max-w-7xl mx-auto px-6 py-32 text-center">
       <!-- Breadcrumb -->
-      <div class="flex items-center gap-2 mb-10">
-        <a href="{% url 'index' %}" class="text-sm text-gray-soft hover:text-teal transition-colors">Home</a>
-        <span class="text-gray-300">/</span>
+      <div class="flex items-center justify-center gap-3 mb-8 opacity-0" id="hero-breadcrumb">
+        <a href="{% url 'index' %}" class="text-sm text-gray-500 hover:text-teal transition-colors">Home</a>
+        <span class="text-gray-700">/</span>
         <span class="text-sm font-semibold text-teal">Services</span>
       </div>
 
-      <!-- Headline & Stats -->
-      <div class="text-center max-w-4xl mx-auto">
-        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5 bg-teal/10 text-teal border border-teal/20">
-          // What We Offer
-        </span>
-        <h1 class="font-space text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 text-midnight">
-          Our <span class="bg-gradient-to-r from-teal to-teal-glow bg-clip-text text-transparent">Services</span>
-        </h1>
-        <p class="text-lg md:text-xl text-gray-soft max-w-2xl mx-auto mb-12">
-          End-to-end digital solutions tailored to your unique business needs. From creative design to cutting-edge technology, we deliver transformative results.
-        </p>
+      <!-- Badge -->
+      <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-semibold tracking-wider uppercase bg-teal/10 text-teal border border-teal/20 mb-8 opacity-0 backdrop-blur-sm" id="hero-badge">
+        <span class="w-2 h-2 bg-teal rounded-full animate-pulse"></span>
+        What We Offer
+      </div>
 
-        <!-- Stats Row -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
-          <div class="glass p-5 rounded-2xl shadow-sm border border-gray-100">
-            <div class="text-3xl md:text-4xl font-bold text-teal">180+</div>
-            <div class="text-sm text-gray-soft mt-1">Projects Delivered</div>
-          </div>
-          <div class="glass p-5 rounded-2xl shadow-sm border border-gray-100">
-            <div class="text-3xl md:text-4xl font-bold text-teal">98%</div>
-            <div class="text-sm text-gray-soft mt-1">Client Satisfaction</div>
-          </div>
-          <div class="glass p-5 rounded-2xl shadow-sm border border-gray-100">
-            <div class="text-3xl md:text-4xl font-bold text-teal">50+</div>
-            <div class="text-sm text-gray-soft mt-1">Team Experts</div>
-          </div>
-          <div class="glass p-5 rounded-2xl shadow-sm border border-gray-100">
-            <div class="text-3xl md:text-4xl font-bold text-teal">12+</div>
-            <div class="text-sm text-gray-soft mt-1">Years Experience</div>
-          </div>
+      <!-- Main heading with split text animation -->
+      <h1 class="font-space text-5xl md:text-7xl lg:text-8xl font-extrabold leading-[1.1] mb-8" id="hero-heading">
+        <span class="inline-block text-white" id="heading-line-1">Our</span>
+        <span class="inline-block bg-gradient-to-r from-teal via-teal-glow to-teal bg-clip-text text-transparent" id="heading-line-2">Services</span>
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-14 opacity-0 leading-relaxed" id="hero-subtitle">
+        End-to-end digital solutions tailored to your unique business needs. From creative design to cutting-edge technology, we deliver transformative results.
+      </p>
+
+      <!-- Service category pills -->
+      <div class="flex flex-wrap justify-center gap-3 mb-16 opacity-0" id="hero-pills">
+        <span class="service-pill px-4 py-2 rounded-full text-sm bg-white/5 border border-white/10 text-gray-300 hover:bg-teal/10 hover:border-teal/30 hover:text-teal transition-all duration-300 cursor-default backdrop-blur-sm">
+          <i class="fas fa-code mr-2"></i>Web Development
+        </span>
+        <span class="service-pill px-4 py-2 rounded-full text-sm bg-white/5 border border-white/10 text-gray-300 hover:bg-teal/10 hover:border-teal/30 hover:text-teal transition-all duration-300 cursor-default backdrop-blur-sm">
+          <i class="fas fa-mobile-alt mr-2"></i>App Development
+        </span>
+        <span class="service-pill px-4 py-2 rounded-full text-sm bg-white/5 border border-white/10 text-gray-300 hover:bg-teal/10 hover:border-teal/30 hover:text-teal transition-all duration-300 cursor-default backdrop-blur-sm">
+          <i class="fas fa-brain mr-2"></i>AI Solutions
+        </span>
+        <span class="service-pill px-4 py-2 rounded-full text-sm bg-white/5 border border-white/10 text-gray-300 hover:bg-teal/10 hover:border-teal/30 hover:text-teal transition-all duration-300 cursor-default backdrop-blur-sm">
+          <i class="fas fa-paint-brush mr-2"></i>UI/UX Design
+        </span>
+        <span class="service-pill px-4 py-2 rounded-full text-sm bg-white/5 border border-white/10 text-gray-300 hover:bg-teal/10 hover:border-teal/30 hover:text-teal transition-all duration-300 cursor-default backdrop-blur-sm">
+          <i class="fas fa-bullhorn mr-2"></i>Digital Marketing
+        </span>
+      </div>
+
+      <!-- Stats Row -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto opacity-0" id="hero-stats">
+        <div class="stat-card group p-6 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-teal/30 hover:bg-teal/5 transition-all duration-500">
+          <div class="text-3xl md:text-4xl font-bold text-teal counter" data-target="180">0</div>
+          <div class="text-sm text-gray-400 mt-1 group-hover:text-gray-300 transition-colors">Projects Delivered</div>
+        </div>
+        <div class="stat-card group p-6 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-teal/30 hover:bg-teal/5 transition-all duration-500">
+          <div class="text-3xl md:text-4xl font-bold text-teal"><span class="counter" data-target="98">0</span>%</div>
+          <div class="text-sm text-gray-400 mt-1 group-hover:text-gray-300 transition-colors">Client Satisfaction</div>
+        </div>
+        <div class="stat-card group p-6 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-teal/30 hover:bg-teal/5 transition-all duration-500">
+          <div class="text-3xl md:text-4xl font-bold text-teal counter" data-target="50">0</div>
+          <div class="text-sm text-gray-400 mt-1 group-hover:text-gray-300 transition-colors">Team Experts</div>
+        </div>
+        <div class="stat-card group p-6 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-teal/30 hover:bg-teal/5 transition-all duration-500">
+          <div class="text-3xl md:text-4xl font-bold text-teal counter" data-target="12">0</div>
+          <div class="text-sm text-gray-400 mt-1 group-hover:text-gray-300 transition-colors">Years Experience</div>
         </div>
       </div>
     </div>
 
     <!-- Scroll indicator -->
-    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-400 animate-bounce">
-      <span class="text-xs tracking-widest uppercase">Scroll</span>
-      <i class="fas fa-chevron-down"></i>
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-0" id="scroll-indicator">
+      <span class="text-xs tracking-widest uppercase text-gray-500">Scroll to explore</span>
+      <div class="w-6 h-10 rounded-full border-2 border-gray-600 flex justify-center pt-2">
+        <div class="w-1 h-3 bg-teal rounded-full animate-bounce"></div>
+      </div>
     </div>
   </section>
 
   <!-- ============================================================ -->
-  <!-- SERVICES GRID -->
+  <!-- SERVICES GRID - NEXT LEVEL -->
   <!-- ============================================================ -->
-  <section class="py-24 bg-soft-white">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <section class="py-32 bg-gradient-to-b from-white via-[#F8FAFC] to-[#F0F4F5] relative overflow-hidden" id="services-section">
+    <!-- Background effects -->
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(40,161,151,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(40,161,151,0.04)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
+      <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-teal/8 rounded-full filter blur-[120px]"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+      <!-- Section Header -->
+      <div class="text-center mb-20">
+        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5 bg-teal/10 text-teal border border-teal/20 backdrop-blur-sm">
+          // Our Expertise
+        </span>
+        <h2 class="font-space text-4xl md:text-6xl font-bold text-midnight mb-6">
+          Services We <span class="bg-gradient-to-r from-teal to-teal-glow bg-clip-text text-transparent">Deliver</span>
+        </h2>
+        <p class="text-lg text-gray-500 max-w-2xl mx-auto">Transforming ideas into powerful digital experiences with cutting-edge technology and creative excellence.</p>
+      </div>
+
+      <!-- Services Grid - Bento Style -->
+      <div class="services-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for service in services %}
-        <!-- Single Service Card -->
-        <a href="{% url 'service_detail' service.slug %}" class="fade-up group relative bg-white rounded-3xl p-8 border border-gray-100 shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden block">
-          <!-- Top gradient line on hover -->
-          <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal to-teal-glow transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
-
-          <!-- Icon -->
-          <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-6 bg-teal/10 text-teal group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
-            <i class="fas {{ service.icon_class|default:'fa-code' }}"></i>
+        <!-- Service Card -->
+        <a href="{% url 'service_detail' service.slug %}" class="service-card group relative rounded-3xl overflow-hidden transition-all duration-500 hover:scale-[1.02] {% if forloop.first %}md:col-span-2 lg:col-span-2{% endif %}" data-index="{{ forloop.counter0 }}">
+          <!-- Card Background -->
+          <div class="absolute inset-0 bg-white/90 backdrop-blur-xl border border-gray-200/60 group-hover:border-teal/30 transition-all duration-500 shadow-sm group-hover:shadow-xl"></div>
+          
+          <!-- Animated Gradient Border -->
+          <div class="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+            <div class="absolute inset-0 rounded-3xl bg-gradient-to-r from-teal via-teal-glow to-teal opacity-10 blur-sm"></div>
           </div>
 
-          <!-- Title -->
-          <h3 class="text-2xl font-bold mb-3 text-midnight">{{ service.title }}</h3>
+          <!-- Corner Glow -->
+          <div class="absolute -top-20 -right-20 w-40 h-40 bg-teal/5 rounded-full filter blur-[60px] group-hover:bg-teal/10 transition-all duration-500"></div>
 
-          <!-- Description -->
-          <p class="text-gray-soft leading-relaxed mb-5">{{ service.short_description|default:service.description|truncatechars:120 }}</p>
+          <!-- Content -->
+          <div class="relative z-10 p-8 md:p-10">
+            <!-- Icon -->
+            <div class="service-icon w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-6 bg-teal/10 text-teal border border-teal/20 group-hover:bg-teal/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+              <i class="fas {{ service.icon_class|default:'fa-code' }}"></i>
+            </div>
 
-          <!-- Tags -->
-          <div class="flex flex-wrap gap-2">
-            {% for tag in service.tags %}
-            <span class="px-3 py-1 rounded-full text-xs font-medium bg-teal/10 text-teal border border-teal/20">{{ tag }}</span>
-            {% endfor %}
+            <!-- Title -->
+            <h3 class="text-2xl md:text-3xl font-bold mb-4 text-midnight group-hover:text-teal transition-colors duration-300">{{ service.title }}</h3>
+
+            <!-- Description -->
+            <p class="text-gray-500 leading-relaxed mb-6 group-hover:text-gray-600 transition-colors">{{ service.short_description|default:service.description|truncatechars:150 }}</p>
+
+            <!-- Tags -->
+            <div class="flex flex-wrap gap-2 mb-6">
+              {% for tag in service.tags %}
+              <span class="px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-500 border border-gray-200 group-hover:bg-teal/10 group-hover:text-teal group-hover:border-teal/20 transition-all duration-300">{{ tag }}</span>
+              {% endfor %}
+            </div>
+
+            <!-- Learn More -->
+            <div class="flex items-center gap-3 text-sm font-semibold text-teal">
+              <span class="group-hover:translate-x-2 transition-transform duration-300">Learn More</span>
+              <i class="fas fa-arrow-right group-hover:translate-x-3 group-hover:text-teal-glow transition-all duration-300"></i>
+              <div class="h-px w-8 bg-teal/30 group-hover:w-12 group-hover:bg-teal transition-all duration-300"></div>
+            </div>
           </div>
 
-          <!-- Learn More Link -->
-          <span class="inline-flex items-center gap-2 mt-5 text-sm font-semibold text-teal group-hover:gap-3 transition-all">
-            Learn More <i class="fas fa-arrow-right"></i>
-          </span>
-
-          <!-- Decorative corner glow -->
-          <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-teal/5 rounded-full blur-2xl group-hover:bg-teal/10 transition-colors"></div>
+          <!-- Hover Line -->
+          <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
         </a>
         {% empty %}
         <!-- Fallback if no services -->
@@ -202,55 +304,148 @@
   </section>
 
   <!-- ============================================================ -->
-  <!-- PROCESS SECTION -->
+  <!-- PROCESS SECTION - NEXT LEVEL -->
   <!-- ============================================================ -->
-  <section class="py-24 bg-white">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="text-center mb-14">
-        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5 bg-teal/10 text-teal border border-teal/20">
+  <section class="py-32 bg-gradient-to-b from-[#F0F4F5] via-white to-[#F8FAFC] relative overflow-hidden" id="process-section">
+    <!-- Background Effects -->
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(40,161,151,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(40,161,151,0.03)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
+      <div class="absolute top-1/3 right-0 w-[500px] h-[500px] bg-teal/5 rounded-full filter blur-[100px]"></div>
+      <div class="absolute bottom-1/3 left-0 w-[400px] h-[400px] bg-teal-glow/5 rounded-full filter blur-[100px]"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+      <!-- Section Header -->
+      <div class="text-center mb-20">
+        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5 bg-teal/10 text-teal border border-teal/20 backdrop-blur-sm">
           // How We Work
         </span>
-        <h2 class="font-space text-4xl md:text-5xl font-bold text-midnight">
-          Our <span class="bg-gradient-to-r from-teal to-teal-glow bg-clip-text text-transparent">process</span>
+        <h2 class="font-space text-4xl md:text-6xl font-bold text-midnight mb-6">
+          Our <span class="bg-gradient-to-r from-teal to-teal-glow bg-clip-text text-transparent">Process</span>
         </h2>
-        <p class="text-lg text-gray-soft max-w-xl mx-auto mt-4">A proven workflow that guarantees successful delivery every time.</p>
+        <p class="text-lg text-gray-500 max-w-2xl mx-auto">A proven workflow that guarantees successful delivery every time.</p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <!-- Step 1 -->
-        <div class="fade-up text-center p-8 rounded-3xl bg-soft-white border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
-          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center text-2xl font-bold mx-auto mb-5 text-white shadow-lg shadow-teal/20">
-            1
-          </div>
-          <h3 class="text-xl font-bold mb-3 text-midnight">Discovery</h3>
-          <p class="text-gray-soft text-sm leading-relaxed">We dive deep into your business, goals, and challenges to define the perfect solution.</p>
-        </div>
+      <!-- Process Timeline -->
+      <div class="relative">
+        <!-- Connecting Line (Desktop) -->
+        <div class="hidden lg:block absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent -translate-y-1/2"></div>
+        <div class="hidden lg:block absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal/50 to-transparent -translate-y-1/2 process-line-animated"></div>
 
-        <!-- Step 2 -->
-        <div class="fade-up text-center p-8 rounded-3xl bg-soft-white border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
-          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center text-2xl font-bold mx-auto mb-5 text-white shadow-lg shadow-teal/20">
-            2
-          </div>
-          <h3 class="text-xl font-bold mb-3 text-midnight">Strategy & Design</h3>
-          <p class="text-gray-soft text-sm leading-relaxed">We craft user‑centric wireframes and stunning visual designs that convert.</p>
-        </div>
+        <!-- Process Steps -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6">
+          <!-- Step 1 -->
+          <div class="process-step group relative" data-step="1">
+            <div class="process-card relative p-8 rounded-3xl bg-white border border-gray-200/60 shadow-sm hover:shadow-xl hover:border-teal/30 transition-all duration-500 hover:-translate-y-2">
+              <!-- Step Number Badge -->
+              <div class="step-badge w-14 h-14 rounded-2xl bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center text-2xl font-bold text-white shadow-lg shadow-teal/20 mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                1
+              </div>
+              
+              <!-- Title -->
+              <h3 class="text-xl font-bold mb-3 text-midnight group-hover:text-teal transition-colors duration-300">Discovery</h3>
+              
+              <!-- Description -->
+              <p class="text-gray-500 text-sm leading-relaxed mb-5">We dive deep into your business, goals, and challenges to define the perfect solution.</p>
+              
+              <!-- Features List -->
+              <ul class="space-y-2">
+                <li class="flex items-center gap-2 text-xs text-gray-400">
+                  <i class="fas fa-check text-teal text-[10px]"></i>
+                  <span>Requirement Analysis</span>
+                </li>
+                <li class="flex items-center gap-2 text-xs text-gray-400">
+                  <i class="fas fa-check text-teal text-[10px]"></i>
+                  <span>Stakeholder Interviews</span>
+                </li>
+                <li class="flex items-center gap-2 text-xs text-gray-400">
+                  <i class="fas fa-check text-teal text-[10px]"></i>
+                  <span>Market Research</span>
+                </li>
+              </ul>
 
-        <!-- Step 3 -->
-        <div class="fade-up text-center p-8 rounded-3xl bg-soft-white border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
-          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center text-2xl font-bold mx-auto mb-5 text-white shadow-lg shadow-teal/20">
-            3
+              <!-- Bottom Accent -->
+              <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal/30 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
+            </div>
           </div>
-          <h3 class="text-xl font-bold mb-3 text-midnight">Development</h3>
-          <p class="text-gray-soft text-sm leading-relaxed">Agile sprints with transparent communication, using the latest technologies.</p>
-        </div>
 
-        <!-- Step 4 -->
-        <div class="fade-up text-center p-8 rounded-3xl bg-soft-white border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
-          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center text-2xl font-bold mx-auto mb-5 text-white shadow-lg shadow-teal/20">
-            4
+          <!-- Step 2 -->
+          <div class="process-step group relative" data-step="2">
+            <div class="process-card relative p-8 rounded-3xl bg-white border border-gray-200/60 shadow-sm hover:shadow-xl hover:border-teal/30 transition-all duration-500 hover:-translate-y-2">
+              <div class="step-badge w-14 h-14 rounded-2xl bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center text-2xl font-bold text-white shadow-lg shadow-teal/20 mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                2
+              </div>
+              <h3 class="text-xl font-bold mb-3 text-midnight group-hover:text-teal transition-colors duration-300">Strategy & Design</h3>
+              <p class="text-gray-500 text-sm leading-relaxed mb-5">We craft user-centric wireframes and stunning visual designs that convert.</p>
+              <ul class="space-y-2">
+                <li class="flex items-center gap-2 text-xs text-gray-400">
+                  <i class="fas fa-check text-teal text-[10px]"></i>
+                  <span>UI/UX Wireframing</span>
+                </li>
+                <li class="flex items-center gap-2 text-xs text-gray-400">
+                  <i class="fas fa-check text-teal text-[10px]"></i>
+                  <span>Visual Design System</span>
+                </li>
+                <li class="flex items-center gap-2 text-xs text-gray-400">
+                  <i class="fas fa-check text-teal text-[10px]"></i>
+                  <span>Prototype Testing</span>
+                </li>
+              </ul>
+              <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal/30 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
+            </div>
           </div>
-          <h3 class="text-xl font-bold mb-3 text-midnight">Launch & Support</h3>
-          <p class="text-gray-soft text-sm leading-relaxed">We deploy, rigorously test, and provide ongoing support to ensure optimal performance.</p>
+
+          <!-- Step 3 -->
+          <div class="process-step group relative" data-step="3">
+            <div class="process-card relative p-8 rounded-3xl bg-white border border-gray-200/60 shadow-sm hover:shadow-xl hover:border-teal/30 transition-all duration-500 hover:-translate-y-2">
+              <div class="step-badge w-14 h-14 rounded-2xl bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center text-2xl font-bold text-white shadow-lg shadow-teal/20 mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                3
+              </div>
+              <h3 class="text-xl font-bold mb-3 text-midnight group-hover:text-teal transition-colors duration-300">Development</h3>
+              <p class="text-gray-500 text-sm leading-relaxed mb-5">Agile sprints with transparent communication, using the latest technologies.</p>
+              <ul class="space-y-2">
+                <li class="flex items-center gap-2 text-xs text-gray-400">
+                  <i class="fas fa-check text-teal text-[10px]"></i>
+                  <span>Agile Development</span>
+                </li>
+                <li class="flex items-center gap-2 text-xs text-gray-400">
+                  <i class="fas fa-check text-teal text-[10px]"></i>
+                  <span>Code Reviews & QA</span>
+                </li>
+                <li class="flex items-center gap-2 text-xs text-gray-400">
+                  <i class="fas fa-check text-teal text-[10px]"></i>
+                  <span>Weekly Updates</span>
+                </li>
+              </ul>
+              <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal/30 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="process-step group relative" data-step="4">
+            <div class="process-card relative p-8 rounded-3xl bg-white border border-gray-200/60 shadow-sm hover:shadow-xl hover:border-teal/30 transition-all duration-500 hover:-translate-y-2">
+              <div class="step-badge w-14 h-14 rounded-2xl bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center text-2xl font-bold text-white shadow-lg shadow-teal/20 mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                4
+              </div>
+              <h3 class="text-xl font-bold mb-3 text-midnight group-hover:text-teal transition-colors duration-300">Launch & Support</h3>
+              <p class="text-gray-500 text-sm leading-relaxed mb-5">We deploy, rigorously test, and provide ongoing support to ensure optimal performance.</p>
+              <ul class="space-y-2">
+                <li class="flex items-center gap-2 text-xs text-gray-400">
+                  <i class="fas fa-check text-teal text-[10px]"></i>
+                  <span>Production Deployment</span>
+                </li>
+                <li class="flex items-center gap-2 text-xs text-gray-400">
+                  <i class="fas fa-check text-teal text-[10px]"></i>
+                  <span>Performance Monitoring</span>
+                </li>
+                <li class="flex items-center gap-2 text-xs text-gray-400">
+                  <i class="fas fa-check text-teal text-[10px]"></i>
+                  <span>24/7 Support</span>
+                </li>
+              </ul>
+              <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal/30 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -273,6 +468,132 @@
   <!-- SCRIPTS (GSAP + Lenis) -->
   <!-- ============================================================ -->
   <script>
+    // ---------- Particle Canvas Background ----------
+    const canvas = document.getElementById('hero-canvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+      let animationId;
+      let mouse = { x: null, y: null };
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      class Particle {
+        constructor() {
+          this.x = Math.random() * canvas.width;
+          this.y = Math.random() * canvas.height;
+          this.size = Math.random() * 2 + 0.5;
+          this.speedX = (Math.random() - 0.5) * 0.5;
+          this.speedY = (Math.random() - 0.5) * 0.5;
+          this.opacity = Math.random() * 0.5 + 0.1;
+        }
+        update() {
+          this.x += this.speedX;
+          this.y += this.speedY;
+          if (this.x > canvas.width) this.x = 0;
+          if (this.x < 0) this.x = canvas.width;
+          if (this.y > canvas.height) this.y = 0;
+          if (this.y < 0) this.y = canvas.height;
+        }
+        draw() {
+          ctx.fillStyle = `rgba(40, 161, 151, ${this.opacity})`;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      function initParticles() {
+        particles = [];
+        const count = Math.min(80, Math.floor((canvas.width * canvas.height) / 15000));
+        for (let i = 0; i < count; i++) {
+          particles.push(new Particle());
+        }
+      }
+      initParticles();
+
+      function connectParticles() {
+        for (let a = 0; a < particles.length; a++) {
+          for (let b = a + 1; b < particles.length; b++) {
+            const dx = particles[a].x - particles[b].x;
+            const dy = particles[a].y - particles[b].y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < 120) {
+              const opacity = (1 - distance / 120) * 0.15;
+              ctx.strokeStyle = `rgba(40, 161, 151, ${opacity})`;
+              ctx.lineWidth = 0.5;
+              ctx.beginPath();
+              ctx.moveTo(particles[a].x, particles[a].y);
+              ctx.lineTo(particles[b].x, particles[b].y);
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          p.update();
+          p.draw();
+        });
+        connectParticles();
+        animationId = requestAnimationFrame(animateParticles);
+      }
+      animateParticles();
+
+      canvas.addEventListener('mousemove', e => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+        particles.forEach(p => {
+          const dx = mouse.x - p.x;
+          const dy = mouse.y - p.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 100) {
+            p.x -= dx * 0.02;
+            p.y -= dy * 0.02;
+          }
+        });
+      });
+    }
+
+    // ---------- Mouse Glow Follower ----------
+    const mouseGlow = document.getElementById('mouse-glow');
+    const heroSection = document.getElementById('hero-section');
+    if (mouseGlow && heroSection) {
+      heroSection.addEventListener('mousemove', e => {
+        const rect = heroSection.getBoundingClientRect();
+        const x = e.clientX - rect.left - 200;
+        const y = e.clientY - rect.top - 200;
+        mouseGlow.style.transform = `translate(${x}px, ${y}px)`;
+      });
+    }
+
+    // ---------- Parallax Floating Shapes ----------
+    const floatingShapes = document.getElementById('floating-shapes');
+    if (floatingShapes && heroSection) {
+      heroSection.addEventListener('mousemove', e => {
+        const shapes = floatingShapes.querySelectorAll('[data-speed]');
+        const rect = heroSection.getBoundingClientRect();
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const mouseX = e.clientX - rect.left - centerX;
+        const mouseY = e.clientY - rect.top - centerY;
+
+        shapes.forEach(shape => {
+          const speed = parseFloat(shape.dataset.speed);
+          const x = mouseX * speed * 0.05;
+          const y = mouseY * speed * 0.05;
+          shape.style.transform = `translate(${x}px, ${y}px)`;
+        });
+      });
+    }
+
     // ---------- Lenis Smooth Scroll ----------
     const lenis = new Lenis({
       duration: 1.2,
@@ -295,7 +616,68 @@
     // ---------- GSAP Entrance Animations ----------
     gsap.registerPlugin(ScrollTrigger);
 
-    // Animate all elements with the class 'fade-up'
+    // Hero entrance timeline
+    const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    heroTl
+      .to('#hero-breadcrumb', { opacity: 1, y: 0, duration: 0.6, delay: 0.2 })
+      .fromTo('#hero-breadcrumb', { y: -20 }, { y: 0, duration: 0.6 }, '<')
+      .to('#hero-badge', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+      .fromTo('#hero-badge', { y: 20 }, { y: 0, duration: 0.6 }, '<')
+      .fromTo('#heading-line-1', { opacity: 0, y: 80, rotateX: -90 }, { opacity: 1, y: 0, rotateX: 0, duration: 0.8 }, '-=0.3')
+      .fromTo('#heading-line-2', { opacity: 0, y: 80, rotateX: -90 }, { opacity: 1, y: 0, rotateX: 0, duration: 0.8 }, '-=0.5')
+      .to('#hero-subtitle', { opacity: 1, y: 0, duration: 0.7 }, '-=0.4')
+      .fromTo('#hero-subtitle', { y: 30 }, { y: 0, duration: 0.7 }, '<')
+      .to('#hero-pills', { opacity: 1, duration: 0.5 }, '-=0.3')
+      .fromTo('.service-pill', 
+        { opacity: 0, y: 20, scale: 0.9 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.1, ease: 'back.out(1.7)' },
+        '-=0.3'
+      )
+      .to('#hero-stats', { opacity: 1, duration: 0.5 }, '-=0.2')
+      .fromTo('.stat-card',
+        { opacity: 0, y: 40, scale: 0.95 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.6, stagger: 0.15, ease: 'power2.out' },
+        '-=0.3'
+      )
+      .to('#scroll-indicator', { opacity: 1, duration: 0.5 }, '-=0.2');
+
+    // Counter animation
+    const counters = document.querySelectorAll('.counter');
+    counters.forEach(counter => {
+      const target = parseInt(counter.dataset.target);
+      gsap.to(counter, {
+        innerText: target,
+        duration: 2,
+        delay: 1.5,
+        snap: { innerText: 1 },
+        ease: 'power2.out',
+        onUpdate: function() {
+          counter.textContent = Math.round(parseFloat(counter.textContent));
+        }
+      });
+    });
+
+    // ---------- Service Card 3D Tilt Effect ----------
+    const serviceCards = document.querySelectorAll('.service-card');
+    serviceCards.forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = (y - centerY) / centerY * -5;
+        const rotateY = (x - centerX) / centerX * 5;
+        
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+      });
+    });
+
+    // ---------- Animate all elements with the class 'fade-up' ----------
     gsap.utils.toArray('.fade-up').forEach(element => {
       gsap.fromTo(element, 
         { opacity: 0, y: 40 },
@@ -312,7 +694,39 @@
       );
     });
 
-    // Smooth scroll for anchor links (e.g., if any)
+    // ---------- Services Grid Stagger Animation ----------
+    gsap.fromTo('.service-card',
+      { opacity: 0, y: 60, scale: 0.95 },
+      {
+        opacity: 1, y: 0, scale: 1,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '.services-grid',
+          start: 'top 80%',
+          toggleActions: 'play none none none'
+        }
+      }
+    );
+
+    // ---------- Process Section Stagger Animation ----------
+    gsap.fromTo('.process-step',
+      { opacity: 0, y: 50, scale: 0.9 },
+      {
+        opacity: 1, y: 0, scale: 1,
+        duration: 0.7,
+        stagger: 0.2,
+        ease: 'back.out(1.7)',
+        scrollTrigger: {
+          trigger: '#process-section',
+          start: 'top 75%',
+          toggleActions: 'play none none none'
+        }
+      }
+    );
+
+    // ---------- Smooth scroll for anchor links ----------
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
         e.preventDefault();

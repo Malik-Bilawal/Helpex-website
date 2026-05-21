@@ -29,11 +29,12 @@
           },
           animation: {
             'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 4s ease-in-out infinite',
           },
           keyframes: {
             float: {
-              '0%, 100%': { transform: 'translateY(0px)' },
-              '50%': { transform: 'translateY(-20px)' },
+              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+              '50%': { transform: 'translateY(-20px) rotate(5deg)' },
             },
           },
         }
@@ -57,20 +58,28 @@
       color: #1A1F3B;
       overflow-x: hidden;
     }
-    .font-display {
-      font-family: 'Space Grotesk', sans-serif;
+    .font-display { font-family: 'Space Grotesk', sans-serif; }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(5deg); }
     }
+    @keyframes pulse-slow {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.05); }
+    }
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    .animate-float { animation: float 6s ease-in-out infinite; }
+    .animate-pulse-slow { animation: pulse-slow 4s ease-in-out infinite; }
+
     .gradient-text {
       background: linear-gradient(135deg, #28A197, #3BC4B5);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-    }
-    .glass {
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.5);
     }
     .bg-grid {
       background-image: 
@@ -78,11 +87,17 @@
         linear-gradient(90deg, rgba(40, 161, 151, 0.03) 1px, transparent 1px);
       background-size: 60px 60px;
     }
-    .fade-up {
-      opacity: 0;
-      transform: translateY(40px);
+    .magnetic-btn {
+      transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
-    /* Team card hover */
+
+    /* Team Card */
+    .team-card {
+      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .team-card:hover {
+      transform: translateY(-12px);
+    }
     .team-card:hover .team-img {
       transform: scale(1.08);
       box-shadow: 0 20px 40px rgba(40, 161, 151, 0.3);
@@ -90,84 +105,156 @@
     .team-img {
       transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
+
+    /* Value Card */
+    .value-card {
+      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .value-card:hover {
+      transform: translateY(-8px);
+    }
+
+    /* Scroll Indicator */
+    @keyframes scroll-bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+      40% { transform: translateY(-10px) translateX(-50%); }
+      60% { transform: translateY(-5px) translateX(-50%); }
+    }
+
+    /* Timeline */
+    .timeline-line {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, transparent, #28A197, transparent);
+      transform: translateX(-50%);
+    }
+    @media (max-width: 768px) {
+      .timeline-line { left: 20px; }
+    }
   </style>
 </head>
-<body class="bg-gradient-to-b from-white via-soft-white to-gray-50">
+<body>
 
   <!-- Navbar -->
   {% include 'helpex_app/components/navbar.html' %}
 
   <!-- ============================================================ -->
-  <!-- HERO SECTION -->
+  <!-- HERO SECTION - DARK PREMIUM -->
   <!-- ============================================================ -->
-  <section class="relative pt-32 pb-20 md:pt-44 md:pb-32 overflow-hidden bg-gradient-to-br from-midnight to-midnight-light">
-    <!-- Background effects -->
-    <div class="absolute inset-0 bg-grid opacity-10"></div>
-    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-teal/10 rounded-full filter blur-3xl animate-float"></div>
-    <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-teal-glow/10 rounded-full filter blur-3xl animate-float" style="animation-delay: -3s;"></div>
+  <section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#0A0F1E] via-[#0F1629] to-[#0A0F1E]" id="about-hero">
+    <!-- Particle Canvas -->
+    <canvas id="hero-canvas" class="absolute inset-0 w-full h-full opacity-30"></canvas>
+    
+    <!-- Gradient Orbs -->
+    <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-teal/15 rounded-full filter blur-[120px] animate-pulse-slow"></div>
+    <div class="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-teal-glow/10 rounded-full filter blur-[100px] animate-pulse-slow" style="animation-delay: -1.5s;"></div>
+    <div class="absolute top-[40%] left-[60%] w-[300px] h-[300px] bg-purple-500/8 rounded-full filter blur-[80px] animate-pulse-slow" style="animation-delay: -3s;"></div>
 
-    <div class="relative z-10 max-w-7xl mx-auto px-6">
+    <!-- Floating Shapes -->
+    <div class="absolute inset-0 pointer-events-none" id="floating-shapes">
+      <div class="absolute top-[15%] left-[10%] w-4 h-4 border-2 border-teal/30 rotate-45 animate-float" data-speed="0.5"></div>
+      <div class="absolute top-[25%] right-[15%] w-6 h-6 rounded-full border border-teal-glow/20 animate-float" style="animation-delay: -1s;" data-speed="0.8"></div>
+      <div class="absolute bottom-[30%] left-[20%] w-3 h-3 bg-teal/20 rounded-full animate-float" style="animation-delay: -2s;" data-speed="1.2"></div>
+      <div class="absolute top-[60%] right-[25%] w-5 h-5 border border-teal/20 rotate-12 animate-float" style="animation-delay: -3s;" data-speed="0.6"></div>
+      <div class="absolute bottom-[20%] right-[10%] w-8 h-8 border-2 border-teal-glow/10 rounded-lg rotate-45 animate-float" style="animation-delay: -2.5s;" data-speed="0.7"></div>
+    </div>
+
+    <!-- Mouse Follower -->
+    <div class="absolute w-[400px] h-[400px] bg-teal/8 rounded-full filter blur-[80px] pointer-events-none transition-transform duration-300 ease-out" id="mouse-glow"></div>
+
+    <!-- Content -->
+    <div class="relative z-10 max-w-7xl mx-auto px-6 py-32 text-center w-full">
       <!-- Breadcrumb -->
-      <div class="flex items-center gap-2 mb-10">
-        <a href="{% url 'index' %}" class="text-sm text-white/60 hover:text-teal transition-colors">Home</a>
-        <span class="text-white/30">/</span>
+      <div class="flex items-center justify-center gap-3 mb-8 opacity-0" id="about-breadcrumb">
+        <a href="{% url 'index' %}" class="text-sm text-gray-500 hover:text-teal transition-colors">Home</a>
+        <span class="text-gray-700">/</span>
         <span class="text-sm font-semibold text-teal">About Us</span>
       </div>
 
-      <!-- Headline -->
-      <div class="text-center max-w-4xl mx-auto">
-        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5 bg-teal/20 text-teal border border-teal/20">
-          // Who We Are
+      <!-- Badge -->
+      <div class="opacity-0" id="about-badge">
+        <span class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-semibold tracking-wider uppercase bg-teal/10 text-teal border border-teal/20 backdrop-blur-sm mb-8">
+          <span class="w-2 h-2 bg-teal rounded-full animate-pulse"></span>
+          Who We Are
         </span>
-        <h1 class="font-display text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 text-white">
-          About <span class="gradient-text">HELPEX</span>
-        </h1>
-        <p class="text-lg md:text-xl text-white/70 max-w-2xl mx-auto leading-relaxed">
-          We're an adaptive digital studio crafting exceptional experiences that drive business growth and success. Our team of passionate creators transforms ideas into powerful digital realities.
-        </p>
+      </div>
+
+      <!-- Title -->
+      <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-extrabold leading-[1.1] mb-8 opacity-0" id="about-title">
+        <span class="text-white">About</span>
+        <span class="bg-gradient-to-r from-teal via-teal-glow to-teal bg-clip-text text-transparent">HELPEX</span>
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-14 opacity-0 leading-relaxed" id="about-subtitle">
+        We're an adaptive digital studio crafting exceptional experiences that drive business growth and success.
+      </p>
+
+      <!-- Quick Stats Pills -->
+      <div class="flex flex-wrap justify-center gap-4 opacity-0" id="about-pills">
+        <div class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-gray-300">
+          <i class="fas fa-rocket text-teal"></i>
+          <span class="text-sm font-medium">180+ Projects Delivered</span>
+        </div>
+        <div class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-gray-300">
+          <i class="fas fa-smile text-teal"></i>
+          <span class="text-sm font-medium">98% Client Satisfaction</span>
+        </div>
+        <div class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-gray-300">
+          <i class="fas fa-users text-teal"></i>
+          <span class="text-sm font-medium">50+ Team Experts</span>
+        </div>
       </div>
     </div>
 
-    <!-- Scroll indicator -->
-    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/40 animate-bounce">
-      <span class="text-xs tracking-widest uppercase">Our Story</span>
-      <i class="fas fa-chevron-down"></i>
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-0" id="scroll-indicator">
+      <span class="text-xs tracking-widest uppercase text-gray-500">Our Story</span>
+      <div class="w-6 h-10 rounded-full border-2 border-gray-600 flex justify-center pt-2">
+        <div class="w-1 h-3 bg-teal rounded-full animate-bounce"></div>
+      </div>
     </div>
   </section>
 
   <!-- ============================================================ -->
-  <!-- STATS SECTION -->
+  <!-- STATS SECTION - DARK -->
   <!-- ============================================================ -->
-  <section class="py-20 bg-white relative -mt-10">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="fade-up glass p-6 rounded-2xl text-center hover:-translate-y-2 transition-all duration-300 shadow-sm">
-          <div class="w-14 h-14 rounded-xl bg-teal/10 text-teal flex items-center justify-center text-2xl mx-auto mb-4">
+  <section class="py-20 bg-gradient-to-b from-[#0A0F1E] to-[#0F1629] relative overflow-hidden" id="stats-section">
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(40,161,151,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(40,161,151,0.03)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
+    </div>
+    <div class="max-w-6xl mx-auto px-6 relative z-10">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div class="stat-card text-center opacity-0" data-index="0">
+          <div class="w-16 h-16 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mx-auto mb-4 border border-teal/20">
             <i class="fas fa-rocket"></i>
           </div>
-          <div class="text-3xl md:text-4xl font-extrabold gradient-text mb-1 stat-counter" data-target="180">{% if hero.stats_number_1 %}{{ hero.stats_number_1 }}{% else %}180+{% endif %}</div>
-          <div class="text-sm text-gray-soft font-medium">{% if hero.stats_label_1 %}{{ hero.stats_label_1 }}{% else %}Projects Delivered{% endif %}</div>
+          <div class="text-3xl md:text-4xl font-extrabold text-teal mb-1 counter" data-target="180">0</div>
+          <div class="text-sm text-gray-400 font-medium">{% if hero.stats_label_1 %}{{ hero.stats_label_1 }}{% else %}Projects Delivered{% endif %}</div>
         </div>
-        <div class="fade-up glass p-6 rounded-2xl text-center hover:-translate-y-2 transition-all duration-300 shadow-sm">
-          <div class="w-14 h-14 rounded-xl bg-teal/10 text-teal flex items-center justify-center text-2xl mx-auto mb-4">
+        <div class="stat-card text-center opacity-0" data-index="1">
+          <div class="w-16 h-16 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mx-auto mb-4 border border-teal/20">
             <i class="fas fa-smile"></i>
           </div>
-          <div class="text-3xl md:text-4xl font-extrabold gradient-text mb-1 stat-counter" data-target="98">{% if hero.stats_number_2 %}{{ hero.stats_number_2 }}{% else %}98%{% endif %}</div>
-          <div class="text-sm text-gray-soft font-medium">{% if hero.stats_label_2 %}{{ hero.stats_label_2 }}{% else %}Client Satisfaction{% endif %}</div>
+          <div class="text-3xl md:text-4xl font-extrabold text-teal mb-1"><span class="counter" data-target="98">0</span>%</div>
+          <div class="text-sm text-gray-400 font-medium">{% if hero.stats_label_2 %}{{ hero.stats_label_2 }}{% else %}Client Satisfaction{% endif %}</div>
         </div>
-        <div class="fade-up glass p-6 rounded-2xl text-center hover:-translate-y-2 transition-all duration-300 shadow-sm">
-          <div class="w-14 h-14 rounded-xl bg-teal/10 text-teal flex items-center justify-center text-2xl mx-auto mb-4">
+        <div class="stat-card text-center opacity-0" data-index="2">
+          <div class="w-16 h-16 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mx-auto mb-4 border border-teal/20">
             <i class="fas fa-users"></i>
           </div>
-          <div class="text-3xl md:text-4xl font-extrabold gradient-text mb-1 stat-counter" data-target="50">{% if hero.stats_number_3 %}{{ hero.stats_number_3 }}{% else %}50+{% endif %}</div>
-          <div class="text-sm text-gray-soft font-medium">{% if hero.stats_label_3 %}{{ hero.stats_label_3 }}{% else %}Team Experts{% endif %}</div>
+          <div class="text-3xl md:text-4xl font-extrabold text-teal mb-1 counter" data-target="50">0</div>
+          <div class="text-sm text-gray-400 font-medium">{% if hero.stats_label_3 %}{{ hero.stats_label_3 }}{% else %}Team Experts{% endif %}</div>
         </div>
-        <div class="fade-up glass p-6 rounded-2xl text-center hover:-translate-y-2 transition-all duration-300 shadow-sm">
-          <div class="w-14 h-14 rounded-xl bg-teal/10 text-teal flex items-center justify-center text-2xl mx-auto mb-4">
+        <div class="stat-card text-center opacity-0" data-index="3">
+          <div class="w-16 h-16 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mx-auto mb-4 border border-teal/20">
             <i class="fas fa-calendar-check"></i>
           </div>
-          <div class="text-3xl md:text-4xl font-extrabold gradient-text mb-1 stat-counter" data-target="12">12+</div>
-          <div class="text-sm text-gray-soft font-medium">Years Experience</div>
+          <div class="text-3xl md:text-4xl font-extrabold text-teal mb-1 counter" data-target="12">0</div>
+          <div class="text-sm text-gray-400 font-medium">Years Experience</div>
         </div>
       </div>
     </div>
@@ -176,60 +263,66 @@
   <!-- ============================================================ -->
   <!-- OUR STORY SECTION -->
   <!-- ============================================================ -->
-  <section class="py-24 bg-soft-white">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="grid lg:grid-cols-2 gap-12 items-center">
+  <section class="py-32 bg-gradient-to-b from-[#F8FAFC] via-white to-[#F0F4F5] relative overflow-hidden" id="story-section">
+    <!-- Background Effects -->
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(40,161,151,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(40,161,151,0.04)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
+      <div class="absolute top-1/3 right-0 w-[500px] h-[500px] bg-teal/5 rounded-full filter blur-[100px]"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
         <!-- Left: Text -->
         <div>
-          <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5 bg-teal/10 text-teal border border-teal/20">
+          <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-6 bg-teal/10 text-teal border border-teal/20 backdrop-blur-sm opacity-0" id="story-badge">
             // Our Story
           </span>
-          <h2 class="font-display text-4xl md:text-5xl font-bold mb-6 text-midnight">
-            From Vision to <span class="gradient-text">Reality</span>
+          <h2 class="font-display text-4xl md:text-5xl font-bold mb-8 text-midnight opacity-0" id="story-title">
+            From Vision to <span class="bg-gradient-to-r from-teal to-teal-glow bg-clip-text text-transparent">Reality</span>
           </h2>
-          <p class="text-gray-soft leading-relaxed mb-5 text-lg">
+          <p class="text-gray-500 leading-relaxed mb-6 text-lg opacity-0" id="story-p1">
             HELPEX is an adaptive digital studio with a passion for crafting exceptional digital experiences. Founded with a vision to bridge the gap between innovative ideas and digital reality, we've grown into a trusted partner for businesses worldwide.
           </p>
-          <p class="text-gray-soft leading-relaxed mb-8 text-lg">
+          <p class="text-gray-500 leading-relaxed mb-10 text-lg opacity-0" id="story-p2">
             We believe that great digital experiences are born from the perfect blend of creative design, cutting-edge technology, and strategic thinking. Every project is an opportunity to push boundaries and deliver transformative solutions.
           </p>
-          <div class="flex flex-wrap gap-6">
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 rounded-xl bg-teal/10 text-teal flex items-center justify-center text-lg">
+          <div class="flex flex-wrap gap-8 opacity-0" id="story-features">
+            <div class="flex items-center gap-4">
+              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal/10 to-teal-glow/10 text-teal flex items-center justify-center text-lg border border-teal/20">
                 <i class="fas fa-award"></i>
               </div>
               <div>
                 <div class="font-semibold text-midnight">Award Winning</div>
-                <div class="text-sm text-gray-soft">Industry Recognition</div>
+                <div class="text-sm text-gray-500">Industry Recognition</div>
               </div>
             </div>
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 rounded-xl bg-teal/10 text-teal flex items-center justify-center text-lg">
+            <div class="flex items-center gap-4">
+              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal/10 to-teal-glow/10 text-teal flex items-center justify-center text-lg border border-teal/20">
                 <i class="fas fa-users"></i>
               </div>
               <div>
                 <div class="font-semibold text-midnight">Expert Team</div>
-                <div class="text-sm text-gray-soft">50+ Professionals</div>
+                <div class="text-sm text-gray-500">50+ Professionals</div>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Right: Quote Card -->
-        <div class="relative">
+        <div class="relative opacity-0" id="story-quote">
           <div class="absolute inset-0 rounded-3xl rotate-3 bg-teal/10"></div>
-          <div class="relative rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-midnight to-midnight-light p-10 md:p-14">
+          <div class="relative rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-[#0A0F1E] to-[#0F1629] p-10 md:p-14 border border-white/10">
             <i class="fas fa-quote-left text-4xl mb-6 text-teal"></i>
-            <p class="text-white/80 text-lg leading-relaxed mb-8 font-light">
+            <p class="text-gray-300 text-lg leading-relaxed mb-8 font-light italic">
               "We don't just build websites. We build relationships. Every project is an opportunity to create something extraordinary that makes a real difference for our clients and their customers."
             </p>
-            <div class="flex items-center gap-4 pt-4 border-t border-white/10">
-              <div class="w-12 h-12 rounded-full bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center text-white font-bold text-lg">
+            <div class="flex items-center gap-4 pt-6 border-t border-white/10">
+              <div class="w-14 h-14 rounded-full bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-teal/20">
                 JD
               </div>
               <div>
                 <div class="font-semibold text-white">John Doe</div>
-                <div class="text-sm text-white/50">CEO & Founder</div>
+                <div class="text-sm text-gray-400">CEO & Founder</div>
               </div>
             </div>
           </div>
@@ -241,73 +334,101 @@
   <!-- ============================================================ -->
   <!-- OUR VALUES SECTION -->
   <!-- ============================================================ -->
-  <section class="py-24 bg-white">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="text-center mb-14">
-        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5 bg-teal/10 text-teal border border-teal/20">
+  <section class="py-32 bg-gradient-to-b from-[#0A0F1E] via-[#0F1629] to-[#0A0F1E] relative overflow-hidden" id="values-section">
+    <!-- Background Effects -->
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(40,161,151,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(40,161,151,0.03)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
+      <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-teal/5 rounded-full filter blur-[120px]"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+      <div class="text-center mb-20">
+        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-6 bg-teal/10 text-teal border border-teal/20 backdrop-blur-sm opacity-0" id="values-badge">
           // Our Values
         </span>
-        <h2 class="font-display text-4xl md:text-5xl font-bold text-midnight mb-4">
-          What <span class="gradient-text">Drives Us</span>
+        <h2 class="font-display text-4xl md:text-6xl font-bold text-white mb-6 opacity-0" id="values-title">
+          What <span class="bg-gradient-to-r from-teal to-teal-glow bg-clip-text text-transparent">Drives Us</span>
         </h2>
-        <p class="text-lg text-gray-soft max-w-xl mx-auto">
-          These core principles guide everything we do — from how we work to the solutions we deliver.
-        </p>
+        <p class="text-lg text-gray-400 max-w-xl mx-auto opacity-0" id="values-desc">These core principles guide everything we do — from how we work to the solutions we deliver.</p>
       </div>
 
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         <!-- Value 1 -->
-        <div class="fade-up group bg-soft-white rounded-3xl p-8 border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
-          <div class="w-14 h-14 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mb-5 group-hover:bg-teal group-hover:text-white transition-all duration-300">
+        <div class="value-card group relative p-10 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] hover:border-teal/30 transition-all duration-500 opacity-0" data-index="0">
+          <div class="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+            <div class="absolute inset-0 rounded-3xl bg-gradient-to-r from-teal via-teal-glow to-teal opacity-10 blur-sm"></div>
+          </div>
+          <div class="w-16 h-16 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mb-6 group-hover:bg-teal group-hover:text-white transition-all duration-500 border border-teal/20 relative z-10">
             <i class="fas fa-heart"></i>
           </div>
-          <h3 class="text-xl font-bold mb-3 text-midnight">Passion</h3>
-          <p class="text-gray-soft text-sm leading-relaxed">We pour our heart into every project, treating each challenge as an opportunity to create something extraordinary that makes a real difference.</p>
+          <h3 class="text-xl font-bold mb-3 text-white group-hover:text-teal transition-colors duration-300 relative z-10">Passion</h3>
+          <p class="text-gray-400 text-sm leading-relaxed relative z-10">We pour our heart into every project, treating each challenge as an opportunity to create something extraordinary that makes a real difference.</p>
+          <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal/30 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
         </div>
 
         <!-- Value 2 -->
-        <div class="fade-up group bg-soft-white rounded-3xl p-8 border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
-          <div class="w-14 h-14 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mb-5 group-hover:bg-teal group-hover:text-white transition-all duration-300">
+        <div class="value-card group relative p-10 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] hover:border-teal/30 transition-all duration-500 opacity-0" data-index="1">
+          <div class="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+            <div class="absolute inset-0 rounded-3xl bg-gradient-to-r from-teal via-teal-glow to-teal opacity-10 blur-sm"></div>
+          </div>
+          <div class="w-16 h-16 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mb-6 group-hover:bg-teal group-hover:text-white transition-all duration-500 border border-teal/20 relative z-10">
             <i class="fas fa-lightbulb"></i>
           </div>
-          <h3 class="text-xl font-bold mb-3 text-midnight">Innovation</h3>
-          <p class="text-gray-soft text-sm leading-relaxed">We constantly push boundaries and explore new technologies to deliver cutting-edge solutions that give our clients a competitive edge.</p>
+          <h3 class="text-xl font-bold mb-3 text-white group-hover:text-teal transition-colors duration-300 relative z-10">Innovation</h3>
+          <p class="text-gray-400 text-sm leading-relaxed relative z-10">We constantly push boundaries and explore new technologies to deliver cutting-edge solutions that give our clients a competitive edge.</p>
+          <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal/30 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
         </div>
 
         <!-- Value 3 -->
-        <div class="fade-up group bg-soft-white rounded-3xl p-8 border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
-          <div class="w-14 h-14 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mb-5 group-hover:bg-teal group-hover:text-white transition-all duration-300">
+        <div class="value-card group relative p-10 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] hover:border-teal/30 transition-all duration-500 opacity-0" data-index="2">
+          <div class="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+            <div class="absolute inset-0 rounded-3xl bg-gradient-to-r from-teal via-teal-glow to-teal opacity-10 blur-sm"></div>
+          </div>
+          <div class="w-16 h-16 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mb-6 group-hover:bg-teal group-hover:text-white transition-all duration-500 border border-teal/20 relative z-10">
             <i class="fas fa-handshake"></i>
           </div>
-          <h3 class="text-xl font-bold mb-3 text-midnight">Integrity</h3>
-          <p class="text-gray-soft text-sm leading-relaxed">We build trust through transparency, honesty, and delivering on our promises. Your success is our success.</p>
+          <h3 class="text-xl font-bold mb-3 text-white group-hover:text-teal transition-colors duration-300 relative z-10">Integrity</h3>
+          <p class="text-gray-400 text-sm leading-relaxed relative z-10">We build trust through transparency, honesty, and delivering on our promises. Your success is our success.</p>
+          <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal/30 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
         </div>
 
         <!-- Value 4 -->
-        <div class="fade-up group bg-soft-white rounded-3xl p-8 border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
-          <div class="w-14 h-14 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mb-5 group-hover:bg-teal group-hover:text-white transition-all duration-300">
+        <div class="value-card group relative p-10 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] hover:border-teal/30 transition-all duration-500 opacity-0" data-index="3">
+          <div class="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+            <div class="absolute inset-0 rounded-3xl bg-gradient-to-r from-teal via-teal-glow to-teal opacity-10 blur-sm"></div>
+          </div>
+          <div class="w-16 h-16 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mb-6 group-hover:bg-teal group-hover:text-white transition-all duration-500 border border-teal/20 relative z-10">
             <i class="fas fa-users"></i>
           </div>
-          <h3 class="text-xl font-bold mb-3 text-midnight">Collaboration</h3>
-          <p class="text-gray-soft text-sm leading-relaxed">Great work happens when great minds work together. We foster open communication and teamwork to achieve shared goals.</p>
+          <h3 class="text-xl font-bold mb-3 text-white group-hover:text-teal transition-colors duration-300 relative z-10">Collaboration</h3>
+          <p class="text-gray-400 text-sm leading-relaxed relative z-10">Great work happens when great minds work together. We foster open communication and teamwork to achieve shared goals.</p>
+          <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal/30 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
         </div>
 
         <!-- Value 5 -->
-        <div class="fade-up group bg-soft-white rounded-3xl p-8 border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
-          <div class="w-14 h-14 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mb-5 group-hover:bg-teal group-hover:text-white transition-all duration-300">
+        <div class="value-card group relative p-10 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] hover:border-teal/30 transition-all duration-500 opacity-0" data-index="4">
+          <div class="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+            <div class="absolute inset-0 rounded-3xl bg-gradient-to-r from-teal via-teal-glow to-teal opacity-10 blur-sm"></div>
+          </div>
+          <div class="w-16 h-16 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mb-6 group-hover:bg-teal group-hover:text-white transition-all duration-500 border border-teal/20 relative z-10">
             <i class="fas fa-star"></i>
           </div>
-          <h3 class="text-xl font-bold mb-3 text-midnight">Excellence</h3>
-          <p class="text-gray-soft text-sm leading-relaxed">We never settle for "good enough." Every line of code, every pixel, every interaction is crafted with precision and care.</p>
+          <h3 class="text-xl font-bold mb-3 text-white group-hover:text-teal transition-colors duration-300 relative z-10">Excellence</h3>
+          <p class="text-gray-400 text-sm leading-relaxed relative z-10">We never settle for "good enough." Every line of code, every pixel, every interaction is crafted with precision and care.</p>
+          <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal/30 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
         </div>
 
         <!-- Value 6 -->
-        <div class="fade-up group bg-soft-white rounded-3xl p-8 border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
-          <div class="w-14 h-14 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mb-5 group-hover:bg-teal group-hover:text-white transition-all duration-300">
+        <div class="value-card group relative p-10 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] hover:border-teal/30 transition-all duration-500 opacity-0" data-index="5">
+          <div class="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+            <div class="absolute inset-0 rounded-3xl bg-gradient-to-r from-teal via-teal-glow to-teal opacity-10 blur-sm"></div>
+          </div>
+          <div class="w-16 h-16 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mb-6 group-hover:bg-teal group-hover:text-white transition-all duration-500 border border-teal/20 relative z-10">
             <i class="fas fa-rocket"></i>
           </div>
-          <h3 class="text-xl font-bold mb-3 text-midnight">Growth</h3>
-          <p class="text-gray-soft text-sm leading-relaxed">We're committed to continuous learning and improvement, ensuring we stay ahead in an ever-evolving digital landscape.</p>
+          <h3 class="text-xl font-bold mb-3 text-white group-hover:text-teal transition-colors duration-300 relative z-10">Growth</h3>
+          <p class="text-gray-400 text-sm leading-relaxed relative z-10">We're committed to continuous learning and improvement, ensuring we stay ahead in an ever-evolving digital landscape.</p>
+          <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal/30 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
         </div>
       </div>
     </div>
@@ -316,24 +437,28 @@
   <!-- ============================================================ -->
   <!-- TEAM SECTION -->
   <!-- ============================================================ -->
-  <section class="py-24 bg-soft-white">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="text-center mb-14">
-        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-5 bg-teal/10 text-teal border border-teal/20">
+  <section class="py-32 bg-gradient-to-b from-[#F8FAFC] via-white to-[#F0F4F5] relative overflow-hidden" id="team-section">
+    <!-- Background Effects -->
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(40,161,151,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(40,161,151,0.04)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
+      <div class="absolute top-1/3 right-0 w-[500px] h-[500px] bg-teal/5 rounded-full filter blur-[100px]"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+      <div class="text-center mb-20">
+        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-6 bg-teal/10 text-teal border border-teal/20 backdrop-blur-sm opacity-0" id="team-badge">
           // Our Team
         </span>
-        <h2 class="font-display text-4xl md:text-5xl font-bold text-midnight mb-4">
-          Meet the <span class="gradient-text">Experts</span>
+        <h2 class="font-display text-4xl md:text-6xl font-bold text-midnight mb-6 opacity-0" id="team-title">
+          Meet the <span class="bg-gradient-to-r from-teal to-teal-glow bg-clip-text text-transparent">Experts</span>
         </h2>
-        <p class="text-lg text-gray-soft max-w-xl mx-auto">
-          Talented people with a shared passion for creating exceptional digital experiences.
-        </p>
+        <p class="text-lg text-gray-500 max-w-xl mx-auto opacity-0" id="team-desc">Talented people with a shared passion for creating exceptional digital experiences.</p>
       </div>
 
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {% for member in team_members %}
-        <div class="fade-up team-card group text-center">
-          <div class="relative mb-5 mx-auto w-36 h-36 md:w-40 md:h-40 rounded-full overflow-hidden shadow-lg team-img">
+        <div class="team-card group text-center opacity-0" data-index="{{ forloop.counter0 }}">
+          <div class="relative mb-6 mx-auto w-40 h-40 rounded-full overflow-hidden shadow-lg team-img border-4 border-white group-hover:border-teal/30 transition-all duration-500">
             {% if member.photo %}
             <img src="{{ member.photo.url }}" alt="{{ member.name }}" class="w-full h-full object-cover">
             {% else %}
@@ -342,38 +467,38 @@
             </div>
             {% endif %}
           </div>
-          <h3 class="text-lg font-bold text-midnight">{{ member.name }}</h3>
+          <h3 class="text-lg font-bold text-midnight group-hover:text-teal transition-colors duration-300">{{ member.name }}</h3>
           <p class="text-sm font-semibold text-teal">{{ member.role }}</p>
-          {% if member.bio %}<p class="text-xs text-gray-soft mt-2 leading-relaxed">{{ member.bio|truncatechars:60 }}</p>{% endif %}
+          {% if member.bio %}<p class="text-xs text-gray-500 mt-2 leading-relaxed">{{ member.bio|truncatechars:60 }}</p>{% endif %}
         </div>
         {% empty %}
         <!-- Fallback team members -->
-        <div class="fade-up team-card group text-center">
-          <div class="relative mb-5 mx-auto w-36 h-36 md:w-40 md:h-40 rounded-full overflow-hidden shadow-lg team-img bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center">
+        <div class="team-card group text-center opacity-0" data-index="0">
+          <div class="relative mb-6 mx-auto w-40 h-40 rounded-full overflow-hidden shadow-lg team-img border-4 border-white group-hover:border-teal/30 transition-all duration-500 bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center">
             <i class="fas fa-user text-4xl text-white/40"></i>
           </div>
-          <h3 class="text-lg font-bold text-midnight">Alex Rivera</h3>
+          <h3 class="text-lg font-bold text-midnight group-hover:text-teal transition-colors duration-300">Alex Rivera</h3>
           <p class="text-sm font-semibold text-teal">CEO & Founder</p>
         </div>
-        <div class="fade-up team-card group text-center">
-          <div class="relative mb-5 mx-auto w-36 h-36 md:w-40 md:h-40 rounded-full overflow-hidden shadow-lg team-img bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center">
+        <div class="team-card group text-center opacity-0" data-index="1">
+          <div class="relative mb-6 mx-auto w-40 h-40 rounded-full overflow-hidden shadow-lg team-img border-4 border-white group-hover:border-teal/30 transition-all duration-500 bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center">
             <i class="fas fa-user text-4xl text-white/40"></i>
           </div>
-          <h3 class="text-lg font-bold text-midnight">Jordan Smith</h3>
+          <h3 class="text-lg font-bold text-midnight group-hover:text-teal transition-colors duration-300">Jordan Smith</h3>
           <p class="text-sm font-semibold text-teal">CTO</p>
         </div>
-        <div class="fade-up team-card group text-center">
-          <div class="relative mb-5 mx-auto w-36 h-36 md:w-40 md:h-40 rounded-full overflow-hidden shadow-lg team-img bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center">
+        <div class="team-card group text-center opacity-0" data-index="2">
+          <div class="relative mb-6 mx-auto w-40 h-40 rounded-full overflow-hidden shadow-lg team-img border-4 border-white group-hover:border-teal/30 transition-all duration-500 bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center">
             <i class="fas fa-user text-4xl text-white/40"></i>
           </div>
-          <h3 class="text-lg font-bold text-midnight">Sam Williams</h3>
+          <h3 class="text-lg font-bold text-midnight group-hover:text-teal transition-colors duration-300">Sam Williams</h3>
           <p class="text-sm font-semibold text-teal">Creative Director</p>
         </div>
-        <div class="fade-up team-card group text-center">
-          <div class="relative mb-5 mx-auto w-36 h-36 md:w-40 md:h-40 rounded-full overflow-hidden shadow-lg team-img bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center">
+        <div class="team-card group text-center opacity-0" data-index="3">
+          <div class="relative mb-6 mx-auto w-40 h-40 rounded-full overflow-hidden shadow-lg team-img border-4 border-white group-hover:border-teal/30 transition-all duration-500 bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center">
             <i class="fas fa-user text-4xl text-white/40"></i>
           </div>
-          <h3 class="text-lg font-bold text-midnight">Taylor Brown</h3>
+          <h3 class="text-lg font-bold text-midnight group-hover:text-teal transition-colors duration-300">Taylor Brown</h3>
           <p class="text-sm font-semibold text-teal">Head of Operations</p>
         </div>
         {% endfor %}
@@ -383,20 +508,167 @@
 
   <!-- ============================================================ -->
   <!-- CTA SECTION -->
+  <!-- ============================================================ -->
+  <section class="py-32 bg-gradient-to-b from-[#0A0F1E] via-[#0F1629] to-[#0A0F1E] relative overflow-hidden" id="cta-section">
+    <!-- Background Effects -->
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(40,161,151,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(40,161,151,0.03)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-r from-teal/10 via-teal-glow/5 to-teal/10 rounded-full filter blur-[120px]"></div>
+    </div>
 
+    <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+      <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-8 bg-teal/10 text-teal border border-teal/20 backdrop-blur-sm opacity-0" id="cta-badge">
+        // Join Our Journey
+      </span>
+      <h2 class="font-display text-4xl md:text-6xl font-bold text-white mb-8 opacity-0" id="cta-title">
+        Ready to <span class="bg-gradient-to-r from-teal to-teal-glow bg-clip-text text-transparent">Build</span> Something Amazing?
+      </h2>
+      <p class="text-lg text-gray-400 max-w-xl mx-auto mb-12 opacity-0" id="cta-desc">Let's turn your vision into reality. Get in touch and let's discuss your next project.</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center opacity-0" id="cta-buttons">
+        <a href="{% url 'contact' %}" class="magnetic-btn inline-flex items-center justify-center gap-3 px-10 py-5 rounded-full font-semibold text-white bg-gradient-to-r from-teal to-teal-dark hover:shadow-xl hover:shadow-teal/30 transition-all hover:scale-105">
+          <i class="fas fa-rocket"></i> Get Started
+        </a>
+        <a href="{% url 'contact' %}" class="magnetic-btn inline-flex items-center justify-center gap-3 px-10 py-5 rounded-full font-semibold text-teal border border-teal/30 hover:bg-teal/5 transition-all">
+          <i class="fas fa-calendar"></i> Book a Call
+        </a>
+      </div>
+    </div>
+  </section>
 
   <!-- Footer -->
-  <!-- ========== REGISTERED COMPANIES ========== -->
   {% include 'helpex_app/components/registered_companies.html' %}
-
-  
-  <!-- ========== FOOTER (included from component) ========== -->
   {% include 'helpex_app/components/footer.html' %}
 
   <!-- ============================================================ -->
   <!-- SCRIPTS -->
   <!-- ============================================================ -->
   <script>
+    // ---------- Particle Canvas Background ----------
+    const canvas = document.getElementById('hero-canvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+      let animationId;
+      let mouse = { x: null, y: null };
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      class Particle {
+        constructor() {
+          this.x = Math.random() * canvas.width;
+          this.y = Math.random() * canvas.height;
+          this.size = Math.random() * 2 + 0.5;
+          this.speedX = (Math.random() - 0.5) * 0.5;
+          this.speedY = (Math.random() - 0.5) * 0.5;
+          this.opacity = Math.random() * 0.5 + 0.1;
+        }
+        update() {
+          this.x += this.speedX;
+          this.y += this.speedY;
+          if (this.x > canvas.width) this.x = 0;
+          if (this.x < 0) this.x = canvas.width;
+          if (this.y > canvas.height) this.y = 0;
+          if (this.y < 0) this.y = canvas.height;
+        }
+        draw() {
+          ctx.fillStyle = `rgba(40, 161, 151, ${this.opacity})`;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      function initParticles() {
+        particles = [];
+        const count = Math.min(80, Math.floor((canvas.width * canvas.height) / 15000));
+        for (let i = 0; i < count; i++) {
+          particles.push(new Particle());
+        }
+      }
+      initParticles();
+
+      function connectParticles() {
+        for (let a = 0; a < particles.length; a++) {
+          for (let b = a + 1; b < particles.length; b++) {
+            const dx = particles[a].x - particles[b].x;
+            const dy = particles[a].y - particles[b].y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < 120) {
+              const opacity = (1 - distance / 120) * 0.15;
+              ctx.strokeStyle = `rgba(40, 161, 151, ${opacity})`;
+              ctx.lineWidth = 0.5;
+              ctx.beginPath();
+              ctx.moveTo(particles[a].x, particles[a].y);
+              ctx.lineTo(particles[b].x, particles[b].y);
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          p.update();
+          p.draw();
+        });
+        connectParticles();
+        animationId = requestAnimationFrame(animateParticles);
+      }
+      animateParticles();
+
+      canvas.addEventListener('mousemove', e => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+        particles.forEach(p => {
+          const dx = mouse.x - p.x;
+          const dy = mouse.y - p.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 100) {
+            p.x -= dx * 0.02;
+            p.y -= dy * 0.02;
+          }
+        });
+      });
+    }
+
+    // ---------- Mouse Glow Follower ----------
+    const mouseGlow = document.getElementById('mouse-glow');
+    const heroSection = document.getElementById('about-hero');
+    if (mouseGlow && heroSection) {
+      heroSection.addEventListener('mousemove', e => {
+        const rect = heroSection.getBoundingClientRect();
+        const x = e.clientX - rect.left - 200;
+        const y = e.clientY - rect.top - 200;
+        mouseGlow.style.transform = `translate(${x}px, ${y}px)`;
+      });
+    }
+
+    // ---------- Parallax Floating Shapes ----------
+    const floatingShapes = document.getElementById('floating-shapes');
+    if (floatingShapes && heroSection) {
+      heroSection.addEventListener('mousemove', e => {
+        const shapes = floatingShapes.querySelectorAll('[data-speed]');
+        const rect = heroSection.getBoundingClientRect();
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const mouseX = e.clientX - rect.left - centerX;
+        const mouseY = e.clientY - rect.top - centerY;
+
+        shapes.forEach(shape => {
+          const speed = parseFloat(shape.dataset.speed);
+          const x = mouseX * speed * 0.05;
+          const y = mouseY * speed * 0.05;
+          shape.style.transform = `translate(${x}px, ${y}px)`;
+        });
+      });
+    }
+
     // ---------- Lenis Smooth Scroll ----------
     const lenis = new Lenis({
       duration: 1.2,
@@ -409,7 +681,6 @@
     }
     requestAnimationFrame(raf);
 
-    // Sync Lenis with GSAP ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add((time) => {
       lenis.raf(time * 1000);
@@ -419,48 +690,160 @@
     // ---------- GSAP Entrance Animations ----------
     gsap.registerPlugin(ScrollTrigger);
 
-    // Animate all fade-up elements
-    gsap.utils.toArray('.fade-up').forEach((element, index) => {
-      gsap.fromTo(element,
-        { opacity: 0, y: 40 },
-        {
-          opacity: 1, y: 0,
-          duration: 0.7,
-          delay: index * 0.08,
+    // Hero Timeline
+    const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    heroTl
+      .to('#about-breadcrumb', { opacity: 1, y: 0, duration: 0.6, delay: 0.2 })
+      .fromTo('#about-breadcrumb', { y: -20 }, { y: 0, duration: 0.6 }, '<')
+      .to('#about-badge', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+      .fromTo('#about-badge', { y: 20 }, { y: 0, duration: 0.6 }, '<')
+      .fromTo('#about-title', { opacity: 0, y: 80, rotateX: -90 }, { opacity: 1, y: 0, rotateX: 0, duration: 0.8 }, '-=0.3')
+      .to('#about-subtitle', { opacity: 1, y: 0, duration: 0.7 }, '-=0.4')
+      .fromTo('#about-subtitle', { y: 30 }, { y: 0, duration: 0.7 }, '<')
+      .to('#about-pills', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+      .fromTo('#about-pills', { y: 20 }, { y: 0, duration: 0.6 }, '<')
+      .to('#scroll-indicator', { opacity: 1, duration: 0.5 }, '-=0.2');
+
+    // Stats Section
+    gsap.fromTo('.stat-card',
+      { opacity: 0, y: 40, scale: 0.95 },
+      {
+        opacity: 1, y: 0, scale: 1,
+        duration: 0.6,
+        stagger: 0.15,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '#stats-section',
+          start: 'top 80%',
+          toggleActions: 'play none none none'
+        }
+      }
+    );
+
+    // Counter Animation
+    const counters = document.querySelectorAll('.counter');
+    counters.forEach(counter => {
+      const target = parseInt(counter.dataset.target) || 0;
+      if (target > 0) {
+        gsap.to(counter, {
+          innerText: target,
+          duration: 2,
+          delay: 0.5,
+          snap: { innerText: 1 },
           ease: 'power2.out',
           scrollTrigger: {
-            trigger: element,
-            start: 'top 85%',
+            trigger: '#stats-section',
+            start: 'top 80%',
             toggleActions: 'play none none none'
-          }
-        }
-      );
-    });
-
-    // ---------- Animated Counters ----------
-    document.querySelectorAll('.stat-counter').forEach(counter => {
-      const text = counter.textContent.trim();
-      const target = parseInt(text.replace(/\D/g, ''));
-      const suffix = text.replace(/[0-9]/g, '').trim();
-      
-      if (!isNaN(target)) {
-        ScrollTrigger.create({
-          trigger: counter,
-          start: 'top 90%',
-          onEnter: () => {
-            gsap.to({ val: 0 }, {
-              val: target,
-              duration: 2.5,
-              ease: 'power3.out',
-              onUpdate: function() {
-                counter.textContent = Math.floor(this.targets()[0].val) + suffix;
-              }
-            });
           },
-          once: true
+          onUpdate: function() {
+            counter.textContent = Math.round(parseFloat(counter.textContent));
+          }
         });
       }
     });
+
+    // Story Section
+    const storyTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#story-section',
+        start: 'top 75%',
+        toggleActions: 'play none none none'
+      }
+    });
+    storyTl
+      .to('#story-badge', { opacity: 1, y: 0, duration: 0.5 })
+      .fromTo('#story-badge', { y: 20 }, { y: 0, duration: 0.5 }, '<')
+      .to('#story-title', { opacity: 1, y: 0, duration: 0.6 }, '-=0.2')
+      .fromTo('#story-title', { y: 30 }, { y: 0, duration: 0.6 }, '<')
+      .to('#story-p1', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+      .fromTo('#story-p1', { y: 20 }, { y: 0, duration: 0.6 }, '<')
+      .to('#story-p2', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+      .fromTo('#story-p2', { y: 20 }, { y: 0, duration: 0.6 }, '<')
+      .to('#story-features', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+      .fromTo('#story-features', { y: 20 }, { y: 0, duration: 0.6 }, '<')
+      .to('#story-quote', { opacity: 1, x: 0, duration: 0.8 }, '-=0.5')
+      .fromTo('#story-quote', { x: 60 }, { x: 0, duration: 0.8 }, '<');
+
+    // Values Section
+    const valuesTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#values-badge',
+        start: 'top 85%',
+        toggleActions: 'play none none none'
+      }
+    });
+    valuesTl
+      .to('#values-badge', { opacity: 1, y: 0, duration: 0.5 })
+      .fromTo('#values-badge', { y: 20 }, { y: 0, duration: 0.5 }, '<')
+      .to('#values-title', { opacity: 1, y: 0, duration: 0.6 }, '-=0.2')
+      .fromTo('#values-title', { y: 30 }, { y: 0, duration: 0.6 }, '<')
+      .to('#values-desc', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+      .fromTo('#values-desc', { y: 20 }, { y: 0, duration: 0.6 }, '<');
+
+    gsap.fromTo('.value-card',
+      { opacity: 0, y: 50, scale: 0.95 },
+      {
+        opacity: 1, y: 0, scale: 1,
+        duration: 0.6,
+        stagger: 0.12,
+        ease: 'back.out(1.7)',
+        scrollTrigger: {
+          trigger: '.value-card',
+          start: 'top 85%',
+          toggleActions: 'play none none none'
+        }
+      }
+    );
+
+    // Team Section
+    const teamTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#team-badge',
+        start: 'top 85%',
+        toggleActions: 'play none none none'
+      }
+    });
+    teamTl
+      .to('#team-badge', { opacity: 1, y: 0, duration: 0.5 })
+      .fromTo('#team-badge', { y: 20 }, { y: 0, duration: 0.5 }, '<')
+      .to('#team-title', { opacity: 1, y: 0, duration: 0.6 }, '-=0.2')
+      .fromTo('#team-title', { y: 30 }, { y: 0, duration: 0.6 }, '<')
+      .to('#team-desc', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+      .fromTo('#team-desc', { y: 20 }, { y: 0, duration: 0.6 }, '<');
+
+    gsap.fromTo('.team-card',
+      { opacity: 0, y: 40, scale: 0.9 },
+      {
+        opacity: 1, y: 0, scale: 1,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: 'back.out(1.7)',
+        scrollTrigger: {
+          trigger: '.team-card',
+          start: 'top 85%',
+          toggleActions: 'play none none none'
+        }
+      }
+    );
+
+    // CTA Section
+    const ctaTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#cta-badge',
+        start: 'top 85%',
+        toggleActions: 'play none none none'
+      }
+    });
+    ctaTl
+      .to('#cta-badge', { opacity: 1, y: 0, duration: 0.5 })
+      .fromTo('#cta-badge', { y: 20 }, { y: 0, duration: 0.5 }, '<')
+      .to('#cta-title', { opacity: 1, y: 0, duration: 0.7 }, '-=0.2')
+      .fromTo('#cta-title', { y: 40 }, { y: 0, duration: 0.7 }, '<')
+      .to('#cta-desc', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+      .fromTo('#cta-desc', { y: 30 }, { y: 0, duration: 0.6 }, '<')
+      .to('#cta-buttons', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+      .fromTo('#cta-buttons', { y: 20 }, { y: 0, duration: 0.6 }, '<');
 
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
