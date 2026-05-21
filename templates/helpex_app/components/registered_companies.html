@@ -6,8 +6,8 @@
 {% if registered_companies %}
 <section class="registered-section py-24 bg-gradient-to-b from-white via-[#F8FAFC] to-[#F0F4F5] overflow-hidden relative">
   <!-- Animated background grid -->
-  <div class="absolute inset-0 pointer-events-none">
-    <div class="absolute inset-0 bg-[linear-gradient(rgba(40,161,151,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(40,161,151,0.04)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
+    <div class="absolute inset-0 pointer-events-none">
+    <div class="absolute inset-0 bg-[linear-gradient(rgba(77,95,241,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(77,95,241,0.04)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] bg-gradient-to-r from-teal/8 via-teal-glow/5 to-teal/8 rounded-full filter blur-[120px] animate-pulse"></div>
   </div>
 
@@ -88,11 +88,11 @@
     backface-visibility: hidden;
   }
   .reg-dot.active {
-    background-color: #28A197;
+    background-color: #4D5FF1;
     width: 28px;
     border-radius: 9999px;
-    border-color: #28A197;
-    box-shadow: 0 0 16px rgba(40, 161, 151, 0.5);
+    border-color: #4D5FF1;
+    box-shadow: 0 0 16px rgba(77, 95, 241, 0.5);
   }
 </style>
 
@@ -143,8 +143,8 @@
         const isCenter = Math.abs(normalizedAngle - 0) < theta / 2 || Math.abs(normalizedAngle - 360) < theta / 2;
         
         if (isCenter) {
-          card.style.boxShadow = '0 30px 60px -15px rgba(40, 161, 151, 0.2), 0 0 0 1px rgba(40, 161, 151, 0.15)';
-          card.style.borderColor = 'rgba(40, 161, 151, 0.3)';
+          card.style.boxShadow = '0 30px 60px -15px rgba(77, 95, 241, 0.2), 0 0 0 1px rgba(77, 95, 241, 0.15)';
+          card.style.borderColor = 'rgba(77, 95, 241, 0.3)';
         } else {
           card.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.08)';
           card.style.borderColor = 'rgba(229, 231, 235, 0.6)';

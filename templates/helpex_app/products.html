@@ -1,0 +1,475 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="HELPEX BRO Products - Software solutions, tools, and platforms built by our team.">
+  <title>Our Products · HELPEX BRO</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            midnight: '#0B0B0B',
+            'midnight-light': '#141414',
+            teal: '#4D5FF1',
+            'teal-dark': '#0C33C2',
+            'teal-glow': '#6B7FFF',
+            'soft-white': '#FEFFFC',
+            'gray-soft': '#666666',
+          },
+          fontFamily: {
+            outfit: ['Outfit', 'sans-serif'],
+            space: ['Space Grotesk', 'sans-serif'],
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-20px)' },
+            },
+          },
+        }
+      }
+    }
+  </script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: #F7F9FA;
+      color: #1A1F3B;
+      overflow-x: hidden;
+    }
+    .fade-up { opacity: 1; transform: translateY(0); transition: opacity 0.8s ease, transform 0.8s ease; }
+    html { scroll-behavior: smooth; }
+
+    .product-card {
+      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transform-style: preserve-3d;
+    }
+    .product-card:hover {
+      transform: translateY(-12px) scale(1.02);
+      box-shadow: 0 30px 60px -15px rgba(77, 95, 241, 0.2);
+    }
+
+    .filter-btn.active {
+      background: linear-gradient(135deg, #4D5FF1, #0C33C2);
+      color: white;
+      border-color: #4D5FF1;
+      box-shadow: 0 4px 15px rgba(77, 95, 241, 0.3);
+    }
+
+    .hero-glow {
+      background: radial-gradient(ellipse at center, rgba(77,95,241,0.15) 0%, transparent 70%);
+    }
+
+    .grid-bg {
+      background-image: linear-gradient(rgba(77,95,241,0.05) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(77,95,241,0.05) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(5deg); }
+    }
+    @keyframes pulse-slow {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.05); }
+    }
+    .animate-float { animation: float 6s ease-in-out infinite; }
+    .animate-pulse-slow { animation: pulse-slow 4s ease-in-out infinite; }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #4D5FF1, #6B7FFF, #0C33C2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .pricing-badge-free {
+      background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(16,185,129,0.05));
+      border: 1px solid rgba(16,185,129,0.2);
+    }
+    .pricing-badge-paid {
+      background: linear-gradient(135deg, rgba(77,95,241,0.1), rgba(77,95,241,0.05));
+      border: 1px solid rgba(77,95,241,0.2);
+    }
+    .pricing-badge-freemium {
+      background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(245,158,11,0.05));
+      border: 1px solid rgba(245,158,11,0.2);
+    }
+
+    .card-shine {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(135deg, transparent 30%, rgba(77,95,241,0.05) 50%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+    }
+    .product-card:hover .card-shine { opacity: 1; }
+
+    .cta-btn {
+      background: linear-gradient(135deg, #4D5FF1, #0C33C2);
+      transition: all 0.3s ease;
+    }
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(77, 95, 241, 0.4);
+    }
+
+    .particle-canvas {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  {% include 'helpex_app/components/navbar.html' %}
+
+  <!-- ========== DARK HERO SECTION ========== -->
+  <section class="relative min-h-[70vh] flex items-center justify-center overflow-hidden pt-32 pb-24 bg-midnight">
+    <canvas id="hero-canvas" class="particle-canvas"></canvas>
+    <div class="absolute inset-0 grid-bg pointer-events-none opacity-50"></div>
+    <div class="absolute inset-0 hero-glow pointer-events-none"></div>
+    <div class="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-[150px] opacity-[0.12] bg-teal animate-pulse-slow pointer-events-none"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full blur-[120px] opacity-[0.08] bg-teal-glow pointer-events-none"></div>
+    <div id="mouse-glow" class="absolute w-[600px] h-[600px] rounded-full blur-[150px] opacity-[0.06] bg-teal pointer-events-none transition-all duration-700 ease-out" style="transform: translate(-50%, -50%);"></div>
+
+    <div class="relative z-10 max-w-6xl mx-auto px-6 text-center">
+      <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-widest uppercase bg-teal/10 text-teal border border-teal/20 mb-6 backdrop-blur-sm fade-up">// Our Products</span>
+      <h1 class="text-4xl md:text-6xl lg:text-7xl font-space font-bold text-white leading-tight mb-6 fade-up">
+        Software Built for <span class="bg-gradient-to-r from-teal via-teal-glow to-teal bg-clip-text text-transparent">Impact</span>
+      </h1>
+      <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed mb-10 fade-up">
+        Discover our suite of powerful tools and platforms designed to accelerate your digital transformation.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4 fade-up">
+        <a href="#products-grid" class="cta-btn inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold text-white text-base">
+          <i class="fas fa-th-large"></i> Browse Products
+        </a>
+        <a href="{% url 'contact' %}" class="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold text-white border border-white/20 hover:bg-white/10 transition-all duration-300">
+          <i class="fas fa-envelope"></i> Get a Quote
+        </a>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-500 fade-up">
+      <span class="text-xs uppercase tracking-widest">Scroll</span>
+      <div class="w-6 h-10 rounded-full border-2 border-gray-600 flex justify-center pt-2">
+        <div class="w-1 h-3 rounded-full bg-teal animate-bounce"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== STATS BAR (Light) ========== -->
+  <section class="relative py-12 bg-soft-white border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div class="text-center fade-up">
+          <div class="text-3xl md:text-4xl font-space font-bold gradient-text mb-1">{{ products|length }}+</div>
+          <div class="text-sm text-gray-500">Products</div>
+        </div>
+        <div class="text-center fade-up">
+          <div class="text-3xl md:text-4xl font-space font-bold gradient-text mb-1">{{ categories|length }}</div>
+          <div class="text-sm text-gray-500">Categories</div>
+        </div>
+        <div class="text-center fade-up">
+          <div class="text-3xl md:text-4xl font-space font-bold gradient-text mb-1">24/7</div>
+          <div class="text-sm text-gray-500">Support</div>
+        </div>
+        <div class="text-center fade-up">
+          <div class="text-3xl md:text-4xl font-space font-bold gradient-text mb-1">99.9%</div>
+          <div class="text-sm text-gray-500">Uptime</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FILTER BAR (Light) ========== -->
+  <section class="relative py-16 bg-soft-white">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-10 fade-up">
+        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-widest uppercase bg-teal/10 text-teal border border-teal/20 mb-4">Categories</span>
+        <h2 class="text-2xl md:text-3xl font-space font-bold text-midnight">Filter by <span class="gradient-text">Category</span></h2>
+      </div>
+      <div class="flex flex-wrap justify-center gap-3 fade-up">
+        <button class="filter-btn px-5 py-2.5 rounded-xl text-sm font-medium border transition-all duration-300 hover:scale-105 {% if active_category == 'all' %}active{% else %}bg-white border-gray-200 text-gray-600 hover:border-teal/30 hover:text-teal{% endif %}" data-category="all">
+          <i class="fas fa-th mr-1.5"></i> All Products
+        </button>
+        {% for category in categories %}
+        <button class="filter-btn px-5 py-2.5 rounded-xl text-sm font-medium border transition-all duration-300 hover:scale-105 {% if active_category == category.slug %}active{% else %}bg-white border-gray-200 text-gray-600 hover:border-teal/30 hover:text-teal{% endif %}" data-category="{{ category.slug }}">
+          <i class="fas {{ category.icon_class }} mr-1.5"></i>{{ category.name }}
+        </button>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PRODUCTS GRID (Light) ========== -->
+  <section class="relative py-20 bg-soft-white" id="products-grid">
+    <div class="max-w-7xl mx-auto px-6">
+      {% if products %}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for product in products %}
+        <a href="{% url 'product_detail' product.slug %}" class="product-card group relative block rounded-2xl bg-white border border-gray-100 shadow-sm overflow-hidden fade-up">
+          <div class="card-shine"></div>
+
+          <!-- Pricing Badge -->
+          {% if product.pricing_type == 'free' %}
+          <div class="absolute top-4 right-4 z-20 px-3 py-1 rounded-full text-xs font-semibold pricing-badge-free text-emerald-600">
+            Free
+          </div>
+          {% elif product.pricing_type == 'paid' %}
+          <div class="absolute top-4 right-4 z-20 px-3 py-1 rounded-full text-xs font-semibold pricing-badge-paid text-teal">
+            {% if product.price %}{{ product.currency }}{{ product.price }}{% else %}Paid{% endif %}
+          </div>
+          {% elif product.pricing_type == 'freemium' %}
+          <div class="absolute top-4 right-4 z-20 px-3 py-1 rounded-full text-xs font-semibold pricing-badge-freemium text-amber-600">
+            Freemium
+          </div>
+          {% endif %}
+
+          <!-- Hero Image or Icon -->
+          <div class="relative h-52 overflow-hidden bg-gradient-to-br from-teal/5 via-gray-50 to-teal-dark/5">
+            {% if product.hero_image %}
+            <img src="{{ product.hero_image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+            <div class="absolute inset-0 bg-gradient-to-t from-white via-white/50 to-transparent"></div>
+            {% else %}
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="w-24 h-24 rounded-2xl bg-gradient-to-br from-teal/10 to-teal-glow/5 flex items-center justify-center border border-teal/10 group-hover:scale-110 transition-transform duration-500">
+                <i class="fas {{ product.icon_class }} text-4xl text-teal"></i>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+
+          <!-- Content -->
+          <div class="p-6 relative z-10">
+            {% if product.category %}
+            <span class="inline-block px-2.5 py-1 rounded-md text-[10px] font-semibold uppercase tracking-wider bg-teal/5 text-teal border border-teal/10 mb-3">
+              {{ product.category.name }}
+            </span>
+            {% endif %}
+
+            <h3 class="text-xl font-space font-bold text-midnight mb-2 group-hover:text-teal transition-colors duration-300">
+              {{ product.name }}
+              {% if product.version %}
+              <span class="text-xs font-normal text-gray-400 ml-1">{{ product.version }}</span>
+              {% endif %}
+            </h3>
+
+            <p class="text-sm text-gray-500 leading-relaxed mb-4 line-clamp-2">
+              {{ product.short_description|default:product.description|truncatechars:120 }}
+            </p>
+
+            {% if product.tech_stack %}
+            <div class="flex flex-wrap gap-1.5 mb-5">
+              {% for tech in product.tech_stack|slice:":4" %}
+              <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-gray-50 text-gray-500 border border-gray-100">
+                {{ tech }}
+              </span>
+              {% endfor %}
+              {% if product.tech_stack|length > 4 %}
+              <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-gray-50 text-gray-400 border border-gray-100">
+                +{{ product.tech_stack|length|add:"-4" }}
+              </span>
+              {% endif %}
+            </div>
+            {% endif %}
+
+            <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+              <span class="text-xs text-gray-400">
+                {% if product.release_date %}Updated {{ product.release_date|date:"M d, Y" }}{% endif %}
+              </span>
+              <span class="inline-flex items-center gap-1.5 text-sm font-semibold text-teal group-hover:gap-3 transition-all duration-300">
+                View Details <i class="fas fa-arrow-right text-xs"></i>
+              </span>
+            </div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="text-center py-20 fade-up">
+        <div class="w-20 h-20 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center mx-auto mb-6">
+          <i class="fas fa-box-open text-3xl text-gray-400"></i>
+        </div>
+        <h3 class="text-xl font-space font-bold text-midnight mb-2">No Products Yet</h3>
+        <p class="text-gray-500">We're working on something amazing. Check back soon!</p>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- ========== CTA SECTION (Dark) ========== -->
+  <section class="relative py-24 bg-midnight overflow-hidden">
+    <div class="absolute inset-0 grid-bg pointer-events-none opacity-30"></div>
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] rounded-full blur-[150px] opacity-[0.1] bg-teal pointer-events-none"></div>
+
+    <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
+      <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-widest uppercase bg-teal/10 text-teal border border-teal/20 mb-6 backdrop-blur-sm fade-up">// Get Started</span>
+      <h2 class="text-3xl md:text-5xl font-space font-bold text-white mb-6 fade-up">
+        Ready to <span class="bg-gradient-to-r from-teal via-teal-glow to-teal bg-clip-text text-transparent">Transform</span> Your Business?
+      </h2>
+      <p class="text-lg text-gray-400 max-w-xl mx-auto mb-10 fade-up">
+        Let's discuss how our products can help you achieve your goals. Get a personalized demo today.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4 fade-up">
+        <a href="{% url 'contact' %}" class="cta-btn inline-flex items-center gap-2 px-10 py-4 rounded-xl font-semibold text-white text-base">
+          <i class="fas fa-rocket"></i> Start Your Project
+        </a>
+        <a href="{% url 'service' %}" class="inline-flex items-center gap-2 px-10 py-4 rounded-xl font-semibold text-white border border-white/20 hover:bg-white/10 transition-all duration-300">
+          <i class="fas fa-cog"></i> Explore Services
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {% include 'helpex_app/components/footer.html' %}
+
+  <script>
+    // Lenis smooth scroll
+    const lenis = new Lenis({ duration: 1.2, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+
+    // Simple IntersectionObserver fallback (works without GSAP)
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+      gsap.registerPlugin(ScrollTrigger);
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.utils.toArray('.fade-up').forEach((el, i) => {
+        gsap.to(el, {
+          opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 90%' },
+          delay: (i % 6) * 0.1
+        });
+      });
+    } else {
+      // Fallback: animate with IntersectionObserver
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.fade-up').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        observer.observe(el);
+      });
+    }
+
+    // Particle canvas
+    const canvas = document.getElementById('hero-canvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+      function resize() { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; }
+      resize();
+      window.addEventListener('resize', resize);
+      for (let i = 0; i < 60; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
+          r: Math.random() * 2 + 0.5,
+          o: Math.random() * 0.3 + 0.1
+        });
+      }
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+          if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(77, 95, 241, ${p.o})`;
+          ctx.fill();
+        });
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 120) {
+              ctx.beginPath();
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.strokeStyle = `rgba(77, 95, 241, ${0.08 * (1 - dist / 120)})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
+
+    // Mouse glow
+    const mouseGlow = document.getElementById('mouse-glow');
+    if (mouseGlow) {
+      document.querySelector('section').addEventListener('mousemove', e => {
+        mouseGlow.style.left = e.clientX + 'px';
+        mouseGlow.style.top = e.clientY + 'px';
+      });
+    }
+
+    // Filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const category = this.dataset.category;
+        const url = new URL(window.location);
+        if (category === 'all') {
+          url.searchParams.delete('category');
+        } else {
+          url.searchParams.set('category', category);
+        }
+        window.location.href = url.toString();
+      });
+    });
+
+    // Navbar scroll effect
+    const navbar = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 80) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+  </script>
+</body>
+</html>

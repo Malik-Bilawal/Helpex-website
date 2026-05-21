@@ -7,7 +7,8 @@ from .models import (
     PortfolioCategory, PortfolioItem, SiteSettings,
     ContactMessage, TeamMember, Client, BlogCategory, BlogPost,
     GalleryCategory, GalleryImage, PricingPlan, PricingFeature,
-    WhyChooseUsSection, WhyChooseUsReason, WhyChooseUsStat, RegisteredCompany
+    WhyChooseUsSection, WhyChooseUsReason, WhyChooseUsStat, RegisteredCompany,
+    ProductCategory, Product, ProductFeature, ProductScreenshot
 )
 
 
@@ -352,3 +353,117 @@ class WhyChooseUsStatAdmin(admin.ModelAdmin):
     make_inactive.short_description = "Mark selected as inactive"
     
     actions = ['make_active', 'make_inactive']
+
+@admin.register(ProductCategory)
+class ProductCategoryAdmin(admin.ModelAdmin):
+    list_display = ['name', 'slug', 'icon_display', 'color_preview', 'order', 'product_count', 'is_active']
+    list_filter = ['is_active']
+    search_fields = ['name', 'description']
+    list_editable = ['order', 'is_active']
+    ordering = ['order', 'name']
+    prepopulated_fields = {'slug': ('name',)}
+
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('name', 'slug', 'description')
+        }),
+        ('Appearance', {
+            'fields': ('icon_class', 'color')
+        }),
+        ('Settings', {
+            'fields': ('order', 'is_active')
+        }),
+    )
+
+    def icon_display(self, obj):
+        return format_html('<i class="fas {}"></i> {}', obj.icon_class, obj.name)
+    icon_display.short_description = 'Category'
+
+    def color_preview(self, obj):
+        return format_html(
+            '<span style="display:inline-block;width:24px;height:24px;background:{};border-radius:4px;border:1px solid #ddd;"></span>',
+            obj.color
+        )
+    color_preview.short_description = 'Color'
+
+    def product_count(self, obj):
+        return obj.products.count()
+    product_count.short_description = 'Products'
+
+
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ['name', 'category', 'pricing_type', 'version', 'order', 'is_active', 'is_featured']
+    list_filter = ['is_active', 'is_featured', 'pricing_type', 'category']
+    search_fields = ['name', 'tagline', 'description', 'short_description']
+    list_editable = ['order', 'is_active', 'is_featured']
+    ordering = ['order', 'name']
+    prepopulated_fields = {'slug': ('name',)}
+
+    fieldsets = (
+        ('Basic Info', {
+            'fields': ('name', 'slug', 'category', 'tagline', 'short_description', 'icon_class', 'order', 'is_active', 'is_featured')
+        }),
+        ('Images', {
+            'fields': ('hero_image', 'logo'),
+            'classes': ('collapse',)
+        }),
+        ('Version & Release', {
+            'fields': ('version', 'release_date'),
+            'classes': ('collapse',)
+        }),
+        ('Pricing', {
+            'fields': ('pricing_type', 'price', 'currency', 'billing_period'),
+        }),
+        ('Links', {
+            'fields': ('website_url', 'demo_url', 'docs_url', 'github_url'),
+            'classes': ('collapse',)
+        }),
+        ('Content (JSON)', {
+            'fields': ('description', 'features', 'specifications', 'screenshots', 'faqs', 'tech_stack', 'system_requirements'),
+            'description': 'Use JSON format. Example: [{"title": "Fast", "description": "Quick delivery"}]'
+        }),
+    )
+
+    def make_active(self, request, queryset):
+        queryset.update(is_active=True)
+    make_active.short_description = "Mark selected as active"
+
+    def make_inactive(self, request, queryset):
+        queryset.update(is_active=False)
+    make_inactive.short_description = "Mark selected as inactive"
+
+    actions = ['make_active', 'make_inactive']
+
+
+@admin.register(ProductFeature)
+class ProductFeatureAdmin(admin.ModelAdmin):
+    list_display = ['title', 'product', 'icon_class', 'order', 'is_active']
+    list_filter = ['product', 'is_active']
+    search_fields = ['title', 'description']
+    list_editable = ['order', 'is_active']
+    ordering = ['product', 'order']
+
+    def make_active(self, request, queryset):
+        queryset.update(is_active=True)
+    make_active.short_description = "Mark selected as active"
+
+    def make_inactive(self, request, queryset):
+        queryset.update(is_active=False)
+    make_inactive.short_description = "Mark selected as inactive"
+
+    actions = ['make_active', 'make_inactive']
+
+
+@admin.register(ProductScreenshot)
+class ProductScreenshotAdmin(admin.ModelAdmin):
+    list_display = ['product', 'caption', 'order', 'is_active', 'image_preview']
+    list_filter = ['product', 'is_active']
+    list_editable = ['order', 'is_active']
+    ordering = ['product', 'order']
+
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;" />', obj.image.url)
+        return '�'
+    image_preview.short_description = 'Preview'

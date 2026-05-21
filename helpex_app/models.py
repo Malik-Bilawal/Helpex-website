@@ -605,3 +605,127 @@ class RegisteredCompany(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ProductCategory(models.Model):
+    """Categories for organizing products"""
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, unique=True)
+    description = models.TextField(blank=True)
+    icon_class = models.CharField(max_length=100, default="fa-box", help_text="FontAwesome icon class")
+    color = models.CharField(max_length=7, default="#4D5FF1", help_text="Category accent color (hex)")
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Product Category"
+        verbose_name_plural = "Product Categories"
+        ordering = ['order', 'name']
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+
+class Product(models.Model):
+    """Software products and solutions offered by the company"""
+    name = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=220, unique=True, blank=True)
+    category = models.ForeignKey(ProductCategory, on_delete=models.SET_NULL, null=True, blank=True, related_name='products')
+    tagline = models.CharField(max_length=200, blank=True, help_text="Short catchy tagline")
+    description = models.TextField(help_text="Full product description")
+    short_description = models.CharField(max_length=300, blank=True, help_text="Brief summary for listing cards")
+    icon_class = models.CharField(max_length=100, default="fa-cube", help_text="FontAwesome icon class")
+    hero_image = models.ImageField(upload_to='products/hero/', blank=True, null=True, help_text="Main hero banner image")
+    logo = models.ImageField(upload_to='products/logos/', blank=True, null=True, help_text="Product logo/icon")
+    version = models.CharField(max_length=50, blank=True, help_text="e.g., v2.1.0")
+    release_date = models.DateField(null=True, blank=True)
+
+    # Pricing & availability
+    pricing_type = models.CharField(max_length=20, choices=[
+        ('free', 'Free'),
+        ('paid', 'Paid'),
+        ('freemium', 'Freemium'),
+        ('contact', 'Contact for Pricing'),
+    ], default='contact')
+    price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    currency = models.CharField(max_length=10, default='$', blank=True)
+    billing_period = models.CharField(max_length=50, default='/month', blank=True)
+
+    # Links
+    website_url = models.URLField(blank=True, help_text="Product website URL")
+    demo_url = models.URLField(blank=True, help_text="Live demo URL")
+    docs_url = models.URLField(blank=True, help_text="Documentation URL")
+    github_url = models.URLField(blank=True, help_text="GitHub repository URL")
+
+    # Rich content
+    features = models.JSONField(default=list, blank=True, help_text='[{"title": "...", "description": "...", "icon": "fa-icon"}]')
+    specifications = models.JSONField(default=list, blank=True, help_text='[{"label": "...", "value": "..."}]')
+    screenshots = models.JSONField(default=list, blank=True, help_text="Optional inline screenshot URLs (deprecated, use ProductScreenshot model)")
+    faqs = models.JSONField(default=list, blank=True, help_text='[{"question": "...", "answer": "..."}]')
+    tech_stack = models.JSONField(default=list, blank=True, help_text="Array of technologies used")
+    system_requirements = models.TextField(blank=True, help_text="System requirements text")
+
+    # Display
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    is_featured = models.BooleanField(default=False, help_text="Show on homepage/featured section")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Product"
+        verbose_name_plural = "Products"
+        ordering = ['order', 'name']
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('product_detail', kwargs={'slug': self.slug})
+
+
+class ProductFeature(models.Model):
+    """Detailed features for a product"""
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='detailed_features')
+    title = models.CharField(max_length=150)
+    description = models.TextField()
+    icon_class = models.CharField(max_length=100, default="fa-check", help_text="FontAwesome icon class")
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "Product Feature"
+        verbose_name_plural = "Product Features"
+        ordering = ['order', 'title']
+
+    def __str__(self):
+        return f"{self.product.name} - {self.title}"
+
+
+class ProductScreenshot(models.Model):
+    """Screenshots/images for a product detail page"""
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='screenshot_images')
+    image = models.ImageField(upload_to='products/screenshots/')
+    caption = models.CharField(max_length=200, blank=True)
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "Product Screenshot"
+        verbose_name_plural = "Product Screenshots"
+        ordering = ['order', 'id']
+
+    def __str__(self):
+        return f"{self.product.name} - {self.caption or f'Screenshot {self.id}'}"

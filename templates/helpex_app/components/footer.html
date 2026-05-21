@@ -11,12 +11,12 @@
   <!-- Decorative background elements -->
   <div class="absolute inset-0 pointer-events-none">
     <!-- Grid pattern -->
-    <div class="absolute inset-0 opacity-[0.03]" style="background-image: linear-gradient(rgba(40,161,151,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(40,161,151,0.5) 1px, transparent 1px); background-size: 40px 40px;"></div>
+    <div class="absolute inset-0 opacity-[0.03]" style="background-image: linear-gradient(rgba(77,95,241,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(77,95,241,0.5) 1px, transparent 1px); background-size: 40px 40px;"></div>
     <!-- Top gradient line -->
-    <div class="absolute top-0 left-0 right-0 h-[2px]" style="background: linear-gradient(90deg, transparent 0%, #28A197 20%, #3BC4B5 50%, #28A197 80%, transparent 100%);"></div>
+    <div class="absolute top-0 left-0 right-0 h-[2px]" style="background: linear-gradient(90deg, transparent 0%, #4D5FF1 20%, #6B7FFF 50%, #4D5FF1 80%, transparent 100%);"></div>
     <!-- Glow orbs -->
-    <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full blur-[120px] opacity-[0.08]" style="background: #28A197;"></div>
-    <div class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full blur-[120px] opacity-[0.05]" style="background: #3BC4B5;"></div>
+    <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full blur-[120px] opacity-[0.08]" style="background: #4D5FF1;"></div>
+    <div class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full blur-[120px] opacity-[0.05]" style="background: #6B7FFF;"></div>
   </div>
 
   <div class="relative z-10 max-w-7xl mx-auto px-6">
@@ -29,8 +29,8 @@
         <!-- Logo -->
         <a href="{% url 'index' %}" class="inline-flex items-center gap-3 mb-6 group">
           <div class="relative">
-            <img src="{% static 'logo.png' %}" alt="{{ settings.company_name }}" class="h-12 w-auto rounded-xl relative z-10 transition-transform duration-300 group-hover:scale-105" style="box-shadow: 0 6px 20px rgba(40,161,151,0.35);">
-            <div class="absolute -inset-1 rounded-xl blur-md opacity-40 group-hover:opacity-60 transition-opacity duration-300" style="background: #28A197; z-index: 0;"></div>
+            <img src="{% static 'logo.png' %}" alt="{{ settings.company_name }}" class="h-12 w-auto rounded-xl relative z-10 transition-transform duration-300 group-hover:scale-105" style="box-shadow: 0 6px 20px rgba(77,95,241,0.35);">
+            <div class="absolute -inset-1 rounded-xl blur-md opacity-40 group-hover:opacity-60 transition-opacity duration-300" style="background: #4D5FF1; z-index: 0;"></div>
           </div>
           <div class="leading-tight">
             <span class="text-2xl font-extrabold text-white tracking-tight">
@@ -95,11 +95,11 @@
           <span class="w-1.5 h-1.5 rounded-full bg-teal"></span> Services
         </h4>
         <ul class="space-y-3">
-          <li><a href="{% url 'service' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Web Development</a></li>
-          <li><a href="{% url 'service' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">App Development</a></li>
-          <li><a href="{% url 'service' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Software Solutions</a></li>
-          <li><a href="{% url 'service' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">UI/UX Design</a></li>
-          <li><a href="{% url 'service' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">AI Solutions</a></li>
+          <li><a href="{% url 'service' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#4D5FF1'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Web Development</a></li>
+          <li><a href="{% url 'service' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#4D5FF1'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">App Development</a></li>
+          <li><a href="{% url 'service' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#4D5FF1'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Software Solutions</a></li>
+          <li><a href="{% url 'service' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#4D5FF1'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">UI/UX Design</a></li>
+          <li><a href="{% url 'service' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#4D5FF1'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">AI Solutions</a></li>
         </ul>
       </div>
 
@@ -109,11 +109,11 @@
           <span class="w-1.5 h-1.5 rounded-full bg-teal"></span> Company
         </h4>
         <ul class="space-y-3">
-          <li><a href="{% url 'about' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">About Us</a></li>
-          <li><a href="{% url 'service' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Services</a></li>
-          <li><a href="{% url 'gallery' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Portfolio</a></li>
-          <li><a href="{% url 'blog' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Blog</a></li>
-          <li><a href="{% url 'contact' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#28A197'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Contact</a></li>
+          <li><a href="{% url 'about' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#4D5FF1'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">About Us</a></li>
+          <li><a href="{% url 'service' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#4D5FF1'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Services</a></li>
+          <li><a href="{% url 'gallery' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#4D5FF1'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Portfolio</a></li>
+          <li><a href="{% url 'blog' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#4D5FF1'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Blog</a></li>
+          <li><a href="{% url 'contact' %}" class="text-sm transition-all duration-300 inline-block hover:translate-x-1" style="color: rgba(255,255,255,0.5);" onmouseover="this.style.color='#4D5FF1'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Contact</a></li>
         </ul>
       </div>
 
@@ -140,7 +140,7 @@
             <button 
               type="submit" 
               class="w-full py-3 rounded-xl font-semibold text-sm transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
-              style="background: linear-gradient(135deg, #28A197, #1E837A); color: white; box-shadow: 0 4px 15px rgba(40,161,151,0.3);"
+              style="background: linear-gradient(135deg, #4D5FF1, #0C33C2); color: white; box-shadow: 0 4px 15px rgba(77,95,241,0.3);"
             >
               <i class="fas fa-paper-plane text-xs"></i> Subscribe
             </button>
@@ -150,7 +150,7 @@
     </div>
 
     <!-- ========== DIVIDER ========== -->
-    <div class="h-px mb-8 opacity-30" style="background: linear-gradient(90deg, transparent 0%, rgba(40,161,151,0.4) 30%, rgba(40,161,151,0.6) 50%, rgba(40,161,151,0.4) 70%, transparent 100%);"></div>
+    <div class="h-px mb-8 opacity-30" style="background: linear-gradient(90deg, transparent 0%, rgba(77,95,241,0.4) 30%, rgba(77,95,241,0.6) 50%, rgba(77,95,241,0.4) 70%, transparent 100%);"></div>
 
     <!-- ========== BOTTOM BAR ========== -->
     <div class="flex flex-col md:flex-row justify-between items-center gap-4">
@@ -174,7 +174,7 @@
   onclick="window.scrollTo({top: 0, behavior: 'smooth'})" 
   id="backToTop"
   class="fixed bottom-8 right-8 w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 hover:-translate-y-1 z-50 opacity-0 invisible"
-  style="background: linear-gradient(135deg, #28A197, #1E837A); box-shadow: 0 6px 25px rgba(40,161,151,0.5);" 
+  style="background: linear-gradient(135deg, #4D5FF1, #0C33C2); box-shadow: 0 6px 25px rgba(77,95,241,0.5);" 
   title="Back to top"
   aria-label="Back to top">
   <i class="fas fa-arrow-up text-white text-sm"></i>
@@ -199,9 +199,9 @@
   // Social icon hover effects
   document.querySelectorAll('.group\\/icon').forEach(icon => {
     icon.addEventListener('mouseenter', function() {
-      this.style.background = 'linear-gradient(135deg, #28A197, #1E837A)';
-      this.style.borderColor = '#28A197';
-      this.style.boxShadow = '0 8px 20px rgba(40,161,151,0.4)';
+      this.style.background = 'linear-gradient(135deg, #4D5FF1, #0C33C2)';
+      this.style.borderColor = '#4D5FF1';
+      this.style.boxShadow = '0 8px 20px rgba(77,95,241,0.4)';
     });
     icon.addEventListener('mouseleave', function() {
       this.style.background = 'rgba(255,255,255,0.06)';

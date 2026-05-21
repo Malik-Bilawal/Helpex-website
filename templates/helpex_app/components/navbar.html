@@ -9,14 +9,14 @@
     <!-- ========== LOGO ========== -->
     <a href="{% url 'index' %}" class="flex items-center gap-3 group flex-shrink-0 z-10">
       <div class="relative">
-        <img src="{% static 'logo.png' %}" alt="HELPEX" class="h-10 md:h-11 w-auto rounded-xl relative z-10 transition-transform duration-300 group-hover:scale-105" style="box-shadow: 0 4px 15px rgba(40,161,151,0.25);">
-        <div class="absolute -inset-1 rounded-xl blur-md opacity-0 group-hover:opacity-40 transition-opacity duration-300" style="background: #28A197; z-index: 0;"></div>
+        <img src="{% static 'logo.png' %}" alt="HELPEX" class="h-10 md:h-11 w-auto rounded-xl relative z-10 transition-transform duration-300 group-hover:scale-105" style="box-shadow: 0 4px 15px rgba(77, 95, 241, 0.25);">
+        <div class="absolute -inset-1 rounded-xl blur-md opacity-0 group-hover:opacity-40 transition-opacity duration-300" style="background: #4D5FF1; z-index: 0;"></div>
       </div>
       <div class="leading-tight hidden sm:block">
         <span class="text-xl md:text-2xl font-extrabold text-white tracking-tight navbar-text">
-          HELPEX<span class="text-[#28A197]">.</span>
+          HELPEX<span class="text-[#4D5FF1]">.</span>
         </span>
-        <!-- <span class="block text-[9px] font-bold text-[#28A197] tracking-[3px] uppercase">BRO</span> -->
+        <!-- <span class="block text-[9px] font-bold text-[#4D5FF1] tracking-[3px] uppercase">BRO</span> -->
       </div>
     </a>
 
@@ -30,17 +30,17 @@
         <!-- Services Mega Dropdown -->
         <div class="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[680px] bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 overflow-hidden">
           <!-- Top bar -->
-          <div class="bg-gradient-to-r from-[#28A197] to-[#1E837A] px-6 py-3">
+          <div class="bg-gradient-to-r from-[#4D5FF1] to-[#0C33C2] px-6 py-3">
             <p class="text-white/80 text-xs font-semibold uppercase tracking-wider">Explore Our Expertise</p>
           </div>
           <div class="grid grid-cols-2 gap-0 p-4">
             {% for s in nav_services %}
-            <a href="{% url 'service_detail' s.slug %}" class="flex items-start gap-3 p-4 rounded-xl hover:bg-[#28A197]/5 transition-all duration-200 group/item">
-              <div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg bg-[#28A197]/10 text-[#28A197] group-hover/item:bg-[#28A197] group-hover/item:text-white transition-all duration-200 flex-shrink-0">
+            <a href="{% url 'service_detail' s.slug %}" class="flex items-start gap-3 p-4 rounded-xl hover:bg-[#4D5FF1]/5 transition-all duration-200 group/item">
+              <div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg bg-[#4D5FF1]/10 text-[#4D5FF1] group-hover/item:bg-[#4D5FF1] group-hover/item:text-white transition-all duration-200 flex-shrink-0">
                 <i class="fas {{ s.icon_class|default:'fa-code' }}"></i>
               </div>
               <div class="min-w-0">
-                <p class="text-sm font-semibold text-[#1A1F3B] group-hover/item:text-[#28A197] transition-colors truncate">{{ s.title }}</p>
+                <p class="text-sm font-semibold text-[#0B0B0B] group-hover/item:text-[#4D5FF1] transition-colors truncate">{{ s.title }}</p>
                 <p class="text-xs text-gray-400 mt-0.5 line-clamp-2">{{ s.short_description|default:s.description|truncatechars:70 }}</p>
               </div>
             </a>
@@ -48,10 +48,10 @@
           </div>
           <!-- Bottom CTA -->
           <div class="border-t border-gray-100 px-6 py-3 bg-gray-50/50 flex items-center justify-between">
-            <a href="{% url 'service' %}" class="text-sm font-semibold text-[#28A197] hover:text-[#1E837A] transition-colors flex items-center gap-1">
+            <a href="{% url 'service' %}" class="text-sm font-semibold text-[#4D5FF1] hover:text-[#0C33C2] transition-colors flex items-center gap-1">
               View All Services <i class="fas fa-arrow-right text-xs"></i>
             </a>
-            <a href="{% url 'contact' %}" class="text-xs font-medium text-gray-400 hover:text-[#28A197] transition-colors">
+            <a href="{% url 'contact' %}" class="text-xs font-medium text-gray-400 hover:text-[#4D5FF1] transition-colors">
               Need Help Deciding?
             </a>
           </div>
@@ -61,22 +61,23 @@
       <li><a href="{% url 'clients' %}" class="nav-link {% if request.path == '/clients/' %}active{% endif %}">Clients</a></li>
       <li><a href="{% url 'blog' %}" class="nav-link {% if request.path == '/blog/' %}active{% endif %}">Blog</a></li>
       <li><a href="{% url 'pricing' %}" class="nav-link {% if request.path == '/pricing/' %}active{% endif %}">Pricing</a></li>
+      <li><a href="{% url 'products' %}" class="nav-link {% if '/products/' in request.path %}active{% endif %}">Products</a></li>
       <li class="relative group">
         <a href="#" class="nav-link flex items-center gap-1">
           More <i class="fas fa-chevron-down text-[10px] transition-transform duration-300 group-hover:rotate-180"></i>
         </a>
         <!-- Dropdown -->
         <div class="absolute top-full left-0 mt-2 w-48 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 py-2">
-          <a href="{% url 'why_choose_us' %}" class="block px-4 py-2.5 text-sm text-[#1A1F3B] hover:bg-[#28A197]/10 hover:text-[#28A197] transition-colors {% if request.path == '/why-choose-us/' %}text-[#28A197] bg-[#28A197]/10{% endif %}">Why Choose Us</a>
-          <a href="{% url 'about' %}" class="block px-4 py-2.5 text-sm text-[#1A1F3B] hover:bg-[#28A197]/10 hover:text-[#28A197] transition-colors {% if request.path == '/about/' %}text-[#28A197] bg-[#28A197]/10{% endif %}">About Us</a>
-          <a href="{% url 'contact' %}" class="block px-4 py-2.5 text-sm text-[#1A1F3B] hover:bg-[#28A197]/10 hover:text-[#28A197] transition-colors {% if request.path == '/contact/' %}text-[#28A197] bg-[#28A197]/10{% endif %}">Contact</a>
+          <a href="{% url 'why_choose_us' %}" class="block px-4 py-2.5 text-sm text-[#0B0B0B] hover:bg-[#4D5FF1]/10 hover:text-[#4D5FF1] transition-colors {% if request.path == '/why-choose-us/' %}text-[#4D5FF1] bg-[#4D5FF1]/10{% endif %}">Why Choose Us</a>
+          <a href="{% url 'about' %}" class="block px-4 py-2.5 text-sm text-[#0B0B0B] hover:bg-[#4D5FF1]/10 hover:text-[#4D5FF1] transition-colors {% if request.path == '/about/' %}text-[#4D5FF1] bg-[#4D5FF1]/10{% endif %}">About Us</a>
+          <a href="{% url 'contact' %}" class="block px-4 py-2.5 text-sm text-[#0B0B0B] hover:bg-[#4D5FF1]/10 hover:text-[#4D5FF1] transition-colors {% if request.path == '/contact/' %}text-[#4D5FF1] bg-[#4D5FF1]/10{% endif %}">Contact</a>
         </div>
       </li>
     </ul>
 
     <!-- ========== MOBILE HAMBURGER ========== -->
     <button id="hamburger" class="lg:hidden relative w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300"
-            style="background: linear-gradient(135deg, #28A197, #1E837A); box-shadow: 0 4px 15px rgba(40,161,151,0.3);"
+            style="background: linear-gradient(135deg, #4D5FF1, #0C33C2); box-shadow: 0 4px 15px rgba(77, 95, 241, 0.3);"
             aria-label="Toggle menu">
       <span class="hamburger-line block w-5 h-[2px] bg-white relative transition-all duration-300"></span>
     </button>
@@ -88,15 +89,15 @@
 
 <!-- ========== MOBILE DRAWER ========== -->
 <div id="mobileDrawer" class="fixed top-0 right-0 h-full w-[85%] max-w-[420px] z-[9999] translate-x-full transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] flex flex-col"
-     style="background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);">
+     style="background: linear-gradient(180deg, #FEFFFC 0%, #F8FAFC 100%);">
   
   <!-- Drawer Header -->
   <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100 flex-shrink-0">
     <a href="{% url 'index' %}" class="flex items-center gap-3" onclick="closeDrawer()">
       <img src="{% static 'logo.png' %}" alt="HELPEX" class="h-9 w-auto rounded-lg">
-      <span class="text-lg font-extrabold text-[#1A1F3B]">HELPEX<span class="text-[#28A197]">.</span></span>
+      <span class="text-lg font-extrabold text-[#0B0B0B]">HELPEX<span class="text-[#4D5FF1]">.</span></span>
     </a>
-    <button onclick="closeDrawer()" class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-[#28A197] hover:text-white flex items-center justify-center transition-all duration-300 text-[#1A1F3B]">
+    <button onclick="closeDrawer()" class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-[#4D5FF1] hover:text-white flex items-center justify-center transition-all duration-300 text-[#0B0B0B]">
       <i class="fas fa-times text-lg"></i>
     </button>
   </div>
@@ -115,12 +116,12 @@
       </button>
       <div class="accordion-content max-h-0 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
         <div class="pl-12 pr-4 py-2 space-y-1">
-          <a href="{% url 'service' %}" class="block px-4 py-2 rounded-lg text-sm font-medium text-gray-500 hover:text-[#28A197] hover:bg-[#28A197]/5 transition-all" onclick="closeDrawer()">
+          <a href="{% url 'service' %}" class="block px-4 py-2 rounded-lg text-sm font-medium text-gray-500 hover:text-[#4D5FF1] hover:bg-[#4D5FF1]/5 transition-all" onclick="closeDrawer()">
             <i class="fas fa-th-large mr-2"></i>View All Services
           </a>
           {% for s in nav_services %}
-          <a href="{% url 'service_detail' s.slug %}" class="block px-4 py-2 rounded-lg text-sm text-gray-600 hover:text-[#28A197] hover:bg-[#28A197]/5 transition-all {% if request.path == '/service/'|add:s.slug|add:'/' %}text-[#28A197] bg-[#28A197]/10{% endif %}" onclick="closeDrawer()">
-            <i class="fas {{ s.icon_class|default:'fa-code' }} mr-2 text-[#28A197]/60"></i>{{ s.title }}
+          <a href="{% url 'service_detail' s.slug %}" class="block px-4 py-2 rounded-lg text-sm text-gray-600 hover:text-[#4D5FF1] hover:bg-[#4D5FF1]/5 transition-all {% if request.path == '/service/'|add:s.slug|add:'/' %}text-[#4D5FF1] bg-[#4D5FF1]/10{% endif %}" onclick="closeDrawer()">
+            <i class="fas {{ s.icon_class|default:'fa-code' }} mr-2 text-[#4D5FF1]/60"></i>{{ s.title }}
           </a>
           {% endfor %}
         </div>
@@ -138,6 +139,9 @@
     </a>
     <a href="{% url 'pricing' %}" class="drawer-link {% if request.path == '/pricing/' %}active{% endif %}" onclick="closeDrawer()">
       <i class="fas fa-tags"></i> Pricing
+    </a>
+    <a href="{% url 'products' %}" class="drawer-link {% if '/products/' in request.path %}active{% endif %}" onclick="closeDrawer()">
+      <i class="fas fa-box"></i> Products
     </a>
     
     <!-- Divider -->
@@ -158,7 +162,7 @@
   <div class="px-4 py-5 border-t border-gray-100 flex-shrink-0">
     <a href="{% url 'contact' %}" onclick="closeDrawer()" 
        class="flex items-center justify-center gap-3 w-full py-4 rounded-2xl font-semibold text-white text-base transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-       style="background: linear-gradient(135deg, #28A197, #1E837A); box-shadow: 0 6px 25px rgba(40,161,151,0.4);">
+       style="background: linear-gradient(135deg, #4D5FF1, #0C33C2); box-shadow: 0 6px 25px rgba(77, 95, 241, 0.4);">
       <i class="fas fa-rocket"></i> Start Your Project
     </a>
     <p class="text-center text-xs text-gray-400 mt-3">Let's build something amazing</p>
@@ -187,13 +191,13 @@
   }
 
   .nav-link:hover {
-    color: #28A197;
+    color: #4D5FF1;
     background: rgba(255, 255, 255, 0.1);
     text-shadow: none;
   }
 
   .nav-link.active {
-    color: #28A197;
+    color: #4D5FF1;
     background: rgba(255, 255, 255, 0.15);
     font-weight: 600;
     text-shadow: none;
@@ -201,30 +205,30 @@
 
   /* Scrolled state - dark text with glass bg */
   #navbar.scrolled {
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(254, 255, 252, 0.85);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(40, 161, 151, 0.15);
-    box-shadow: 0 4px 30px rgba(26, 31, 59, 0.08);
+    border-bottom: 1px solid rgba(77, 95, 241, 0.15);
+    box-shadow: 0 4px 30px rgba(11, 11, 11, 0.08);
   }
 
   #navbar.scrolled .nav-link {
-    color: rgba(26, 31, 59, 0.75);
+    color: rgba(11, 11, 11, 0.75);
     text-shadow: none;
   }
 
   #navbar.scrolled .nav-link:hover {
-    color: #28A197;
-    background: rgba(40, 161, 151, 0.06);
+    color: #4D5FF1;
+    background: rgba(77, 95, 241, 0.06);
   }
 
   #navbar.scrolled .nav-link.active {
-    color: #28A197;
-    background: rgba(40, 161, 151, 0.1);
+    color: #4D5FF1;
+    background: rgba(77, 95, 241, 0.1);
   }
 
   #navbar.scrolled .navbar-text {
-    color: #1A1F3B;
+    color: #0B0B0B;
   }
 
   /* Hamburger Lines */
@@ -263,7 +267,7 @@
     border-radius: 14px;
     font-size: 16px;
     font-weight: 500;
-    color: #1A1F3B;
+    color: #0B0B0B;
     text-decoration: none;
     transition: all 0.3s ease;
     opacity: 0;
@@ -274,19 +278,19 @@
     width: 22px;
     text-align: center;
     font-size: 16px;
-    color: #64748B;
+    color: #666666;
     transition: color 0.3s ease;
   }
 
   .drawer-link:hover,
   .drawer-link.active {
-    background: rgba(40, 161, 151, 0.08);
-    color: #28A197;
+    background: rgba(77, 95, 241, 0.08);
+    color: #4D5FF1;
   }
 
   .drawer-link:hover i,
   .drawer-link.active i {
-    color: #28A197;
+    color: #4D5FF1;
   }
 
   /* Staggered animation when drawer opens */
@@ -303,6 +307,7 @@
   #mobileDrawer.open .drawer-link:nth-child(7) { transition-delay: 0.35s; }
   #mobileDrawer.open .drawer-link:nth-child(8) { transition-delay: 0.4s; }
   #mobileDrawer.open .drawer-link:nth-child(9) { transition-delay: 0.45s; }
+  #mobileDrawer.open .drawer-link:nth-child(10) { transition-delay: 0.5s; }
 
   /* Accordion styles */
   .drawer-accordion .drawer-link {

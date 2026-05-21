@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
-from .models import Service, Testimonial, ProcessStep, PortfolioItem, PortfolioCategory, TeamMember, SiteSettings, HeroSection, HeroCarouselItem, ContactMessage, Client, BlogPost, BlogCategory, GalleryImage, GalleryCategory, PricingPlan, WhyChooseUsSection, WhyChooseUsReason, WhyChooseUsStat
+from .models import Service, Testimonial, ProcessStep, PortfolioItem, PortfolioCategory, TeamMember, SiteSettings, HeroSection, HeroCarouselItem, ContactMessage, Client, BlogPost, BlogCategory, GalleryImage, GalleryCategory, PricingPlan, WhyChooseUsSection, WhyChooseUsReason, WhyChooseUsStat, ProductCategory, Product, ProductFeature, ProductScreenshot
 
 
 def index(request):
@@ -207,5 +207,46 @@ def why_choose_us(request):
         'reasons': reasons,
         'stats': stats,
         'testimonials': testimonials,
+        'settings': settings,
+    })
+
+
+def products(request):
+    """Products listing page"""
+    products = Product.objects.filter(is_active=True).order_by('order', 'name')
+    categories = ProductCategory.objects.filter(is_active=True).order_by('order', 'name')
+    featured_products = Product.objects.filter(is_active=True, is_featured=True).order_by('order', 'name')
+    settings = SiteSettings.get_settings()
+
+    category_filter = request.GET.get('category')
+    if category_filter and category_filter != 'all':
+        products = products.filter(category__slug=category_filter)
+
+    return render(request, 'helpex_app/products.html', {
+        'products': products,
+        'categories': categories,
+        'featured_products': featured_products,
+        'settings': settings,
+        'active_category': category_filter or 'all',
+    })
+
+
+def product_detail(request, slug):
+    """Product detail page"""
+    from django.http import Http404
+    product = Product.objects.filter(slug=slug, is_active=True).first()
+    if not product:
+        raise Http404("Product not found")
+
+    related_products = Product.objects.filter(is_active=True).exclude(slug=slug).order_by('order', 'name')[:4]
+    features = product.detailed_features.filter(is_active=True).order_by('order', 'title')
+    screenshots = product.screenshot_images.filter(is_active=True).order_by('order', 'id')
+    settings = SiteSettings.get_settings()
+
+    return render(request, 'helpex_app/product_detail.html', {
+        'product': product,
+        'related_products': related_products,
+        'features': features,
+        'screenshots': screenshots,
         'settings': settings,
     })
