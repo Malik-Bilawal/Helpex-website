@@ -62,6 +62,7 @@
       <li><a href="{% url 'blog' %}" class="nav-link {% if request.path == '/blog/' %}active{% endif %}">Blog</a></li>
       <li><a href="{% url 'pricing' %}" class="nav-link {% if request.path == '/pricing/' %}active{% endif %}">Pricing</a></li>
       <li><a href="{% url 'products' %}" class="nav-link {% if '/products/' in request.path %}active{% endif %}">Products</a></li>
+      <li><a href="{% url 'reviews' %}" class="nav-link {% if '/reviews/' in request.path %}active{% endif %}">Reviews</a></li>
       <li class="relative group">
         <a href="#" class="nav-link flex items-center gap-1">
           More <i class="fas fa-chevron-down text-[10px] transition-transform duration-300 group-hover:rotate-180"></i>
@@ -142,6 +143,9 @@
     </a>
     <a href="{% url 'products' %}" class="drawer-link {% if '/products/' in request.path %}active{% endif %}" onclick="closeDrawer()">
       <i class="fas fa-box"></i> Products
+    </a>
+    <a href="{% url 'reviews' %}" class="drawer-link {% if '/reviews/' in request.path %}active{% endif %}" onclick="closeDrawer()">
+      <i class="fas fa-star"></i> Reviews
     </a>
     
     <!-- Divider -->
@@ -308,6 +312,7 @@
   #mobileDrawer.open .drawer-link:nth-child(8) { transition-delay: 0.4s; }
   #mobileDrawer.open .drawer-link:nth-child(9) { transition-delay: 0.45s; }
   #mobileDrawer.open .drawer-link:nth-child(10) { transition-delay: 0.5s; }
+  #mobileDrawer.open .drawer-link:nth-child(11) { transition-delay: 0.55s; }
 
   /* Accordion styles */
   .drawer-accordion .drawer-link {

@@ -144,20 +144,22 @@ class ServiceCaseStudy(models.Model):
 
 
 class Testimonial(models.Model):
-    """Client testimonials"""
+    """Client testimonials linked to a client and project"""
     name = models.CharField(max_length=100)
     role = models.CharField(max_length=100)
     company = models.CharField(max_length=100)
     quote = models.TextField()
     avatar = models.ImageField(upload_to='testimonials/', blank=True, null=True)
     rating = models.PositiveIntegerField(default=5, choices=[(i, i) for i in range(1, 6)])
+    client = models.ForeignKey('Client', on_delete=models.SET_NULL, null=True, blank=True, related_name='reviews')
+    project = models.ForeignKey('PortfolioItem', on_delete=models.SET_NULL, null=True, blank=True, related_name='reviews')
     order = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = "Testimonial"
-        verbose_name_plural = "Testimonials"
+        verbose_name = "Client Review"
+        verbose_name_plural = "Client Reviews"
         ordering = ['order', 'name']
 
     def __str__(self):
@@ -337,6 +339,7 @@ class TeamMember(models.Model):
 class Client(models.Model):
     """Client logos and information"""
     name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, unique=True, blank=True)
     logo = models.ImageField(upload_to='clients/', blank=True, null=True)
     website = models.URLField(blank=True, help_text="Client website URL")
     industry = models.CharField(max_length=100, blank=True)
@@ -348,6 +351,11 @@ class Client(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
 
 class BlogCategory(models.Model):

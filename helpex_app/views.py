@@ -211,6 +211,32 @@ def why_choose_us(request):
     })
 
 
+def reviews(request):
+    """Client Reviews page - all reviews linked to clients and projects"""
+    review_list = Testimonial.objects.filter(is_active=True).select_related('client', 'project').order_by('order', '-created_at')
+    settings = SiteSettings.get_settings()
+
+    client_filter = request.GET.get('client')
+    project_filter = request.GET.get('project')
+
+    if client_filter:
+        review_list = review_list.filter(client__slug=client_filter)
+    if project_filter:
+        review_list = review_list.filter(project__slug=project_filter)
+
+    clients = Client.objects.filter(is_active=True, reviews__is_active=True).distinct().order_by('name')
+    projects = PortfolioItem.objects.filter(is_active=True, reviews__is_active=True).distinct().order_by('title')
+
+    return render(request, 'helpex_app/reviews.html', {
+        'reviews': review_list,
+        'clients': clients,
+        'projects': projects,
+        'active_client': client_filter or '',
+        'active_project': project_filter or '',
+        'settings': settings,
+    })
+
+
 def products(request):
     """Products listing page"""
     products = Product.objects.filter(is_active=True).order_by('order', 'name')

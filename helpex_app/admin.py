@@ -105,11 +105,38 @@ class ServiceCaseStudyAdmin(admin.ModelAdmin):
 
 @admin.register(Testimonial)
 class TestimonialAdmin(admin.ModelAdmin):
-    list_display = ['name', 'company', 'rating', 'order', 'is_active']
-    list_filter = ['is_active', 'rating']
+    list_display = ['name', 'company', 'client_link', 'project_link', 'rating', 'order', 'is_active']
+    list_filter = ['is_active', 'rating', 'client', 'project']
     search_fields = ['name', 'company', 'quote']
     list_editable = ['order', 'is_active']
     ordering = ['order', 'name']
+    fieldsets = (
+        ('Reviewer Info', {
+            'fields': ('name', 'role', 'company', 'avatar')
+        }),
+        ('Review', {
+            'fields': ('quote', 'rating')
+        }),
+        ('Links', {
+            'fields': ('client', 'project'),
+            'description': 'Link this review to a specific client and/or project for tracking.'
+        }),
+        ('Settings', {
+            'fields': ('order', 'is_active')
+        }),
+    )
+
+    def client_link(self, obj):
+        if obj.client:
+            return obj.client.name
+        return '—'
+    client_link.short_description = 'Client'
+
+    def project_link(self, obj):
+        if obj.project:
+            return obj.project.title
+        return '—'
+    project_link.short_description = 'Project'
 
 
 @admin.register(ProcessStep)

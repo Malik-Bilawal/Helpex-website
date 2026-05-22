@@ -13,6 +13,7 @@ urlpatterns = [
     path('gallery/<slug:slug>/', views.gallery_image_detail, name='gallery_detail'),
     path('pricing/', views.pricing, name='pricing'),
     path('why-choose-us/', views.why_choose_us, name='why_choose_us'),
+    path('reviews/', views.reviews, name='reviews'),
     path('products/', views.products, name='products'),
     path('products/<slug:slug>/', views.product_detail, name='product_detail'),
 ]
