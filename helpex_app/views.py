@@ -201,6 +201,7 @@ def why_choose_us(request):
     stats = WhyChooseUsStat.objects.filter(is_active=True).order_by('order')
     testimonials = Testimonial.objects.filter(is_active=True).order_by('order', 'name')[:3]
     settings = SiteSettings.get_settings()
+    process_steps = ProcessStep.objects.filter(is_active=True).order_by('order', 'step_number')
     
     return render(request, 'helpex_app/why_choose_us.html', {
         'section': section,
@@ -208,6 +209,7 @@ def why_choose_us(request):
         'stats': stats,
         'testimonials': testimonials,
         'settings': settings,
+        'process_steps': process_steps,
     })
 
 

@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="HELPEX BRO Services - Web Development, App Development, Software Solutions, Digital Marketing, UI/UX Design, AI Solutions">
-  <title>Services · HELPEX BRO</title>
+  <meta name="description" content="The Helpex Services - Custom Software, AI Automation, ERP Solutions, Web & Mobile Development, Digital Marketing">
+  <title>Services · The Helpex</title>
 
   <!-- Tailwind CSS with custom theme -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -59,7 +59,7 @@
     }
     /* Entrance animation base */
     .fade-up {
-      opacity: 0;
+      opacity: 1;
       transform: translateY(30px);
     }
     /* Smooth scroll */
@@ -69,7 +69,7 @@
     /* Horizontal scroll (if used) */
     .services-scroll {
       scrollbar-width: thin;
-      scrollbar-color: #28A197 #E2E8F0;
+      scrollbar-color: #4D5FF1 #E2E8F0;
     }
     .services-scroll::-webkit-scrollbar {
       height: 6px;
@@ -79,7 +79,7 @@
       border-radius: 3px;
     }
     .services-scroll::-webkit-scrollbar-thumb {
-      background: #28A197;
+      background: #4D5FF1;
       border-radius: 3px;
     }
     /* Glass effect */
@@ -160,7 +160,7 @@
       <!-- Badge -->
       <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-semibold tracking-wider uppercase bg-teal/10 text-teal border border-teal/20 mb-8 opacity-0 backdrop-blur-sm" id="hero-badge">
         <span class="w-2 h-2 bg-teal rounded-full animate-pulse"></span>
-        What We Offer
+        // Our Services
       </div>
 
       <!-- Main heading with split text animation -->
@@ -171,44 +171,46 @@
 
       <!-- Subtitle -->
       <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-14 opacity-0 leading-relaxed" id="hero-subtitle">
-        End-to-end digital solutions tailored to your unique business needs. From creative design to cutting-edge technology, we deliver transformative results.
-      </p>
+        Technology should serve people.      </p>
 
       <!-- Service category pills -->
       <div class="flex flex-wrap justify-center gap-3 mb-16 opacity-0" id="hero-pills">
         <span class="service-pill px-4 py-2 rounded-full text-sm bg-white/5 border border-white/10 text-gray-300 hover:bg-teal/10 hover:border-teal/30 hover:text-teal transition-all duration-300 cursor-default backdrop-blur-sm">
-          <i class="fas fa-code mr-2"></i>Web Development
+          <i class="fas fa-laptop-code mr-2"></i>Custom Software
         </span>
         <span class="service-pill px-4 py-2 rounded-full text-sm bg-white/5 border border-white/10 text-gray-300 hover:bg-teal/10 hover:border-teal/30 hover:text-teal transition-all duration-300 cursor-default backdrop-blur-sm">
-          <i class="fas fa-mobile-alt mr-2"></i>App Development
+          <i class="fas fa-globe mr-2"></i>Web &amp; Mobile Dev
         </span>
         <span class="service-pill px-4 py-2 rounded-full text-sm bg-white/5 border border-white/10 text-gray-300 hover:bg-teal/10 hover:border-teal/30 hover:text-teal transition-all duration-300 cursor-default backdrop-blur-sm">
-          <i class="fas fa-brain mr-2"></i>AI Solutions
+          <i class="fas fa-chart-line mr-2"></i>ERP / CRM / POS
         </span>
         <span class="service-pill px-4 py-2 rounded-full text-sm bg-white/5 border border-white/10 text-gray-300 hover:bg-teal/10 hover:border-teal/30 hover:text-teal transition-all duration-300 cursor-default backdrop-blur-sm">
-          <i class="fas fa-paint-brush mr-2"></i>UI/UX Design
+          <i class="fas fa-robot mr-2"></i>AI Agents &amp; Automation
         </span>
         <span class="service-pill px-4 py-2 rounded-full text-sm bg-white/5 border border-white/10 text-gray-300 hover:bg-teal/10 hover:border-teal/30 hover:text-teal transition-all duration-300 cursor-default backdrop-blur-sm">
           <i class="fas fa-bullhorn mr-2"></i>Digital Marketing
+        </span>
+        <span class="service-pill px-4 py-2 rounded-full text-sm bg-white/5 border border-white/10 text-gray-300 hover:bg-teal/10 hover:border-teal/30 hover:text-teal transition-all duration-300 cursor-default backdrop-blur-sm">
+          <i class="fas fa-cloud mr-2"></i>SaaS Development
         </span>
       </div>
 
       <!-- Stats Row -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto opacity-0" id="hero-stats">
         <div class="stat-card group p-6 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-teal/30 hover:bg-teal/5 transition-all duration-500">
-          <div class="text-3xl md:text-4xl font-bold text-teal counter" data-target="180">0</div>
+          <div class="text-3xl md:text-4xl font-bold text-teal counter" data-target="{{ total_projects }}">0</div>
           <div class="text-sm text-gray-400 mt-1 group-hover:text-gray-300 transition-colors">Projects Delivered</div>
         </div>
         <div class="stat-card group p-6 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-teal/30 hover:bg-teal/5 transition-all duration-500">
-          <div class="text-3xl md:text-4xl font-bold text-teal"><span class="counter" data-target="98">0</span>%</div>
+          <div class="text-3xl md:text-4xl font-bold text-teal"><span class="counter" data-target="{{ avg_satisfaction }}">0</span>%</div>
           <div class="text-sm text-gray-400 mt-1 group-hover:text-gray-300 transition-colors">Client Satisfaction</div>
         </div>
         <div class="stat-card group p-6 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-teal/30 hover:bg-teal/5 transition-all duration-500">
-          <div class="text-3xl md:text-4xl font-bold text-teal counter" data-target="50">0</div>
+          <div class="text-3xl md:text-4xl font-bold text-teal counter" data-target="{{ team_size }}">0</div>
           <div class="text-sm text-gray-400 mt-1 group-hover:text-gray-300 transition-colors">Team Experts</div>
         </div>
         <div class="stat-card group p-6 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-teal/30 hover:bg-teal/5 transition-all duration-500">
-          <div class="text-3xl md:text-4xl font-bold text-teal counter" data-target="12">0</div>
+          <div class="text-3xl md:text-4xl font-bold text-teal counter" data-target="{{ total_experience }}">0</div>
           <div class="text-sm text-gray-400 mt-1 group-hover:text-gray-300 transition-colors">Years Experience</div>
         </div>
       </div>
@@ -296,7 +298,7 @@
         <!-- Fallback if no services -->
         <div class="col-span-3 text-center py-20">
           <i class="fas fa-box-open text-5xl text-gray-300 mb-4"></i>
-          <p class="text-xl text-gray-400">No services available at the moment.</p>
+          <p class="text-xl text-gray-400">Our services are being updated. Please check back soon.</p>
         </div>
         {% endfor %}
       </div>
@@ -734,6 +736,29 @@
         if (target) lenis.scrollTo(target);
       });
     });
+
+    // ---------- IntersectionObserver fallback for GSAP ----------
+    if (!('IntersectionObserver' in window)) {
+      document.querySelectorAll('.fade-up, .service-card, .process-step').forEach(el => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+    } else {
+      const observerFallback = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+            observerFallback.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.fade-up, .service-card, .process-step').forEach(el => {
+        if (!el.classList.contains('service-card') && !el.classList.contains('process-step')) {
+          observerFallback.observe(el);
+        }
+      });
+    }
   </script>
 </body>
 </html>

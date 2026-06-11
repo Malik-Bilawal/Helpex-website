@@ -34,9 +34,8 @@
           </div>
           <div class="leading-tight">
             <span class="text-2xl font-extrabold text-white tracking-tight">
-              {{ settings.company_name|default:"HELPEX"|slice:":-1" }}<span class="text-teal">.</span>
+              The Helpex<span class="text-teal">.</span>
             </span>
-            <span class="block text-[10px] font-bold text-teal tracking-[4px] uppercase">BRO</span>
           </div>
         </a>
         
@@ -45,7 +44,7 @@
           {% if settings.description %}
             {{ settings.description }}
           {% else %}
-            Adaptive digital studio crafting exceptional digital experiences. We combine creative design, cutting‑edge technology, and strategic thinking to transform businesses worldwide.
+            The Helpex is a hospitality technology and business systems company helping businesses streamline operations, improve visibility, and accelerate growth through intelligent digital solutions.
           {% endif %}
         </p>
         
@@ -155,7 +154,7 @@
     <!-- ========== BOTTOM BAR ========== -->
     <div class="flex flex-col md:flex-row justify-between items-center gap-4">
       <p class="text-xs" style="color: rgba(255,255,255,0.35);">
-        &copy; {% now "Y" %} {% if settings.copyright_text %}{{ settings.copyright_text }}{% else %}{{ settings.company_name|default:"HELPEX BRO" }}. All rights reserved.{% endif %}
+        &copy; {% now "Y" %} {% if settings.copyright_text %}{{ settings.copyright_text }}{% else %}{{ settings.company_name|default:"The Helpex" }}. All rights reserved.{% endif %}
       </p>
       <div class="flex items-center gap-5">
         <a href="#" class="text-xs transition-colors duration-300 hover:text-teal" style="color: rgba(255,255,255,0.4);">Privacy Policy</a>

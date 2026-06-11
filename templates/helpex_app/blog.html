@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blog - HELPEX BRO</title>
+  <title>Blog - The Helpex</title>
 
   <!-- Tailwind CSS with custom theme -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -219,8 +219,7 @@
 
       <!-- Subtitle -->
       <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-14 opacity-0 leading-relaxed" id="blog-subtitle">
-        Tips, tutorials, and insights from our team of experts. Stay updated with the latest trends in technology, design, and business.
-      </p>
+        Insights, tutorials, and expert guidance on software development, AI, cloud solutions, and digital innovation. Stay ahead with the latest technology trends and business solutions.      </p>
 
       <!-- Stats Row -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto opacity-0" id="blog-stats">
@@ -233,12 +232,12 @@
           <div class="text-sm text-gray-400 mt-1 group-hover:text-gray-300 transition-colors">Categories</div>
         </div>
         <div class="stat-card group p-6 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-teal/30 hover:bg-teal/5 transition-all duration-500">
-          <div class="text-3xl md:text-4xl font-bold text-teal">2K+</div>
-          <div class="text-sm text-gray-400 mt-1 group-hover:text-gray-300 transition-colors">Monthly Readers</div>
+          <div class="text-3xl md:text-4xl font-bold text-teal counter" data-target="{{ total_projects }}">0</div>
+          <div class="text-sm text-gray-400 mt-1 group-hover:text-gray-300 transition-colors">Projects Delivered</div>
         </div>
         <div class="stat-card group p-6 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-teal/30 hover:bg-teal/5 transition-all duration-500">
-          <div class="text-3xl md:text-4xl font-bold text-teal">Weekly</div>
-          <div class="text-sm text-gray-400 mt-1 group-hover:text-gray-300 transition-colors">Updates</div>
+          <div class="text-3xl md:text-4xl font-bold text-teal"><span class="counter" data-target="{{ avg_satisfaction }}">0</span>%</div>
+          <div class="text-sm text-gray-400 mt-1 group-hover:text-gray-300 transition-colors">Client Satisfaction</div>
         </div>
       </div>
     </div>

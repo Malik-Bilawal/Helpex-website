@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clients - HELPEX BRO</title>
+  <title>Clients - The Helpex</title>
 
   <!-- Tailwind CSS with custom theme -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -191,16 +191,16 @@
           <div class="text-sm text-gray-400 mt-1 group-hover:text-gray-300 transition-colors">Active Clients</div>
         </div>
         <div class="stat-card group p-6 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-teal/30 hover:bg-teal/5 transition-all duration-500">
-          <div class="text-3xl md:text-4xl font-bold text-teal counter" data-target="180">0</div>
+          <div class="text-3xl md:text-4xl font-bold text-teal counter" data-target="{{ total_projects }}">0</div>
           <div class="text-sm text-gray-400 mt-1 group-hover:text-gray-300 transition-colors">Projects Delivered</div>
         </div>
         <div class="stat-card group p-6 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-teal/30 hover:bg-teal/5 transition-all duration-500">
-          <div class="text-3xl md:text-4xl font-bold text-teal"><span class="counter" data-target="98">0</span>%</div>
+          <div class="text-3xl md:text-4xl font-bold text-teal"><span class="counter" data-target="{{ avg_satisfaction }}">0</span>%</div>
           <div class="text-sm text-gray-400 mt-1 group-hover:text-gray-300 transition-colors">Client Retention</div>
         </div>
         <div class="stat-card group p-6 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-teal/30 hover:bg-teal/5 transition-all duration-500">
-          <div class="text-3xl md:text-4xl font-bold text-teal counter" data-target="15">0</div>
-          <div class="text-sm text-gray-400 mt-1 group-hover:text-gray-300 transition-colors">Countries</div>
+          <div class="text-3xl md:text-4xl font-bold text-teal counter" data-target="{{ total_experience }}">0</div>
+          <div class="text-sm text-gray-400 mt-1 group-hover:text-gray-300 transition-colors">Years Experience</div>
         </div>
       </div>
     </div>

@@ -1,12 +1,13 @@
 {% load static %}
 {% load helpex_tags %}
+{% get_hero as hero %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="About HELPEX BRO - Adaptive Digital Studio">
-  <title>About Us · HELPEX BRO</title>
+  <meta name="description" content="The Helpex — Your Tech Helpers. Learn our story, mission, and vision.">
+  <title>About · The Helpex</title>
 
   <!-- Tailwind CSS with custom theme -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -59,7 +60,11 @@
       overflow-x: hidden;
     }
     .font-display { font-family: 'Space Grotesk', sans-serif; }
-    
+
+    /* fade-up default: visible even without JS */
+    .fade-up { opacity: 1; }
+    .js-ready .fade-up { opacity: 0; }
+
     @keyframes float {
       0%, 100% { transform: translateY(0px) rotate(0deg); }
       50% { transform: translateY(-20px) rotate(5deg); }
@@ -82,7 +87,7 @@
       background-clip: text;
     }
     .bg-grid {
-      background-image: 
+      background-image:
         linear-gradient(rgba(77, 95, 241, 0.04) 1px, transparent 1px),
         linear-gradient(90deg, rgba(77, 95, 241, 0.04) 1px, transparent 1px);
       background-size: 60px 60px;
@@ -120,20 +125,6 @@
       40% { transform: translateY(-10px) translateX(-50%); }
       60% { transform: translateY(-5px) translateX(-50%); }
     }
-
-    /* Timeline */
-    .timeline-line {
-      position: absolute;
-      left: 50%;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: linear-gradient(to bottom, transparent, #28A197, transparent);
-      transform: translateX(-50%);
-    }
-    @media (max-width: 768px) {
-      .timeline-line { left: 20px; }
-    }
   </style>
 </head>
 <body>
@@ -147,7 +138,7 @@
   <section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#0A0F1E] via-[#0F1629] to-[#0A0F1E]" id="about-hero">
     <!-- Particle Canvas -->
     <canvas id="hero-canvas" class="absolute inset-0 w-full h-full opacity-30"></canvas>
-    
+
     <!-- Gradient Orbs -->
     <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-teal/15 rounded-full filter blur-[120px] animate-pulse-slow"></div>
     <div class="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-teal-glow/10 rounded-full filter blur-[100px] animate-pulse-slow" style="animation-delay: -1.5s;"></div>
@@ -168,50 +159,50 @@
     <!-- Content -->
     <div class="relative z-10 max-w-7xl mx-auto px-6 py-32 text-center w-full">
       <!-- Breadcrumb -->
-      <div class="flex items-center justify-center gap-3 mb-8 opacity-0" id="about-breadcrumb">
+      <div class="flex items-center justify-center gap-3 mb-8 fade-up" id="about-breadcrumb">
         <a href="{% url 'index' %}" class="text-sm text-gray-500 hover:text-teal transition-colors">Home</a>
         <span class="text-gray-700">/</span>
-        <span class="text-sm font-semibold text-teal">About Us</span>
+        <span class="text-sm font-semibold text-teal">About</span>
       </div>
 
       <!-- Badge -->
-      <div class="opacity-0" id="about-badge">
+      <div class="fade-up" id="about-badge">
         <span class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-semibold tracking-wider uppercase bg-teal/10 text-teal border border-teal/20 backdrop-blur-sm mb-8">
           <span class="w-2 h-2 bg-teal rounded-full animate-pulse"></span>
-          Who We Are
+          // Our Story
         </span>
       </div>
 
       <!-- Title -->
-      <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-extrabold leading-[1.1] mb-8 opacity-0" id="about-title">
-        <span class="text-white">About</span>
-        <span class="bg-gradient-to-r from-teal via-teal-glow to-teal bg-clip-text text-transparent">HELPEX</span>
+      <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-extrabold leading-[1.1] mb-8 fade-up" id="about-title">
+        <span class="text-white">Technology Should</span>
+        <span class="bg-gradient-to-r from-teal via-teal-glow to-teal bg-clip-text text-transparent">Serve People</span>
       </h1>
 
       <!-- Subtitle -->
-      <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-14 opacity-0 leading-relaxed" id="about-subtitle">
-        We're an adaptive digital studio crafting exceptional experiences that drive business growth and success.
+      <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-14 fade-up leading-relaxed" id="about-subtitle">
+        Technology Should Serve People. From a 16-year-old freelancer with a vision — to a global IT company.
       </p>
 
       <!-- Quick Stats Pills -->
-      <div class="flex flex-wrap justify-center gap-4 opacity-0" id="about-pills">
+      <div class="flex flex-wrap justify-center gap-4 fade-up" id="about-pills">
         <div class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-gray-300">
           <i class="fas fa-rocket text-teal"></i>
-          <span class="text-sm font-medium">180+ Projects Delivered</span>
+          <span class="text-sm font-medium">{{ total_projects }}+ Projects Delivered</span>
         </div>
         <div class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-gray-300">
           <i class="fas fa-smile text-teal"></i>
-          <span class="text-sm font-medium">98% Client Satisfaction</span>
+          <span class="text-sm font-medium">{{ avg_satisfaction }}% Client Satisfaction</span>
         </div>
         <div class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-gray-300">
           <i class="fas fa-users text-teal"></i>
-          <span class="text-sm font-medium">50+ Team Experts</span>
+          <span class="text-sm font-medium">{{ team_size }}+ Team Experts</span>
         </div>
       </div>
     </div>
 
     <!-- Scroll Indicator -->
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-0" id="scroll-indicator">
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 fade-up" id="scroll-indicator">
       <span class="text-xs tracking-widest uppercase text-gray-500">Our Story</span>
       <div class="w-6 h-10 rounded-full border-2 border-gray-600 flex justify-center pt-2">
         <div class="w-1 h-3 bg-teal rounded-full animate-bounce"></div>
@@ -227,34 +218,27 @@
       <div class="absolute inset-0 bg-[linear-gradient(rgba(40,161,151,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(40,161,151,0.03)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
     </div>
     <div class="max-w-6xl mx-auto px-6 relative z-10">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-        <div class="stat-card text-center opacity-0" data-index="0">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="stat-card text-center fade-up" data-index="0">
           <div class="w-16 h-16 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mx-auto mb-4 border border-teal/20">
-            <i class="fas fa-rocket"></i>
+            <i class="fas fa-cube"></i>
           </div>
-          <div class="text-3xl md:text-4xl font-extrabold text-teal mb-1 counter" data-target="180">0</div>
-          <div class="text-sm text-gray-400 font-medium">{% if hero.stats_label_1 %}{{ hero.stats_label_1 }}{% else %}Projects Delivered{% endif %}</div>
+          <div class="text-3xl md:text-4xl font-extrabold text-teal mb-1 counter" data-target="{% if hero %}{{ hero.stats_number_1|default:'5' }}{% else %}5{% endif %}">0</div>
+          <div class="text-sm text-gray-400 font-medium">Products Built</div>
         </div>
-        <div class="stat-card text-center opacity-0" data-index="1">
+        <div class="stat-card text-center fade-up" data-index="1">
           <div class="w-16 h-16 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mx-auto mb-4 border border-teal/20">
-            <i class="fas fa-smile"></i>
+            <i class="fas fa-building"></i>
           </div>
-          <div class="text-3xl md:text-4xl font-extrabold text-teal mb-1"><span class="counter" data-target="98">0</span>%</div>
-          <div class="text-sm text-gray-400 font-medium">{% if hero.stats_label_2 %}{{ hero.stats_label_2 }}{% else %}Client Satisfaction{% endif %}</div>
+          <div class="text-3xl md:text-4xl font-extrabold text-teal mb-1 counter" data-target="{% if hero %}{{ hero.stats_number_2|default:'7' }}{% else %}7{% endif %}">0</div>
+          <div class="text-sm text-gray-400 font-medium">Organizations Served</div>
         </div>
-        <div class="stat-card text-center opacity-0" data-index="2">
+        <div class="stat-card text-center fade-up" data-index="2">
           <div class="w-16 h-16 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mx-auto mb-4 border border-teal/20">
-            <i class="fas fa-users"></i>
+            <i class="fas fa-heart"></i>
           </div>
-          <div class="text-3xl md:text-4xl font-extrabold text-teal mb-1 counter" data-target="50">0</div>
-          <div class="text-sm text-gray-400 font-medium">{% if hero.stats_label_3 %}{{ hero.stats_label_3 }}{% else %}Team Experts{% endif %}</div>
-        </div>
-        <div class="stat-card text-center opacity-0" data-index="3">
-          <div class="w-16 h-16 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mx-auto mb-4 border border-teal/20">
-            <i class="fas fa-calendar-check"></i>
-          </div>
-          <div class="text-3xl md:text-4xl font-extrabold text-teal mb-1 counter" data-target="12">0</div>
-          <div class="text-sm text-gray-400 font-medium">Years Experience</div>
+          <div class="text-3xl md:text-4xl font-extrabold text-teal mb-1"><span class="counter" data-target="{% if hero %}{{ hero.stats_number_3|default:'88' }}{% else %}88{% endif %}">0</span>%</div>
+          <div class="text-sm text-gray-400 font-medium">Client Retention</div>
         </div>
       </div>
     </div>
@@ -271,59 +255,49 @@
     </div>
 
     <div class="max-w-7xl mx-auto px-6 relative z-10">
-      <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <div class="grid lg:grid-cols-2 gap-16 items-start">
         <!-- Left: Text -->
         <div>
-          <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-6 bg-teal/10 text-teal border border-teal/20 backdrop-blur-sm opacity-0" id="story-badge">
+          <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-6 bg-teal/10 text-teal border border-teal/20 backdrop-blur-sm fade-up" id="story-badge">
             // Our Story
           </span>
-          <h2 class="font-display text-4xl md:text-5xl font-bold mb-8 text-midnight opacity-0" id="story-title">
-            From Vision to <span class="bg-gradient-to-r from-teal to-teal-glow bg-clip-text text-transparent">Reality</span>
+          <h2 class="font-display text-4xl md:text-5xl font-bold mb-8 text-midnight fade-up" id="story-title">
+            Our Story &amp; <span class="bg-gradient-to-r from-teal to-teal-glow bg-clip-text text-transparent">Brand Journey</span>
           </h2>
-          <p class="text-gray-500 leading-relaxed mb-6 text-lg opacity-0" id="story-p1">
-            HELPEX is an adaptive digital studio with a passion for crafting exceptional digital experiences. Founded with a vision to bridge the gap between innovative ideas and digital reality, we've grown into a trusted partner for businesses worldwide.
+          <p class="text-gray-500 leading-relaxed text-lg fade-up" id="story-text">
+            At just sixteen, our founder Hasnain noticed something troubling: businesses were investing in technology but receiving only software — without guidance, training, or long-term partnership. That realization sparked The Helpex. Now 3+ years later — 5 products, 7 organizations, 88% client retention, and global collaborations. Proof that technology built with empathy works.
           </p>
-          <p class="text-gray-500 leading-relaxed mb-10 text-lg opacity-0" id="story-p2">
-            We believe that great digital experiences are born from the perfect blend of creative design, cutting-edge technology, and strategic thinking. Every project is an opportunity to push boundaries and deliver transformative solutions.
-          </p>
-          <div class="flex flex-wrap gap-8 opacity-0" id="story-features">
-            <div class="flex items-center gap-4">
-              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal/10 to-teal-glow/10 text-teal flex items-center justify-center text-lg border border-teal/20">
-                <i class="fas fa-award"></i>
-              </div>
-              <div>
-                <div class="font-semibold text-midnight">Award Winning</div>
-                <div class="text-sm text-gray-500">Industry Recognition</div>
-              </div>
-            </div>
-            <div class="flex items-center gap-4">
-              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal/10 to-teal-glow/10 text-teal flex items-center justify-center text-lg border border-teal/20">
-                <i class="fas fa-users"></i>
-              </div>
-              <div>
-                <div class="font-semibold text-midnight">Expert Team</div>
-                <div class="text-sm text-gray-500">50+ Professionals</div>
-              </div>
-            </div>
-          </div>
         </div>
 
-        <!-- Right: Quote Card -->
-        <div class="relative opacity-0" id="story-quote">
-          <div class="absolute inset-0 rounded-3xl rotate-3 bg-teal/10"></div>
-          <div class="relative rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-[#0A0F1E] to-[#0F1629] p-10 md:p-14 border border-white/10">
-            <i class="fas fa-quote-left text-4xl mb-6 text-teal"></i>
-            <p class="text-gray-300 text-lg leading-relaxed mb-8 font-light italic">
-              "We don't just build websites. We build relationships. Every project is an opportunity to create something extraordinary that makes a real difference for our clients and their customers."
-            </p>
-            <div class="flex items-center gap-4 pt-6 border-t border-white/10">
-              <div class="w-14 h-14 rounded-full bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-teal/20">
-                JD
-              </div>
-              <div>
-                <div class="font-semibold text-white">John Doe</div>
-                <div class="text-sm text-gray-400">CEO & Founder</div>
-              </div>
+        <!-- Right: Timeline -->
+        <div class="relative fade-up" id="story-timeline">
+          <!-- Vertical line -->
+          <div class="absolute left-[7px] top-0 bottom-0 w-[2px] bg-gradient-to-b from-teal/20 via-teal to-teal/20 rounded-full"></div>
+          <div class="space-y-10 pl-10">
+            <div class="timeline-item relative">
+              <div class="absolute -left-[26px] top-1 w-4 h-4 rounded-full bg-teal border-[3px] border-white shadow-md shadow-teal/20 z-10"></div>
+              <span class="text-2xl font-bold text-teal font-display">2022</span>
+              <p class="text-gray-500 mt-1">Started as a freelancer at age 16</p>
+            </div>
+            <div class="timeline-item relative">
+              <div class="absolute -left-[26px] top-1 w-4 h-4 rounded-full bg-teal border-[3px] border-white shadow-md shadow-teal/20 z-10"></div>
+              <span class="text-2xl font-bold text-teal font-display">2023</span>
+              <p class="text-gray-500 mt-1">Founded The Helpex — first clients onboarded</p>
+            </div>
+            <div class="timeline-item relative">
+              <div class="absolute -left-[26px] top-1 w-4 h-4 rounded-full bg-teal border-[3px] border-white shadow-md shadow-teal/20 z-10"></div>
+              <span class="text-2xl font-bold text-teal font-display">2024</span>
+              <p class="text-gray-500 mt-1">Grew team, expanded service offerings</p>
+            </div>
+            <div class="timeline-item relative">
+              <div class="absolute -left-[26px] top-1 w-4 h-4 rounded-full bg-teal border-[3px] border-white shadow-md shadow-teal/20 z-10"></div>
+              <span class="text-2xl font-bold text-teal font-display">2025</span>
+              <p class="text-gray-500 mt-1">5 products · 7 orgs · 88% retention</p>
+            </div>
+            <div class="timeline-item relative">
+              <div class="absolute -left-[26px] top-1 w-4 h-4 rounded-full bg-teal border-[3px] border-white shadow-md shadow-teal/20 z-10"></div>
+              <span class="text-2xl font-bold text-teal font-display">2026</span>
+              <p class="text-gray-500 mt-1">Launching SaaS &amp; global expansion</p>
             </div>
           </div>
         </div>
@@ -332,7 +306,7 @@
   </section>
 
   <!-- ============================================================ -->
-  <!-- OUR VALUES SECTION -->
+  <!-- MISSION / VISION / VALUES SECTION -->
   <!-- ============================================================ -->
   <section class="py-32 bg-gradient-to-b from-[#0A0F1E] via-[#0F1629] to-[#0A0F1E] relative overflow-hidden" id="values-section">
     <!-- Background Effects -->
@@ -343,83 +317,44 @@
 
     <div class="max-w-7xl mx-auto px-6 relative z-10">
       <div class="text-center mb-20">
-        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-6 bg-teal/10 text-teal border border-teal/20 backdrop-blur-sm opacity-0" id="values-badge">
-          // Our Values
+        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-6 bg-teal/10 text-teal border border-teal/20 backdrop-blur-sm fade-up" id="values-badge">
+          // Our Compass
         </span>
-        <h2 class="font-display text-4xl md:text-6xl font-bold text-white mb-6 opacity-0" id="values-title">
-          What <span class="bg-gradient-to-r from-teal to-teal-glow bg-clip-text text-transparent">Drives Us</span>
+        <h2 class="font-display text-4xl md:text-6xl font-bold text-white mb-6 fade-up" id="values-title">
+          Mission, Vision &amp; <span class="bg-gradient-to-r from-teal to-teal-glow bg-clip-text text-transparent">Values</span>
         </h2>
-        <p class="text-lg text-gray-400 max-w-xl mx-auto opacity-0" id="values-desc">These core principles guide everything we do — from how we work to the solutions we deliver.</p>
+        <p class="text-lg text-gray-400 max-w-xl mx-auto fade-up" id="values-desc">The principles and purpose that guide every decision we make.</p>
       </div>
 
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- Value 1 -->
-        <div class="value-card group relative p-10 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] hover:border-teal/30 transition-all duration-500 opacity-0" data-index="0">
+        <!-- Vision -->
+        <div class="value-card group relative p-10 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] hover:border-teal/30 transition-all duration-500 fade-up" data-index="0">
           <div class="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
             <div class="absolute inset-0 rounded-3xl bg-gradient-to-r from-teal via-teal-glow to-teal opacity-10 blur-sm"></div>
           </div>
           <div class="w-16 h-16 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mb-6 group-hover:bg-teal group-hover:text-white transition-all duration-500 border border-teal/20 relative z-10">
-            <i class="fas fa-heart"></i>
+            <i class="fas fa-eye"></i>
           </div>
-          <h3 class="text-xl font-bold mb-3 text-white group-hover:text-teal transition-colors duration-300 relative z-10">Passion</h3>
-          <p class="text-gray-400 text-sm leading-relaxed relative z-10">We pour our heart into every project, treating each challenge as an opportunity to create something extraordinary that makes a real difference.</p>
+          <h3 class="text-xl font-bold mb-3 text-white group-hover:text-teal transition-colors duration-300 relative z-10">Vision</h3>
+          <p class="text-gray-400 text-sm leading-relaxed relative z-10">To empower businesses with smart digital systems that drive operational excellence and long-term success.</p>
           <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal/30 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
         </div>
 
-        <!-- Value 2 -->
-        <div class="value-card group relative p-10 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] hover:border-teal/30 transition-all duration-500 opacity-0" data-index="1">
+        <!-- Mission -->
+        <div class="value-card group relative p-10 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] hover:border-teal/30 transition-all duration-500 fade-up" data-index="1">
           <div class="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
             <div class="absolute inset-0 rounded-3xl bg-gradient-to-r from-teal via-teal-glow to-teal opacity-10 blur-sm"></div>
           </div>
           <div class="w-16 h-16 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mb-6 group-hover:bg-teal group-hover:text-white transition-all duration-500 border border-teal/20 relative z-10">
-            <i class="fas fa-lightbulb"></i>
+            <i class="fas fa-bullseye"></i>
           </div>
-          <h3 class="text-xl font-bold mb-3 text-white group-hover:text-teal transition-colors duration-300 relative z-10">Innovation</h3>
-          <p class="text-gray-400 text-sm leading-relaxed relative z-10">We constantly push boundaries and explore new technologies to deliver cutting-edge solutions that give our clients a competitive edge.</p>
+          <h3 class="text-xl font-bold mb-3 text-white group-hover:text-teal transition-colors duration-300 relative z-10">Mission</h3>
+          <p class="text-gray-400 text-sm leading-relaxed relative z-10">To build customized, human-centric software solutions that help businesses save time, reduce manual effort, and achieve sustainable growth.</p>
           <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal/30 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
         </div>
 
-        <!-- Value 3 -->
-        <div class="value-card group relative p-10 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] hover:border-teal/30 transition-all duration-500 opacity-0" data-index="2">
-          <div class="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-            <div class="absolute inset-0 rounded-3xl bg-gradient-to-r from-teal via-teal-glow to-teal opacity-10 blur-sm"></div>
-          </div>
-          <div class="w-16 h-16 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mb-6 group-hover:bg-teal group-hover:text-white transition-all duration-500 border border-teal/20 relative z-10">
-            <i class="fas fa-handshake"></i>
-          </div>
-          <h3 class="text-xl font-bold mb-3 text-white group-hover:text-teal transition-colors duration-300 relative z-10">Integrity</h3>
-          <p class="text-gray-400 text-sm leading-relaxed relative z-10">We build trust through transparency, honesty, and delivering on our promises. Your success is our success.</p>
-          <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal/30 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
-        </div>
-
-        <!-- Value 4 -->
-        <div class="value-card group relative p-10 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] hover:border-teal/30 transition-all duration-500 opacity-0" data-index="3">
-          <div class="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-            <div class="absolute inset-0 rounded-3xl bg-gradient-to-r from-teal via-teal-glow to-teal opacity-10 blur-sm"></div>
-          </div>
-          <div class="w-16 h-16 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mb-6 group-hover:bg-teal group-hover:text-white transition-all duration-500 border border-teal/20 relative z-10">
-            <i class="fas fa-users"></i>
-          </div>
-          <h3 class="text-xl font-bold mb-3 text-white group-hover:text-teal transition-colors duration-300 relative z-10">Collaboration</h3>
-          <p class="text-gray-400 text-sm leading-relaxed relative z-10">Great work happens when great minds work together. We foster open communication and teamwork to achieve shared goals.</p>
-          <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal/30 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
-        </div>
-
-        <!-- Value 5 -->
-        <div class="value-card group relative p-10 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] hover:border-teal/30 transition-all duration-500 opacity-0" data-index="4">
-          <div class="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-            <div class="absolute inset-0 rounded-3xl bg-gradient-to-r from-teal via-teal-glow to-teal opacity-10 blur-sm"></div>
-          </div>
-          <div class="w-16 h-16 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mb-6 group-hover:bg-teal group-hover:text-white transition-all duration-500 border border-teal/20 relative z-10">
-            <i class="fas fa-star"></i>
-          </div>
-          <h3 class="text-xl font-bold mb-3 text-white group-hover:text-teal transition-colors duration-300 relative z-10">Excellence</h3>
-          <p class="text-gray-400 text-sm leading-relaxed relative z-10">We never settle for "good enough." Every line of code, every pixel, every interaction is crafted with precision and care.</p>
-          <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal/30 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
-        </div>
-
-        <!-- Value 6 -->
-        <div class="value-card group relative p-10 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] hover:border-teal/30 transition-all duration-500 opacity-0" data-index="5">
+        <!-- Value: Growth -->
+        <div class="value-card group relative p-10 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] hover:border-teal/30 transition-all duration-500 fade-up" data-index="2">
           <div class="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
             <div class="absolute inset-0 rounded-3xl bg-gradient-to-r from-teal via-teal-glow to-teal opacity-10 blur-sm"></div>
           </div>
@@ -427,7 +362,33 @@
             <i class="fas fa-rocket"></i>
           </div>
           <h3 class="text-xl font-bold mb-3 text-white group-hover:text-teal transition-colors duration-300 relative z-10">Growth</h3>
-          <p class="text-gray-400 text-sm leading-relaxed relative z-10">We're committed to continuous learning and improvement, ensuring we stay ahead in an ever-evolving digital landscape.</p>
+          <p class="text-gray-400 text-sm leading-relaxed relative z-10">We grow together with our clients, team, and technology.</p>
+          <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal/30 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
+        </div>
+
+        <!-- Value: Authenticity -->
+        <div class="value-card group relative p-10 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] hover:border-teal/30 transition-all duration-500 fade-up" data-index="3">
+          <div class="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+            <div class="absolute inset-0 rounded-3xl bg-gradient-to-r from-teal via-teal-glow to-teal opacity-10 blur-sm"></div>
+          </div>
+          <div class="w-16 h-16 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mb-6 group-hover:bg-teal group-hover:text-white transition-all duration-500 border border-teal/20 relative z-10">
+            <i class="fas fa-shield-heart"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 text-white group-hover:text-teal transition-colors duration-300 relative z-10">Authenticity</h3>
+          <p class="text-gray-400 text-sm leading-relaxed relative z-10">Real solutions with genuine care — no unnecessary complexity.</p>
+          <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal/30 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
+        </div>
+
+        <!-- Value: Connection -->
+        <div class="value-card group relative p-10 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] hover:border-teal/30 transition-all duration-500 fade-up" data-index="4">
+          <div class="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+            <div class="absolute inset-0 rounded-3xl bg-gradient-to-r from-teal via-teal-glow to-teal opacity-10 blur-sm"></div>
+          </div>
+          <div class="w-16 h-16 rounded-2xl bg-teal/10 text-teal flex items-center justify-center text-2xl mb-6 group-hover:bg-teal group-hover:text-white transition-all duration-500 border border-teal/20 relative z-10">
+            <i class="fas fa-handshake"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 text-white group-hover:text-teal transition-colors duration-300 relative z-10">Connection</h3>
+          <p class="text-gray-400 text-sm leading-relaxed relative z-10">We build systems with businesses, not just for them.</p>
           <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal/30 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
         </div>
       </div>
@@ -446,18 +407,18 @@
 
     <div class="max-w-7xl mx-auto px-6 relative z-10">
       <div class="text-center mb-20">
-        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-6 bg-teal/10 text-teal border border-teal/20 backdrop-blur-sm opacity-0" id="team-badge">
+        <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-6 bg-teal/10 text-teal border border-teal/20 backdrop-blur-sm fade-up" id="team-badge">
           // Our Team
         </span>
-        <h2 class="font-display text-4xl md:text-6xl font-bold text-midnight mb-6 opacity-0" id="team-title">
+        <h2 class="font-display text-4xl md:text-6xl font-bold text-midnight mb-6 fade-up" id="team-title">
           Meet the <span class="bg-gradient-to-r from-teal to-teal-glow bg-clip-text text-transparent">Experts</span>
         </h2>
-        <p class="text-lg text-gray-500 max-w-xl mx-auto opacity-0" id="team-desc">Talented people with a shared passion for creating exceptional digital experiences.</p>
+        <p class="text-lg text-gray-500 max-w-xl mx-auto fade-up" id="team-desc">Talented people with a shared passion for creating exceptional digital experiences.</p>
       </div>
 
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {% for member in team_members %}
-        <div class="team-card group text-center opacity-0" data-index="{{ forloop.counter0 }}">
+        <div class="team-card group text-center fade-up" data-index="{{ forloop.counter0 }}">
           <div class="relative mb-6 mx-auto w-40 h-40 rounded-full overflow-hidden shadow-lg team-img border-4 border-white group-hover:border-teal/30 transition-all duration-500">
             {% if member.photo %}
             <img src="{{ member.photo.url }}" alt="{{ member.name }}" class="w-full h-full object-cover">
@@ -473,28 +434,28 @@
         </div>
         {% empty %}
         <!-- Fallback team members -->
-        <div class="team-card group text-center opacity-0" data-index="0">
+        <div class="team-card group text-center fade-up" data-index="0">
           <div class="relative mb-6 mx-auto w-40 h-40 rounded-full overflow-hidden shadow-lg team-img border-4 border-white group-hover:border-teal/30 transition-all duration-500 bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center">
             <i class="fas fa-user text-4xl text-white/40"></i>
           </div>
           <h3 class="text-lg font-bold text-midnight group-hover:text-teal transition-colors duration-300">Alex Rivera</h3>
           <p class="text-sm font-semibold text-teal">CEO & Founder</p>
         </div>
-        <div class="team-card group text-center opacity-0" data-index="1">
+        <div class="team-card group text-center fade-up" data-index="1">
           <div class="relative mb-6 mx-auto w-40 h-40 rounded-full overflow-hidden shadow-lg team-img border-4 border-white group-hover:border-teal/30 transition-all duration-500 bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center">
             <i class="fas fa-user text-4xl text-white/40"></i>
           </div>
           <h3 class="text-lg font-bold text-midnight group-hover:text-teal transition-colors duration-300">Jordan Smith</h3>
           <p class="text-sm font-semibold text-teal">CTO</p>
         </div>
-        <div class="team-card group text-center opacity-0" data-index="2">
+        <div class="team-card group text-center fade-up" data-index="2">
           <div class="relative mb-6 mx-auto w-40 h-40 rounded-full overflow-hidden shadow-lg team-img border-4 border-white group-hover:border-teal/30 transition-all duration-500 bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center">
             <i class="fas fa-user text-4xl text-white/40"></i>
           </div>
           <h3 class="text-lg font-bold text-midnight group-hover:text-teal transition-colors duration-300">Sam Williams</h3>
           <p class="text-sm font-semibold text-teal">Creative Director</p>
         </div>
-        <div class="team-card group text-center opacity-0" data-index="3">
+        <div class="team-card group text-center fade-up" data-index="3">
           <div class="relative mb-6 mx-auto w-40 h-40 rounded-full overflow-hidden shadow-lg team-img border-4 border-white group-hover:border-teal/30 transition-all duration-500 bg-gradient-to-br from-teal to-teal-dark flex items-center justify-center">
             <i class="fas fa-user text-4xl text-white/40"></i>
           </div>
@@ -517,14 +478,14 @@
     </div>
 
     <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
-      <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-8 bg-teal/10 text-teal border border-teal/20 backdrop-blur-sm opacity-0" id="cta-badge">
+      <span class="inline-block px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase mb-8 bg-teal/10 text-teal border border-teal/20 backdrop-blur-sm fade-up" id="cta-badge">
         // Join Our Journey
       </span>
-      <h2 class="font-display text-4xl md:text-6xl font-bold text-white mb-8 opacity-0" id="cta-title">
+      <h2 class="font-display text-4xl md:text-6xl font-bold text-white mb-8 fade-up" id="cta-title">
         Ready to <span class="bg-gradient-to-r from-teal to-teal-glow bg-clip-text text-transparent">Build</span> Something Amazing?
       </h2>
-      <p class="text-lg text-gray-400 max-w-xl mx-auto mb-12 opacity-0" id="cta-desc">Let's turn your vision into reality. Get in touch and let's discuss your next project.</p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center opacity-0" id="cta-buttons">
+      <p class="text-lg text-gray-400 max-w-xl mx-auto mb-12 fade-up" id="cta-desc">Let's turn your vision into reality. Get in touch and let's discuss your next project.</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center fade-up" id="cta-buttons">
         <a href="{% url 'contact' %}" class="magnetic-btn inline-flex items-center justify-center gap-3 px-10 py-5 rounded-full font-semibold text-white bg-gradient-to-r from-teal to-teal-dark hover:shadow-xl hover:shadow-teal/30 transition-all hover:scale-105">
           <i class="fas fa-rocket"></i> Get Started
         </a>
@@ -543,6 +504,9 @@
   <!-- SCRIPTS -->
   <!-- ============================================================ -->
   <script>
+    // Mark page as ready for JS-driven animations
+    document.body.classList.add('js-ready');
+
     // ---------- Particle Canvas Background ----------
     const canvas = document.getElementById('hero-canvas');
     if (canvas) {
@@ -756,14 +720,25 @@
       .fromTo('#story-badge', { y: 20 }, { y: 0, duration: 0.5 }, '<')
       .to('#story-title', { opacity: 1, y: 0, duration: 0.6 }, '-=0.2')
       .fromTo('#story-title', { y: 30 }, { y: 0, duration: 0.6 }, '<')
-      .to('#story-p1', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
-      .fromTo('#story-p1', { y: 20 }, { y: 0, duration: 0.6 }, '<')
-      .to('#story-p2', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
-      .fromTo('#story-p2', { y: 20 }, { y: 0, duration: 0.6 }, '<')
-      .to('#story-features', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
-      .fromTo('#story-features', { y: 20 }, { y: 0, duration: 0.6 }, '<')
-      .to('#story-quote', { opacity: 1, x: 0, duration: 0.8 }, '-=0.5')
-      .fromTo('#story-quote', { x: 60 }, { x: 0, duration: 0.8 }, '<');
+      .to('#story-text', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+      .fromTo('#story-text', { y: 20 }, { y: 0, duration: 0.6 }, '<')
+      .to('#story-timeline', { opacity: 1, x: 0, duration: 0.8 }, '-=0.3')
+      .fromTo('#story-timeline', { x: 40 }, { x: 0, duration: 0.8 }, '<');
+
+    gsap.fromTo('.timeline-item',
+      { opacity: 0, x: 40 },
+      {
+        opacity: 1, x: 0,
+        duration: 0.5,
+        stagger: 0.15,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '#story-timeline',
+          start: 'top 80%',
+          toggleActions: 'play none none none'
+        }
+      }
+    );
 
     // Values Section
     const valuesTl = gsap.timeline({
@@ -853,6 +828,31 @@
         if (target) lenis.scrollTo(target);
       });
     });
+
+    // ---------- Fallback IntersectionObserver for GSAP ScrollTrigger ----------
+    setTimeout(() => {
+      const hasScrollTrigger = typeof ScrollTrigger !== 'undefined';
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const el = entry.target;
+            if (hasScrollTrigger) {
+              const trigger = ScrollTrigger.getById(el.id || el.classList[0]);
+              if (trigger && trigger.isActive) return;
+            }
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0) scale(1)';
+            io.unobserve(el);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+      document.querySelectorAll('.fade-up, .stat-card, .value-card, .team-card, .timeline-item').forEach(el => {
+        if (getComputedStyle(el).opacity === '0') {
+          io.observe(el);
+        }
+      });
+    }, 1500);
   </script>
 </body>
 </html>

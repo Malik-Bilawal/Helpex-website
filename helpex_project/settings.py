@@ -54,7 +54,7 @@ WSGI_APPLICATION = 'helpex_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'the_helpex',
+        'NAME': 'thehelpe_xwebsite',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',
@@ -85,7 +85,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Unfold Settings
 UNFOLD = {
     "SITE_TITLE": "HELPEX Admin",
-    "SITE_HEADER": "THE ELPEX",
+    "SITE_HEADER": "THE HELPEX",
     "SITE_TITLE_COLOR": "#28A197",
     "SITE_LOGO": None,
     "SITEavicon": None,

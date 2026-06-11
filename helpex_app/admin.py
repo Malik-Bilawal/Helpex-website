@@ -242,12 +242,13 @@ class GalleryCategoryAdmin(admin.ModelAdmin):
     )
 
     def icon_display(self, obj):
-        return format_html('<i class="fas {}"></i> {}'.format(obj.icon, obj.name))
+        return format_html('<i class="fas {}"></i> {}', obj.icon, obj.name)
     icon_display.short_description = 'Category'
 
     def color_preview(self, obj):
         return format_html(
-            '<span style="display: inline-block; width: 24px; height: 24px; background: {}; border-radius: 4px; border: 1px solid #ddd;"></span>'.format(obj.color)
+            '<span style="display: inline-block; width: 24px; height: 24px; background: {}; border-radius: 4px; border: 1px solid #ddd;"></span>',
+            obj.color
         )
     color_preview.short_description = 'Color'
 
@@ -258,7 +259,7 @@ class GalleryCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(GalleryImage)
 class GalleryImageAdmin(admin.ModelAdmin):
-    list_display = ['thumbnail_preview', 'title', 'category', 'aspect_ratio', 'is_featured', 'is_active', 'order', 'view_count', 'created']
+    list_display = ['thumbnail_preview', 'title', 'category', 'aspect_ratio', 'is_featured', 'is_active', 'order', 'view_count', 'created_at']
     list_filter = ['is_active', 'is_featured', 'category', 'aspect_ratio']
     search_fields = ['title', 'description', 'tags', 'photographer', 'location']
     list_editable = ['order', 'is_active', 'is_featured']
@@ -287,9 +288,11 @@ class GalleryImageAdmin(admin.ModelAdmin):
     def thumbnail_preview(self, obj):
         if obj.image:
             return format_html(
-                '<img src="{}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;" />'.format(obj.image.url)
+                '<img src="{}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;" />',
+                obj.image.url
             )
-        return format_html('<span style="color: #999;">No image</span>')
+        from django.utils.safestring import mark_safe
+        return mark_safe('<span style="color: #999;">No image</span>')
     thumbnail_preview.short_description = 'Preview'
 
     def created(self, obj):

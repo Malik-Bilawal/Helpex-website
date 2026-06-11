@@ -47,6 +47,8 @@ class HeroSection(models.Model):
     stats_number_2 = models.CharField(max_length=10, default="98%")
     stats_label_3 = models.CharField(max_length=30, default="Team")
     stats_number_3 = models.CharField(max_length=10, default="50+")
+    stats_label_4 = models.CharField(max_length=30, default="", blank=True)
+    stats_number_4 = models.CharField(max_length=10, default="", blank=True)
     
     # Badges
     badge_text = models.CharField(max_length=50, default="ADAPTIVE DIGITAL STUDIO")
